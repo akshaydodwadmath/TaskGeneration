@@ -1,0 +1,102 @@
+Upto >800 values
+
+1 (Depth=1) :C1-D0, C2-D0
+( )
+
+2 (Depth=2) : C1-D1, C2-D0
+( D_CONST ( ) )
+ C1a-D1,C1b-D1, C2-D0
+( D_IF ( ) D_ELSE ( ) )
+
+3 (Depth=2) : C1-D1, C2-D1
+( D_CONST ( ) D_CONST ( ) )
+
+C1a-D1,C1b-D1, C2a-D1, C2b-D1
+( D_IF ( ) D_ELSE ( ) D_IF ( ) D_ELSE ( ) )
+C1a-D1,C1b-D1, C2-D1
+( D_IF ( ) D_ELSE ( ) D_CONST ( ) )
+C1-D1, C2a-D1,C2b-D1 
+( D_CONST ( ) D_IF ( ) D_ELSE ( ) )
+
+
+4 (Depth=3)
+C1-D2, C2-D0
+( D_CONST ( D_CONST ( ) ) )
+C1-D2, C2-D0
+( D_CONST ( D_IF ( ) D_ELSE ( ) ) )
+( D_IF ( D_CONST ( ) ) D_ELSE ( ) )
+( D_IF ( D_IF ( ) D_ELSE ( ) ) D_ELSE ( ) )
+( D_IF ( ) D_ELSE ( D_CONST ( ) ) )
+( D_IF ( ) D_ELSE ( D_IF ( ) D_ELSE ( ) ) )
+
+12 (Depth=3)
+( D_IF ( D_CONST ( ) ) D_ELSE ( D_CONST ( ) ) )
+
+5 (Depth=3)
+C1-D2, C2-D1
+( D_CONST ( D_CONST ( ) ) D_CONST ( ) )
+( D_CONST ( D_IF ( ) D_ELSE ( ) ) D_CONST ( ) )
+( D_CONST ( D_CONST ( ) ) D_IF ( ) D_ELSE ( ) )
+( D_IF ( D_CONST ( ) ) D_ELSE ( ) D_CONST ( ) )
+( D_IF ( ) D_ELSE ( D_CONST ( ) ) D_CONST ( ) )
+
+6 (Depth=3)
+C1-D1, C2-D2
+( D_CONST ( ) D_CONST ( D_CONST ( ) ) )
+( D_CONST ( ) D_CONST ( D_IF ( ) D_ELSE ( ) ) )
+( D_IF ( ) D_ELSE ( ) D_CONST ( D_CONST ( ) ) )
+( D_CONST ( ) D_IF ( D_CONST ( ) ) D_ELSE ( ) )
+( D_CONST ( ) D_IF ( ) D_ELSE ( D_CONST ( ) ) )
+( D_IF ( ) D_ELSE ( ) D_CONST ( D_IF ( ) D_ELSE ( ) ) )
+
+
+7 (Depth=3)
+2 control within C1
+( D_CONST ( D_CONST ( ) D_CONST ( ) ) )
+( D_CONST ( D_IF ( ) D_ELSE ( ) D_CONST ( ) ) )
+( D_CONST ( D_CONST ( ) D_IF ( ) D_ELSE ( ) ) )
+( D_CONST ( D_IF ( ) D_ELSE ( ) D_IF ( ) D_ELSE ( ) ) )
+
+
+8(Depth=4)
+( D_CONST ( D_CONST ( D_CONST ( ) ) ) )
+( D_CONST ( D_CONST ( D_IF ( ) D_ELSE ( ) ) ) )
+( D_CONST ( D_IF ( D_CONST ( ) ) D_ELSE ( ) ) )
+( D_CONST ( D_IF ( ) D_ELSE ( D_CONST ( ) ) ) )
+( D_CONST ( D_IF ( D_IF ( ) D_ELSE ( ) ) D_ELSE ( ) ) )
+( D_CONST ( D_IF ( ) D_ELSE ( D_IF ( ) D_ELSE ( ) ) ) )
+( D_IF ( D_CONST ( D_CONST ( ) ) ) D_ELSE ( ) )
+( D_IF ( ) D_ELSE ( D_CONST ( D_CONST ( ) ) ) )
+
+
+9(Depth=3)
+C1-D2, C2-D2
+( D_CONST ( D_CONST ( ) ) D_CONST ( D_CONST ( ) ) )
+
+10 (Depth=2)
+3 control
+( D_CONST ( ) D_CONST ( ) D_CONST ( ) )
+( D_IF ( ) D_ELSE ( ) D_CONST ( ) D_CONST ( ) )
+( D_CONST ( ) D_IF ( ) D_ELSE ( ) D_CONST ( ) )
+( D_CONST ( ) D_CONST ( ) D_IF ( ) D_ELSE ( ) )
+
+11(Depth=5)
+( D_CONST ( D_CONST ( D_CONST ( D_CONST ( ) ) ) ) )
+
+( D_CONST ( D_CONST ( D_CONST ( D_IF ( ) D_ELSE ( ) ) ) ) )
+( D_CONST ( D_CONST ( D_IF ( D_CONST ( ) ) D_ELSE ( ) ) ) )
+( D_CONST ( D_CONST ( D_IF ( ) D_ELSE ( D_CONST ( ) ) ) ) )
+13(Depth=4)
+( D_CONST ( ) D_CONST ( D_CONST ( D_CONST ( ) ) ) )
+( D_CONST ( D_CONST ( D_CONST ( ) D_CONST ( ) ) ) )
+( D_CONST ( D_CONST ( D_CONST ( ) ) ) D_CONST ( ) )'
+( D_CONST ( D_CONST ( D_CONST ( ) ) D_CONST ( ) ) )
+( D_CONST ( D_CONST ( ) D_CONST ( D_CONST ( ) ) ) )
+( D_IF ( D_CONST ( D_IF ( ) D_ELSE ( ) ) ) D_ELSE ( ) )
+( D_IF ( ) D_ELSE ( D_CONST ( D_IF ( ) D_ELSE ( ) ) ) )
+( D_CONST ( D_IF ( D_CONST ( ) ) D_ELSE ( D_CONST ( ) ) ) 
+( D_CONST ( D_CONST ( D_IF ( ) D_ELSE ( ) ) ) D_CONST ( ) )
+
+Control=3
+14 (Depth=3) (Control=1,Depth =1, Control=2,Depth=1, Control=3, Depth=2)
+D_CONST ( ) D_CONST ( ) D_CONST ( D_CONST ( ) ) )
