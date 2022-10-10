@@ -35,27 +35,27 @@ control_close = ['m)',
 
 #FeatureVector format: [C1_D1_WHILE, C1_D1_REPEAT, C1_D1_IF, [C1_D1_IFELSE, C1_D1_ELSE] ,C1_D2_WHILE, C1_D2_REPEAT, C1_D2_IF, [C1_D2_IFELSE, C1_D2_ELSE] , 
 #                       C2_D1_WHILE ,C2_D1_REPEAT, C2_D1_IF, [C2_D1_IFELSE, C2_D1_ELSE] ,C2_D2_WHILE ,C2_D2_REPEAT, C2_D2_IF, [C2_D2_IFELSE, C2_D2_ELSE]]
-required_ctypes = {'()': '[0,[0,0,0],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
+required_ctypes = {'()',
                    
-                   '(D_CTRL())': '[1,[0,0,0],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]', 
-                   '(D_IF()D_ELSE())': '[0,[0,0,0],1,[0,0,0],1,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
+                   '(D_CTRL())', 
+                   '(D_IF()D_ELSE())',
                    
-                   '(D_CTRL()D_CTRL())': '[1,[0,0,0],0,[0,0,0],0,[0,0,0]], [1,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF()D_ELSE()D_CTRL())': '[0,[0,0,0],1,[0,0,0],1,[0,0,0]], [1,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_CTRL()D_IF()D_ELSE())': '[1,[0,0,0],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],1,[0,0,0],1,[0,0,0]]',
-                   '(D_IF()D_ELSE()D_IF()D_ELSE())': '[0,[0,0,0],1,[0,0,0],1,[0,0,0]], [0,[0,0,0],1,[0,0,0],1,[0,0,0]]',
+                   '(D_CTRL()D_CTRL())',
+                   '(D_IF()D_ELSE()D_CTRL())',
+                   '(D_CTRL()D_IF()D_ELSE())',
+                   '(D_IF()D_ELSE()D_IF()D_ELSE())',
                    
-                   '(D_CTRL(D_CTRL()))': '[1,[1,0,0],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_CTRL(D_IF()D_ELSE()))': '[1,[0,1,1],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF(D_CTRL())D_ELSE())': '[0,[0,0,0],1,[1,0,0],1,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF(D_IF()D_ELSE())D_ELSE())': '[0,[0,0,0],1,[0,1,1],1,[0,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF()D_ELSE(D_CTRL()))': '[0,[0,0,0],1,[0,0,0],1,[1,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF()D_ELSE(D_IF()D_ELSE()))': '[0,[0,0,0],1,[0,0,0],1,[0,1,1]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
+                   '(D_CTRL(D_CTRL()))',
+                   '(D_CTRL(D_IF()D_ELSE()))',
+                   '(D_IF(D_CTRL())D_ELSE())',
+                   '(D_IF(D_IF()D_ELSE())D_ELSE())',
+                   '(D_IF()D_ELSE(D_CTRL()))',
+                   '(D_IF()D_ELSE(D_IF()D_ELSE()))',
                    
-                   '(D_IF(D_CTRL())D_ELSE(D_CTRL()))': '[0,[0,0,0],1,[1,0,0],1,[1,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_CTRL()))': '[0,[0,0,0],1,[0,1,1],1,[1,0,0]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF(D_CTRL())D_ELSE(D_IF()D_ELSE()))': '[0,[0,0,0],1,[1,0,0],1,[0,1,1]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]',
-                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_IF()D_ELSE()))': '[0,[0,0,0],1,[0,1,1],1,[0,1,1]], [0,[0,0,0],0,[0,0,0],0,[0,0,0]]'} 
+                   '(D_IF(D_CTRL())D_ELSE(D_CTRL()))',
+                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_CTRL()))',
+                   '(D_IF(D_CTRL())D_ELSE(D_IF()D_ELSE()))',
+                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_IF()D_ELSE()))'} 
                    #"CodeType": "FeatureVector"
                    
                    #'( D_CTRL ( ) D_CTRL ( ) D_CTRL ( ) )',
@@ -67,8 +67,63 @@ required_ctypes = {'()': '[0,[0,0,0],0,[0,0,0],0,[0,0,0]], [0,[0,0,0],0,[0,0,0],
                    #'( D_CTRL ( D_CTRL ( ) ) )',
                    #'( D_CTRL ( D_CTRL ( ) ) D_CTRL ( ) )',
                    #'( D_CTRL ( D_CTRL ( ) ) D_CTRL ( ) D_CTRL ( ) )'
+               
                    
-                   
+
+def checkNextCtrl(subprog, index):
+    ifelse_started = False
+    subVec_format = ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']
+    for token in subprog:
+        if(token == 'REPEAT'):
+            return(subVec_format.index('REPEAT'), index)
+        elif(token == 'WHILE'):
+            return(subVec_format.index('WHILE'), index)
+        elif(token == 'IF'):
+            return(subVec_format.index('IF'), index)
+        elif(token == 'IFELSE'):
+            ifelse_started = True
+        elif(token == 'ELSE'):
+            return(subVec_format.index('IFELSE'), index)
+        elif ((token in control_close) and (ifelse_started ==False)):
+            return(subVec_format.index('NO_CTRL'), index)
+        index+=1
+
+def getFeatureVector(prog):
+    index = 0
+    ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
+    featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
+                      'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
+    featVec = [[0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
+               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]]]
+    #for token in prog[index:]:
+    ctrl_index = 0
+    while(index < len(prog)):
+        token = prog[index]
+        if(token == 'REPEAT'):
+            featVec[ctrl_index][featVec_format.index('REPEAT')] = 1
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            featVec[ctrl_index][featVec_format.index('REPEAT')+1][value] = 1
+            ctrl_index+=1
+        elif(token == 'WHILE'):
+            featVec[ctrl_index][featVec_format.index('WHILE')] = 1
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            featVec[ctrl_index][featVec_format.index('WHILE')+1][value] = 1
+            ctrl_index+=1
+        elif(token == 'IF'):
+            featVec[ctrl_index][featVec_format.index('IF')] = 1
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            featVec[ctrl_index][featVec_format.index('IF')+1][value] = 1
+            ctrl_index+=1
+        elif(token == 'IFELSE'):
+            featVec[ctrl_index][featVec_format.index('IFELSE')] = 1
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            featVec[ctrl_index][featVec_format.index('IFELSE')+1][value] = 1
+        elif(token == 'ELSE'):
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
+            ctrl_index+=1
+        index+=1
+    return featVec
 
 def add_args(parser):
     
@@ -76,7 +131,7 @@ def add_args(parser):
                                         description="Conversion options")
     
     
-    parse_group.add_argument("--code_file", type=str,
+    parse_group.add_argument("--input_code_file", type=str,
                             default="code_val.txt",
                             help="Path to the input code file. "
                             " Default: %(default)s")
@@ -97,7 +152,7 @@ parser = argparse.ArgumentParser(
 add_args(parser)
 args = parser.parse_args()
 
-code_file = open(args.code_file, 'r')
+code_file = open(args.input_code_file, 'r')
 
 code_type_file = open(args.code_type_file, "w")
 
@@ -107,7 +162,8 @@ line_count = 0
 code_type_list = []
 #dict_obj = my_dictionary()
 list_obj = []
-
+feat_vect_elements = []
+no_of_vect_elements =  []
 for line in Lines:
     
     prog_updated = []
@@ -147,14 +203,22 @@ for line in Lines:
     code_type_list.append(code_type)
     code_type_file.write( code_type + "\n" )
 
-    if(code_type in required_ctypes.keys()):
-        list_obj.append({"CodeType": code_type,
-                         "FeatureVector":required_ctypes[code_type],
-                         "Code": prog_updated})
+    if(code_type in required_ctypes):
+        
+        feat_vect = getFeatureVector(prog_updated)
+        if(feat_vect not in feat_vect_elements):
+            feat_vect_elements.append(feat_vect)
+            no_of_vect_elements.append(0)
+        no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
+        
+        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= 100):
+            list_obj.append({"CodeType": code_type,
+                            "FeatureVector":feat_vect,
+                            "Code": prog_updated})
     
-        line_count+=1
-    #if(line_count>1):
-     #   break
+            line_count+=1
+  #  if(line_count>1):
+  #      break
     
 values, counts = np.unique(code_type_list, return_counts=True)    
 
@@ -168,6 +232,7 @@ with open(args.json_data_file, 'w') as json_file:
     
     
 print("Total count\n", line_count)
+print("Number of feature vectors\n", len(no_of_vect_elements))
 #dict_obj = {}
 #for v, c in zip(values, counts):
     
