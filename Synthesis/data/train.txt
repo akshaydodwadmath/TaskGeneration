@@ -1,0 +1,7 @@
+def run() {
+  turn_left() put_marker() turn_left() repeat(19) {
+    pick_marker()
+    turn_right()
+  }
+  turn_right() move() turn_right()
+}
