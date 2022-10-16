@@ -3,19 +3,13 @@ import torch
 import torch.autograd as autograd
 from torch.autograd import Variable
 
-def do_supervised_minibatch(model,
-                            # Source
-                            inp_grids, out_grids,
-                            # Target
-                            in_tgt_seq, in_tgt_seq_list, out_tgt_seq,
-                            # Criterion
-                            criterion):
+def do_supervised_minibatch(model, in_src_seq, out_tgt_seq, criterion):
 
     # Get the log probability of each token in the ground truth sequence of tokens.
-    decoder_logit, _ = model(inp_grids, out_grids, in_tgt_seq, in_tgt_seq_list)
+    
+    decoder_logit, _ = model(in_src_seq, out_tgt_seq)
     
     nb_predictions = torch.numel(out_tgt_seq.data)
-    
     ## out_tgt_seq will be of size batch size x max seq length, non max sequences will be padded
     ## decoder_logit will be of size (out_tgt_seq size, vocab size(52))
     ## cross entropy loss requires unnormalized prediction scores of all tokens, output class

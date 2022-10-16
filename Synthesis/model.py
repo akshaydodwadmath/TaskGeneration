@@ -10,6 +10,12 @@ from torch.autograd import Variable
 from dataloader import IMG_SIZE
 from misc.beam import Beam
 
+
+import math
+from typing import Tuple
+from torch import Tensor
+from torch.nn import TransformerEncoder, TransformerEncoderLayer
+
 ### A module to ensure convolution happens in the correct manner and the required dimensions are obtained 
 ### after convolution. Example:
 # inp_grids torch.Size([16, 5, 16, 18, 18])
@@ -70,14 +76,20 @@ class MultiIOProgramDecoder(nn.Module):
         self.embedding_dim = embedding_dim
 
         self.io_emb_size = io_emb_size
-        self.lstm_input_size = io_emb_size + embedding_dim
+        self.lstm_input_size =  embedding_dim * 2
         self.lstm_hidden_size = lstm_hidden_size
         self.nb_layers = nb_layers
         self.syntax_checker = None
         self.learned_syntax_checker = None
+        
+        
+        self.embedding_input = nn.Embedding(
+            47,
+            self.embedding_dim
+        )
 
-        self.embedding = nn.Embedding(
-            self.vocab_size,
+        self.embedding_output = nn.Embedding(
+            10,
             self.embedding_dim
         )
         self.rnn = nn.LSTM(
@@ -86,8 +98,8 @@ class MultiIOProgramDecoder(nn.Module):
             self.nb_layers,
         )
 
-        self.initial_h = nn.Parameter(torch.Tensor(self.nb_layers, 1, 1, self.lstm_hidden_size))
-        self.initial_c = nn.Parameter(torch.Tensor(self.nb_layers, 1, 1, self.lstm_hidden_size))
+        self.initial_h = nn.Parameter(torch.Tensor(self.nb_layers, 1,  self.lstm_hidden_size))
+        self.initial_c = nn.Parameter(torch.Tensor(self.nb_layers, 1,  self.lstm_hidden_size))
 
         self.out2token = MapModule(nn.Linear(self.lstm_hidden_size, self.vocab_size), 1)
         #TODO
@@ -99,14 +111,13 @@ class MultiIOProgramDecoder(nn.Module):
         
     def init_weights(self):
         initrange = 0.1
-        self.embedding.weight.data.uniform_(-initrange, initrange)
+        self.embedding_input.weight.data.uniform_(-initrange, initrange)
+        self.embedding_output.weight.data.uniform_(-initrange, initrange)
         self.out2token.elt_module.bias.data.fill_(0)
         self.initial_h.data.uniform_(-initrange, initrange)
         self.initial_c.data.uniform_(-initrange, initrange)
         
-    
-    def forward(self, tgt_inp_sequences, io_embeddings,
-                list_inp_sequences,
+    def forward(self, in_src_seq, tgt_encoder_vector,out_tgt_seq,
                 initial_state=None,
                 grammar_state=None):
         '''
@@ -119,38 +130,36 @@ class MultiIOProgramDecoder(nn.Module):
         # permute:  dimensions permuted.
         # torch.cat dim: dimensions along which the tensors are concatenated
         # TODO: understand seq_len again
-        batch_size, seq_len = tgt_inp_sequences.size()
-        _, nb_ios, _ = io_embeddings.size()
-     #  print('tgt_inp_sequences',tgt_inp_sequences)
-     #   print('tgt_inp_sequences.long()', tgt_inp_sequences.long())
-        seq_emb = self.embedding(tgt_inp_sequences).permute(1, 0, 2).contiguous()
-        # seq_emb: seq_len x batch_size x embedding_dim
-        per_io_seq_emb = seq_emb.unsqueeze(2).expand(seq_len, batch_size, nb_ios, self.embedding_dim)
-        # per_io_seq_emb: seq_len x batch_size x nb_ios x embedding_dim
+        batch_size, seq_len  = out_tgt_seq.size()
+      #  print("batch_size, seq_len", batch_size, seq_len)
+        src_emb = self.embedding_input(in_src_seq.reshape(-1,1)).contiguous()
+     #   print("src_emb", src_emb)
+        tgt_emb = self.embedding_output(torch.argmax(tgt_encoder_vector, dim=1).reshape(-1,1))
+     #   print("tgt_emb", tgt_emb)
+       
+        # tgt_emb:  batch_size x embedding_dim
 
-        lstm_cell_size = torch.Size((self.nb_layers, batch_size, nb_ios, self.lstm_hidden_size))
+        lstm_cell_size = torch.Size((self.nb_layers, batch_size, self.lstm_hidden_size))
         if initial_state is None:
             initial_state = (
                 self.initial_h.expand(lstm_cell_size).contiguous(),
                 self.initial_c.expand(lstm_cell_size).contiguous()
             )
-        
-
-        # Add the IO embedding to each of the input
-        io_embeddings = io_embeddings.unsqueeze(0)
-        io_embeddings = io_embeddings.expand(seq_len, batch_size, nb_ios, self.io_emb_size)
 
 
         # Forms the input correctly
-        dec_input = torch.cat([per_io_seq_emb, io_embeddings], 3)
-        # dec_input: seq_len x batch_size x nb_ios x lstm_input_size
+        dec_input_per_ts = torch.cat([src_emb, tgt_emb], 2).permute(1,0,2)
+        # dec_input: 1 x batch_size   x lstm_input_size
+        dec_input = dec_input_per_ts.repeat(seq_len,1,1)
+        # dec_input: seq_len x batch_size  x lstm_input_size
 
         # Flatten across batch x nb_ios
-        dec_input = dec_input.view(seq_len, batch_size*nb_ios, self.lstm_input_size)
-        # dec_input: seq_len x batch_size*nb_ios x lstm_input_size
+        dec_input = dec_input.view( seq_len, batch_size, self.lstm_input_size)
+    #    print("dec_input flattened", dec_input)
+        # dec_input: seq_len x batch_size x lstm_input_size
         initial_state = (
-            initial_state[0].view(self.nb_layers, batch_size*nb_ios, self.lstm_hidden_size),
-            initial_state[1].view(self.nb_layers, batch_size*nb_ios, self.lstm_hidden_size)
+            initial_state[0].view(self.nb_layers, batch_size, self.lstm_hidden_size),
+            initial_state[1].view(self.nb_layers, batch_size, self.lstm_hidden_size)
         )
         # initial_state: 2-Tuple of (nb_layers x batch_size*nb_ios x embedding_dim)
 
@@ -160,7 +169,7 @@ class MultiIOProgramDecoder(nn.Module):
         # dec_lstm_state: 2-Tuple of (nb_layers x batch_size*nb_ios x embedding_dim)
 
         # Reshape the output:
-        dec_out = dec_out.view(1, seq_len, batch_size, nb_ios, self.lstm_hidden_size)
+        dec_out = dec_out.view(1, seq_len, batch_size, 1, self.lstm_hidden_size)
         # XXX there is an extremely weird bug in pytorch when doing the max
         # over dim = 2 so we introduce a dummy dimension to avoid it, so
         # that we can operate on the third dimension
@@ -173,19 +182,18 @@ class MultiIOProgramDecoder(nn.Module):
         # decoder_logit: seq_len x batch_size x out_voc_size
         decoder_logit = decoder_logit.permute(1, 0, 2)
         # decoder_logit: batch_size x seq_len x out_voc_size
+     #   print("decoder_logit", decoder_logit.size())
 
         # Also reorganise the state
         dec_lstm_state = (
-            dec_lstm_state[0].view(self.nb_layers, batch_size, nb_ios, self.lstm_hidden_size),
-            dec_lstm_state[1].view(self.nb_layers, batch_size, nb_ios, self.lstm_hidden_size)
+            dec_lstm_state[0].view(self.nb_layers, batch_size, self.lstm_hidden_size),
+            dec_lstm_state[1].view(self.nb_layers, batch_size, self.lstm_hidden_size)
         )
         syntax_mask = None
         
         #TODO if self.syntax_checker is not None:
         
         return decoder_logit, dec_lstm_state, grammar_state, syntax_mask
-    
-       #TODO understand beam search, currently only used for model evaluation
     
     def beam_sample(self, io_embeddings,
                     tgt_start, tgt_end, max_len,
@@ -484,3 +492,104 @@ class IOs2Seq(nn.Module):
                                            tgt_start, tgt_end, max_len,
                                            beam_size, top_k, vol)
         return sampled
+
+class PositionalEncoding(nn.Module):
+
+    def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 5000):
+        super().__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        position = torch.arange(max_len).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
+        pe = torch.zeros(max_len, 1, d_model)
+        pe[:, 0, 0::2] = torch.sin(position * div_term)
+        pe[:, 0, 1::2] = torch.cos(position * div_term)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x: Tensor) -> Tensor:
+        """
+        Args:
+            x: Tensor, shape [seq_len, batch_size, embedding_dim]
+        """
+        x = x + self.pe[:x.size(0)]
+        return self.dropout(x)
+    
+class TransformerModel(nn.Module):
+
+    def __init__(self, ntoken: int, d_model: int, nhead: int, d_hid: int,
+                 nlayers: int, dropout: float = 0.5):
+        super().__init__()
+        self.model_type = 'Transformer'
+        self.pos_encoder = PositionalEncoding(d_model, dropout)
+        encoder_layers = TransformerEncoderLayer(d_model, nhead, d_hid, dropout)
+        self.transformer_encoder = TransformerEncoder(encoder_layers, nlayers)
+        self.encoder = nn.Embedding(ntoken, d_model)
+        self.d_model = d_model
+        self.decoder = nn.Linear(d_model, 10)
+
+        self.init_weights()
+
+    def init_weights(self) -> None:
+        initrange = 0.1
+        self.encoder.weight.data.uniform_(-initrange, initrange)
+        #self.decoder.bias.data.zero_()
+        #self.decoder.weight.data.uniform_(-initrange, initrange)
+
+    def forward(self, src: Tensor) -> Tensor:
+        """
+        Args:
+            src: Tensor, shape [seq_len, batch_size]
+            src_mask: Tensor, shape [seq_len, seq_len]
+
+        Returns:
+            output Tensor of shape [seq_len, batch_size, ntoken]
+        """
+        src = self.encoder(src) * math.sqrt(self.d_model)
+        src = self.pos_encoder(src)
+        output = self.transformer_encoder(src)
+       # print("Tx output", output)
+       # print("Tx output 1", output[0][0])
+        #TODO
+        output = self.decoder(output.permute(1,0,2)[0])
+        #print("dec output", output)
+        probs = F.gumbel_softmax(output, tau=1, hard=True)
+      #  print("probs", probs)
+        return probs
+    
+class CodeType2Code(nn.Module):
+
+    def __init__(self,
+                 # IO encoder
+                 kernel_size, conv_stack, fc_stack,
+                 # Program Decoder
+                 tgt_vocabulary_size,
+                 tgt_embedding_dim,
+                 decoder_lstm_hidden_size,
+                 decoder_nb_lstm_layers,
+                 learn_syntax):
+        super(CodeType2Code, self).__init__()
+        
+        
+        ntokens = tgt_vocabulary_size  # size of vocabulary
+        emsize = 16 # embedding dimension
+        d_hid = 200  # dimension of the feedforward network model in nn.TransformerEncoder
+        nlayers = 2  # number of nn.TransformerEncoderLayer in nn.TransformerEncoder
+        nhead = 2  # number of heads in nn.MultiheadAttention
+        dropout = 0.2  # dropout probability
+        self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, dropout)
+        io_emb_size = fc_stack[-1]
+        self.decoder = MultiIOProgramDecoder(tgt_vocabulary_size,
+                                             tgt_embedding_dim,
+                                             io_emb_size,
+                                             decoder_lstm_hidden_size,
+                                             decoder_nb_lstm_layers,
+                                             learn_syntax)
+                                             
+                                             
+    def forward(self, in_src_seq, out_tgt_seq):
+
+       # io_embedding = self.encoder(input_grids, output_grids)
+        tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq)
+        dec_outs, _, _, syntax_mask = self.decoder(in_src_seq,
+                                                   tgt_encoder_vector, out_tgt_seq)
+        return dec_outs, syntax_mask

@@ -7,7 +7,7 @@ import torch
 from torch.autograd import Variable
 from tqdm import tqdm
 
-from dataloader import load_input_file_orig, get_minibatch, shuffle_dataset
+from dataloader import load_input_file, get_minibatch, shuffle_dataset
 from karel.consistency import Simulator
 
 
@@ -67,7 +67,7 @@ def evaluate_model(model_weights,
     program_dump_path = os.path.join(res_dir, "generated")
         
     # Load the vocabulary of the trained model
-    dataset, vocab = load_input_file_orig(dataset_path, vocabulary_path)
+    dataset, vocab = load_input_file(dataset_path, vocabulary_path)
     tgt_start = vocab["tkn2idx"]["<s>"]
     tgt_end = vocab["tkn2idx"]["m)"]
     tgt_pad = vocab["tkn2idx"]["<pad>"]

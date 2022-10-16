@@ -7,9 +7,9 @@ import time
 
 
 import argparse
-from dataloader import load_input_file,get_minibatch, load_input_file_orig, shuffle_dataset
+from dataloader import load_input_file,get_minibatch, shuffle_dataset
 from train_helper import do_supervised_minibatch
-from model import IOs2Seq
+from model import CodeType2Code
 from evaluate import evaluate_model
 
 import torch
@@ -92,8 +92,6 @@ def add_train_cli_args(parser):
                         default=100,
                         help="How many minibatch to do before logging"
                         "Default: %(default)s.")
-    train_group.add_argument("--save_to_txt", action="store_true",
-                    help="Create data files with desried programs")
 
     rl_group = parser.add_argument_group("RL-specific training options")
     # rl_group.add_argument("--environment", type=str,
@@ -158,10 +156,7 @@ if not models_dir.exists():
     time.sleep(1)  # Let some time for the dir to be created
             
 # Load-up the dataset TODO
-if(args.save_to_txt):
-    dataset, vocab = load_input_file(args.train_file, args.vocab)
-else:
-    dataset, vocab = load_input_file_orig(args.train_file, args.vocab)
+dataset, vocab = load_input_file(args.train_file, args.vocab)
 
 #TODO
 if use_grammar:
@@ -179,7 +174,7 @@ nb_lstm_layers = 2
 learn_syntax = False
 
 #Need to setup paths
-model = IOs2Seq(kernel_size, conv_stack, fc_stack,
+model = CodeType2Code(kernel_size, conv_stack, fc_stack,
                 vocabulary_size, tgt_embedding_size,
                 lstm_hidden_size, nb_lstm_layers,
                 learn_syntax)
@@ -239,15 +234,12 @@ for epoch_idx in range(0, args.nb_epochs):
         optimizer.zero_grad()
 
         if signal == TrainSignal.SUPERVISED:
-            inp_grids, out_grids, \
-                in_tgt_seq, in_tgt_seq_list, out_tgt_seq, \
-                _, _, _, _, _ = get_minibatch(dataset, sp_idx, batch_size,
+            in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
                                               tgt_start, tgt_end, tgt_pad,
                                               nb_ios_for_epoch)
             #TODO
             if args.use_cuda:
-                inp_grids, out_grids = inp_grids.cuda(), out_grids.cuda()
-                in_tgt_seq, out_tgt_seq = in_tgt_seq.cuda(), out_tgt_seq.cuda()
+                in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
             # if learn_syntax:
                 # minibatch_loss = do_syntax_weighted_minibatch(model,
                                                               # inp_grids, out_grids,
@@ -255,10 +247,8 @@ for epoch_idx in range(0, args.nb_epochs):
                                                               # out_tgt_seq,
                                                               # loss_criterion, beta)
             # else:
-            minibatch_loss = do_supervised_minibatch(model,
-                                                     inp_grids, out_grids,
-                                                     in_tgt_seq, in_tgt_seq_list,
-                                                     out_tgt_seq, loss_criterion)
+            minibatch_loss = do_supervised_minibatch(model,in_src_seq, out_tgt_seq, loss_criterion)
+            
             recent_losses.append(minibatch_loss)
             
         optimizer.step()
