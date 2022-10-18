@@ -69,7 +69,7 @@ class MultiIOProgramDecoder(nn.Module):
     '''
     def __init__(self, vocab_size, embedding_dim,
                  io_emb_size, lstm_hidden_size, nb_layers,
-                 learn_syntax):
+                 ndomains, nfeaturevectors, learn_syntax):
         super(MultiIOProgramDecoder, self).__init__()
 
         self.vocab_size = vocab_size
@@ -84,12 +84,12 @@ class MultiIOProgramDecoder(nn.Module):
         
         
         self.embedding_input = nn.Embedding(
-            47,
+            nfeaturevectors,
             self.embedding_dim
         )
 
         self.embedding_output = nn.Embedding(
-            10,
+            ndomains,
             self.embedding_dim
         )
         self.rnn = nn.LSTM(
@@ -517,7 +517,7 @@ class PositionalEncoding(nn.Module):
 class TransformerModel(nn.Module):
 
     def __init__(self, ntoken: int, d_model: int, nhead: int, d_hid: int,
-                 nlayers: int, dropout: float = 0.5):
+                 nlayers: int, ndomains, dropout: float = 0.5 ):
         super().__init__()
         self.model_type = 'Transformer'
         self.pos_encoder = PositionalEncoding(d_model, dropout)
@@ -525,7 +525,7 @@ class TransformerModel(nn.Module):
         self.transformer_encoder = TransformerEncoder(encoder_layers, nlayers)
         self.encoder = nn.Embedding(ntoken, d_model)
         self.d_model = d_model
-        self.decoder = nn.Linear(d_model, 10)
+        self.decoder = nn.Linear(d_model, ndomains)
 
         self.init_weights()
 
@@ -553,7 +553,7 @@ class TransformerModel(nn.Module):
         output = self.decoder(output.permute(1,0,2)[0])
         #print("dec output", output)
         probs = F.gumbel_softmax(output, tau=1, hard=True)
-      #  print("probs", probs)
+       # print("probs", probs)
         return probs
     
 class CodeType2Code(nn.Module):
@@ -566,6 +566,8 @@ class CodeType2Code(nn.Module):
                  tgt_embedding_dim,
                  decoder_lstm_hidden_size,
                  decoder_nb_lstm_layers,
+                 ndomains,
+                 nfeaturevectors,
                  learn_syntax):
         super(CodeType2Code, self).__init__()
         
@@ -576,13 +578,15 @@ class CodeType2Code(nn.Module):
         nlayers = 2  # number of nn.TransformerEncoderLayer in nn.TransformerEncoder
         nhead = 2  # number of heads in nn.MultiheadAttention
         dropout = 0.2  # dropout probability
-        self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, dropout)
+        self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, ndomains, dropout )
         io_emb_size = fc_stack[-1]
         self.decoder = MultiIOProgramDecoder(tgt_vocabulary_size,
                                              tgt_embedding_dim,
                                              io_emb_size,
                                              decoder_lstm_hidden_size,
                                              decoder_nb_lstm_layers,
+                                             ndomains,
+                                             nfeaturevectors,
                                              learn_syntax)
                                              
                                              
@@ -592,4 +596,4 @@ class CodeType2Code(nn.Module):
         tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq)
         dec_outs, _, _, syntax_mask = self.decoder(in_src_seq,
                                                    tgt_encoder_vector, out_tgt_seq)
-        return dec_outs, syntax_mask
+        return dec_outs, tgt_encoder_vector, syntax_mask

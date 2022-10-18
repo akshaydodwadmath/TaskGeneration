@@ -78,21 +78,11 @@ def load_input_file(path_to_dataset, path_to_vocab):
 
                 srcs.append(src_feature_index)
                 tgts.append(tgt_program_idces)
-                    
+        
         dataset = {"sources": srcs,
                    "targets": tgts}
         torch.save(dataset, path_to_ds_cache)
-
-    return dataset, vocab    
-
-    
-
-    dataset = {"sources": srcs,
-               "targets": tgts}
-    torch.save(dataset, path_to_ds_cache)
- 
-
-    return dataset, vocab
+    return dataset, vocab, max(dataset["sources"])+1    
 
 #TODO: undestand this
 def shuffle_dataset(dataset, batch_size, randomize=True):
