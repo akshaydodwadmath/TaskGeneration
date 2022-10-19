@@ -76,12 +76,16 @@ class MultiIOProgramDecoder(nn.Module):
         self.embedding_dim = embedding_dim
 
         self.io_emb_size = io_emb_size
-        self.lstm_input_size =  embedding_dim * 2
+        self.lstm_input_size =  embedding_dim * 3
         self.lstm_hidden_size = lstm_hidden_size
         self.nb_layers = nb_layers
         self.syntax_checker = None
         self.learned_syntax_checker = None
         
+        self.embedding = nn.Embedding(
+            self.vocab_size,
+            self.embedding_dim
+        )
         
         self.embedding_input = nn.Embedding(
             nfeaturevectors,
@@ -111,13 +115,14 @@ class MultiIOProgramDecoder(nn.Module):
         
     def init_weights(self):
         initrange = 0.1
+        self.embedding.weight.data.uniform_(-initrange, initrange)
         self.embedding_input.weight.data.uniform_(-initrange, initrange)
         self.embedding_output.weight.data.uniform_(-initrange, initrange)
         self.out2token.elt_module.bias.data.fill_(0)
         self.initial_h.data.uniform_(-initrange, initrange)
         self.initial_c.data.uniform_(-initrange, initrange)
         
-    def forward(self, in_src_seq, tgt_encoder_vector,out_tgt_seq,
+    def forward(self, tgt_inp_sequences, in_src_seq, tgt_encoder_vector,seq_len,
                 initial_state=None,
                 grammar_state=None):
         '''
@@ -130,14 +135,13 @@ class MultiIOProgramDecoder(nn.Module):
         # permute:  dimensions permuted.
         # torch.cat dim: dimensions along which the tensors are concatenated
         # TODO: understand seq_len again
-        batch_size, seq_len  = out_tgt_seq.size()
-      #  print("batch_size, seq_len", batch_size, seq_len)
+        batch_size, seq_len = tgt_inp_sequences.size()
+        seq_emb = self.embedding(tgt_inp_sequences).permute(1, 0, 2).contiguous()
+
         src_emb = self.embedding_input(in_src_seq.reshape(-1,1)).contiguous()
-     #   print("src_emb", src_emb)
         tgt_emb = self.embedding_output(torch.argmax(tgt_encoder_vector, dim=1).reshape(-1,1))
-     #   print("tgt_emb", tgt_emb)
        
-        # tgt_emb:  batch_size x embedding_dim
+        # src_emb, tgt_emb:  batch_size x embedding_dim
 
         lstm_cell_size = torch.Size((self.nb_layers, batch_size, self.lstm_hidden_size))
         if initial_state is None:
@@ -150,8 +154,9 @@ class MultiIOProgramDecoder(nn.Module):
         # Forms the input correctly
         dec_input_per_ts = torch.cat([src_emb, tgt_emb], 2).permute(1,0,2)
         # dec_input: 1 x batch_size   x lstm_input_size
-        dec_input = dec_input_per_ts.repeat(seq_len,1,1)
+        fixed_dec_input = dec_input_per_ts.repeat(seq_len,1,1)
         # dec_input: seq_len x batch_size  x lstm_input_size
+        dec_input = torch.cat([seq_emb,fixed_dec_input], 2)
 
         # Flatten across batch x nb_ios
         dec_input = dec_input.view( seq_len, batch_size, self.lstm_input_size)
@@ -195,8 +200,7 @@ class MultiIOProgramDecoder(nn.Module):
         
         return decoder_logit, dec_lstm_state, grammar_state, syntax_mask
     
-    def beam_sample(self, io_embeddings,
-                    tgt_start, tgt_end, max_len,
+    def beam_sample(self, in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, max_len,
                     beam_size, top_k, vol):
 
         '''
@@ -204,8 +208,8 @@ class MultiIOProgramDecoder(nn.Module):
         All the rest are ints
         vol is a boolean indicating whether created Variables should be volatile
         '''
-        batch_size, nb_ios, io_emb_size = io_embeddings.size()
-        use_cuda = io_embeddings.is_cuda
+        batch_size = len(in_src_seq)
+        use_cuda = in_src_seq.is_cuda
         tt = torch.cuda if use_cuda else torch
         force_beamcpu = True
 
@@ -218,8 +222,6 @@ class MultiIOProgramDecoder(nn.Module):
         batch_state = None  # First one is the learned default state
         batch_grammar_state = None
         batch_inputs = Variable(tt.LongTensor(batch_size, 1).fill_(tgt_start), volatile=vol)
-        batch_list_inputs = [[tgt_start]]*batch_size
-        batch_io_embeddings = io_embeddings
         batch_idx = Variable(torch.arange(0, batch_size, 1).long(), volatile=vol)
         if use_cuda:
             batch_idx = batch_idx.cuda()
@@ -232,10 +234,12 @@ class MultiIOProgramDecoder(nn.Module):
            # if batch_state is not None:
                # print('in_tgt_seq_list', (batch_state.size()))
            # print('batch_inputs', batch_inputs)
+         #   print("batch_inputs", (batch_inputs))
             dec_outs, dec_state, \
             batch_grammar_state, _ = self.forward(batch_inputs,
-                                                  batch_io_embeddings,
-                                                  batch_list_inputs,
+                                                  in_src_seq,
+                                                  tgt_encoder_vector,
+                                                  1,
                                                   batch_state,
                                                   batch_grammar_state)
             # dec_outs -> (batch_size*beam_size, 1, nb_out_word)
@@ -301,7 +305,10 @@ class MultiIOProgramDecoder(nn.Module):
             batch_idx = torch.cat(new_batch_idx, 0)
             parent_idxs = torch.cat(new_parent_idxs, 0)
             batch_list_inputs = new_batch_list_inputs
-
+            
+            
+            tgt_encoder_vector = tgt_encoder_vector.index_select(0, parent_idxs.type(torch.int64))
+            in_src_seq = in_src_seq.index_select(0, parent_idxs.type(torch.int64))
             batch_state = (
                 dec_state[0].index_select(1, parent_idxs.type(torch.int64)),
                 dec_state[1].index_select(1, parent_idxs.type(torch.int64))
@@ -313,7 +320,6 @@ class MultiIOProgramDecoder(nn.Module):
                     batch_grammar_state[0].index_select(1, parent_idxs),
                     batch_grammar_state[1].index_select(1, parent_idxs)
                 )
-            batch_io_embeddings = io_embeddings.index_select(0, batch_idx)
             beams_per_sp = new_beams_per_sp
             assert(len(beams_per_sp)==len(beams))
         sampled = []
@@ -553,7 +559,7 @@ class TransformerModel(nn.Module):
         output = self.decoder(output.permute(1,0,2)[0])
         #print("dec output", output)
         probs = F.gumbel_softmax(output, tau=1, hard=True)
-       # print("probs", probs)
+       # print("probs.size()", probs.size())
         return probs
     
 class CodeType2Code(nn.Module):
@@ -590,10 +596,22 @@ class CodeType2Code(nn.Module):
                                              learn_syntax)
                                              
                                              
-    def forward(self, in_src_seq, out_tgt_seq):
+    def forward(self, tgt_inp_sequences, in_src_seq, out_tgt_seq):
 
        # io_embedding = self.encoder(input_grids, output_grids)
         tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq)
-        dec_outs, _, _, syntax_mask = self.decoder(in_src_seq,
-                                                   tgt_encoder_vector, out_tgt_seq)
+
+      #  print("out_tgt_seq.size()", out_tgt_seq.size())
+        _, seq_len  = out_tgt_seq.size()
+        dec_outs, _, _, syntax_mask = self.decoder(tgt_inp_sequences, in_src_seq,
+                                                   tgt_encoder_vector, seq_len)
         return dec_outs, tgt_encoder_vector, syntax_mask
+    
+    
+    def beam_sample(self, in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, seq_len,
+                    beam_size, top_k, vol=True):
+      #  io_embedding = self.encoder(input_grids, output_grids)
+
+        sampled = self.decoder.beam_sample(in_src_seq,tgt_encoder_vector, tgt_start, tgt_end, seq_len,
+                                           beam_size, top_k, vol)
+        return sampled

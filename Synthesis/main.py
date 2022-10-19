@@ -225,7 +225,6 @@ recent_losses = []
 best_val_acc = np.NINF
 batch_size = args.batch_size
 for epoch_idx in range(0, args.nb_epochs):
-    nb_ios_for_epoch = args.nb_ios
     # This is definitely not the most efficient way to do it but oh well
     dataset = shuffle_dataset(dataset, batch_size)
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
@@ -236,12 +235,11 @@ for epoch_idx in range(0, args.nb_epochs):
         optimizer.zero_grad()
 
         if signal == TrainSignal.SUPERVISED:
-            in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
-                                              tgt_start, tgt_end, tgt_pad,
-                                              nb_ios_for_epoch)
+            tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
+                                              tgt_start, tgt_end, tgt_pad)
             #TODO
             if args.use_cuda:
-                in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
+                tgt_inp_sequences, in_src_seq, out_tgt_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda()
             # if learn_syntax:
                 # minibatch_loss = do_syntax_weighted_minibatch(model,
                                                               # inp_grids, out_grids,
@@ -249,7 +247,7 @@ for epoch_idx in range(0, args.nb_epochs):
                                                               # out_tgt_seq,
                                                               # loss_criterion, beta)
             # else:
-            minibatch_loss = do_supervised_minibatch(model,in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
+            minibatch_loss = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
             
             recent_losses.append(minibatch_loss)
             

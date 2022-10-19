@@ -108,7 +108,7 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
 
 def get_minibatch(dataset, sp_idx, batch_size,
                   start_idx, end_idx, pad_idx,
-                  nb_ios, shuffle=True, volatile_vars=False):
+                  shuffle=True, volatile_vars=False):
     """Prepare minibatch."""
 
     # Prepare the grids
@@ -122,6 +122,13 @@ def get_minibatch(dataset, sp_idx, batch_size,
     ]
     lens = [len(line) for line in lines]
     max_len = max(lens)
+    
+    
+    # Drop the last element, it should be the <end> symbol for all of them
+    # padding for all of them
+    input_lines = [
+        line[:max_len-1] + [pad_idx] * (max_len - len(line[:max_len-1])-1) for line in lines
+    ]
 
     # Drop the first element, should always be the <start> symbol. This makes
     # everything shifted by one compared to the input_lines
@@ -130,6 +137,7 @@ def get_minibatch(dataset, sp_idx, batch_size,
     ]
 
     in_src_seq = Variable(torch.LongTensor(srcs), volatile=volatile_vars)
+    tgt_inp_sequences = Variable(torch.LongTensor(input_lines), volatile=volatile_vars)
     out_tgt_seq = Variable(torch.LongTensor(output_lines), volatile=volatile_vars)
 
-    return in_src_seq, out_tgt_seq, srcs,targets
+    return tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets

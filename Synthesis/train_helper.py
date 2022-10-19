@@ -4,11 +4,11 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 
 
-def do_supervised_minibatch(model, in_src_seq, out_tgt_seq, criterion, weight_lambda):
+def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, out_tgt_seq, criterion, weight_lambda):
 
     # Get the log probability of each token in the ground truth sequence of tokens.
     
-    decoder_logit, probs, _ = model(in_src_seq, out_tgt_seq)
+    decoder_logit, probs, _ = model(tgt_inp_sequences, in_src_seq, out_tgt_seq)
    
     probs_avg = torch.mean(torch.add(probs,1e-6), 0, True)
     loss_entropy = -torch.matmul(probs_avg, torch.log(probs_avg).reshape(-1,1))
