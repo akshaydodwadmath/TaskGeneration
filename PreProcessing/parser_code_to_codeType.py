@@ -88,15 +88,25 @@ def checkNextCtrl(subprog, index):
             return(subVec_format.index('NO_CTRL'), index)
         index+=1
 
+def getNumberOfActions(prog):
+    action_count = 0
+    for token in prog:
+        if(token in actions):
+            action_count+=1
+    return action_count
+    
+
 def getFeatureVector(prog):
     index = 0
     ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
     featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
                       'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
     featVec = [[0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
-               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]]]
+               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
+               [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
     #for token in prog[index:]:
     ctrl_index = 0
+    numb_actions = getNumberOfActions(prog)
     while(index < len(prog)):
         token = prog[index]
         if(token == 'REPEAT'):
@@ -123,7 +133,8 @@ def getFeatureVector(prog):
             featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
             ctrl_index+=1
         index+=1
-    return featVec
+    featVec[2][numb_actions] = 1
+    return featVec, numb_actions
 
 def add_args(parser):
     
@@ -145,6 +156,10 @@ def add_args(parser):
                             default="val_data.json",
                             help="Path to the input code file. "
                             " Default: %(default)s")
+    parse_group.add_argument("--json_featVectors_file", type=str,
+                            default="featVectors.json",
+                            help="Path to the input code file. "
+                            " Default: %(default)s")
 
 
 parser = argparse.ArgumentParser(
@@ -162,8 +177,12 @@ line_count = 0
 code_type_list = []
 #dict_obj = my_dictionary()
 list_obj = []
+featVec_evaluation = []
 feat_vect_elements = []
 no_of_vect_elements =  []
+action_temp = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+
 for line in Lines:
     
     prog_updated = []
@@ -179,8 +198,10 @@ for line in Lines:
         token = token.replace(']', '')
         token = token.replace('\n', '')
         prog_updated.append(token)
-    
-   # print("prog", prog_updated)
+        #Example format: ['DEF', 'run', 'm(', 'move', 'move', 'WHILE', 'c(', 'noMarkersPresent', 'c)', 'w(', 'putMarker', 'move', 'w)', 'm)']
+
+
+    #print("prog", prog_updated)
     
     pattern_only = []
     
@@ -205,15 +226,24 @@ for line in Lines:
 
     if(code_type in required_ctypes):
         
-        feat_vect = getFeatureVector(prog_updated)
+        feat_vect,numb_actions = getFeatureVector(prog_updated)
+        action_temp[numb_actions] +=1
         if(feat_vect not in feat_vect_elements):
             feat_vect_elements.append(feat_vect)
             no_of_vect_elements.append(0)
+            featVec_evaluation.append({
+                            "FeatureVector":feat_vect,
+                            "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
+                            "Code": prog_updated
+                            })
+            
+            
         no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
         
-        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= 100):
+        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= 15):
             list_obj.append({"CodeType": code_type,
                             "FeatureVector":feat_vect,
+                            "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
                             "Code": prog_updated})
     
             line_count+=1
@@ -222,7 +252,11 @@ for line in Lines:
     
 values, counts = np.unique(code_type_list, return_counts=True)    
 
-
+with open(args.json_featVectors_file, 'w') as json_file:
+    for dict_ in featVec_evaluation:
+        json.dump(dict_, json_file, 
+                        separators=(',',': '))
+        json_file.write('\n')
 
 with open(args.json_data_file, 'w') as json_file:
     for dict_ in list_obj:
@@ -233,6 +267,7 @@ with open(args.json_data_file, 'w') as json_file:
     
 print("Total count\n", line_count)
 print("Number of feature vectors\n", len(no_of_vect_elements))
+print("Action temp\n", action_temp)
 #dict_obj = {}
 #for v, c in zip(values, counts):
     
