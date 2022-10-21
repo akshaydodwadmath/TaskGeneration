@@ -88,17 +88,34 @@ def checkNextCtrl(subprog, index):
             return(subVec_format.index('NO_CTRL'), index)
         index+=1
 
+def getNumberOfActions(prog):
+    action_count = 0
+    for token in prog:
+        if(token in actions):
+            action_count+=1
+    return action_count
+    
+
 def getFeatureVector(prog):
     index = 0
     ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
     featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
                       'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
     featVec = [[0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
-               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]]]
+               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
+               [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+    featVec_undefined = [[1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
+               [1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
+               [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     #for token in prog[index:]:
     ctrl_index = 0
+    numb_actions = getNumberOfActions(prog)
     while(index < len(prog)):
         token = prog[index]
+        if((token in commands) or (token in command_if_else)):
+            if(ctrl_index > 1):
+                return featVec_undefined, numb_actions
+        
         if(token == 'REPEAT'):
             featVec[ctrl_index][featVec_format.index('REPEAT')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
@@ -123,9 +140,5 @@ def getFeatureVector(prog):
             featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
             ctrl_index+=1
         index+=1
-    return featVec
-
-    
-    
-    
-    
+    featVec[2][numb_actions] = 1
+    return featVec, numb_actions

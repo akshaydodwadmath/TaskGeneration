@@ -24,7 +24,7 @@ def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, out_tgt_seq, c
         out_tgt_seq.view(nb_predictions)
     )
 
-    loss = loss_train + weight_lambda * loss_entropy
+    loss = loss_train - weight_lambda * loss_entropy
     # Do the backward pass over the loss
     loss.backward()
     

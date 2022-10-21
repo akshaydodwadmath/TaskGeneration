@@ -85,7 +85,11 @@ def add_train_cli_args(parser):
     train_group.add_argument("--val_frequency", type=int,
                              default=1,
                              help="Frequency (in epochs) of validation.")
-                             
+    train_group.add_argument('--ndomains', type=int,
+                             default=20,
+                             help="Number of domains for target encoder. "
+                             "Default: %(default)s")
+    
     train_group.add_argument("--use_cuda", action="store_true",
                         help="Use the GPU to run the model")
     train_group.add_argument("--log_frequency", type=int,
@@ -170,14 +174,14 @@ conv_stack = [64, 64, 64]
 fc_stack = [512]
 tgt_embedding_size = 256
 lstm_hidden_size = 256
-nb_lstm_layers = 2
+nb_lstm_layers = 1
 learn_syntax = False
-ndomains = 200
+#ndomains = 200
 
 #Need to setup paths
 model = CodeType2Code(kernel_size, conv_stack, fc_stack,
                 vocabulary_size, tgt_embedding_size,
-                lstm_hidden_size, nb_lstm_layers,ndomains ,
+                lstm_hidden_size, nb_lstm_layers, args.ndomains ,
                 nfeaturevectors,learn_syntax)
 # Dump initial weights
 path_to_ini_weight_dump = models_dir / "ini_weights.model"

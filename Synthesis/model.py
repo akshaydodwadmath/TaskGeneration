@@ -557,9 +557,7 @@ class TransformerModel(nn.Module):
        # print("Tx output 1", output[0][0])
         #TODO
         output = self.decoder(output.permute(1,0,2)[0])
-        #print("dec output", output)
         probs = F.gumbel_softmax(output, tau=1, hard=True)
-       # print("probs.size()", probs.size())
         return probs
     
 class CodeType2Code(nn.Module):

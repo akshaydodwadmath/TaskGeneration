@@ -182,7 +182,7 @@ feat_vect_elements = []
 no_of_vect_elements =  []
 action_temp = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-
+code_list = []
 for line in Lines:
     
     prog_updated = []
@@ -231,22 +231,28 @@ for line in Lines:
         if(feat_vect not in feat_vect_elements):
             feat_vect_elements.append(feat_vect)
             no_of_vect_elements.append(0)
-            featVec_evaluation.append({
-                            "FeatureVector":feat_vect,
-                            "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                            "Code": prog_updated
-                            })
-            
+            code_list.append([0] * 15)
             
         no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
         
         if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= 15):
-            list_obj.append({"CodeType": code_type,
+            code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
+        
+        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == 15):
+            featVec_evaluation.append({
                             "FeatureVector":feat_vect,
                             "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                            "Code": prog_updated})
-    
-            line_count+=1
+                            "Code": code_list[feat_vect_elements.index(feat_vect)][0]
+                            })
+            
+            for i in range(0,15):
+                list_obj.append({"CodeType": code_type,
+                                "FeatureVector":feat_vect,
+                                "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
+                                "Code": code_list[feat_vect_elements.index(feat_vect)][i]})
+              
+        
+                line_count+=1
   #  if(line_count>1):
   #      break
     
