@@ -66,6 +66,7 @@ def load_input_file(path_to_dataset, path_to_vocab):
         with open(path_to_dataset, 'r') as dataset_file:
             srcs = []
             tgts = []
+            fVectors = []
             for sample_str in tqdm(dataset_file.readlines()):
                 sample_data = json.loads(sample_str)
 
@@ -78,9 +79,11 @@ def load_input_file(path_to_dataset, path_to_vocab):
 
                 srcs.append(src_feature_index)
                 tgts.append(tgt_program_idces)
+                fVectors.append(sample_data['FeatureVector'])
         
         dataset = {"sources": srcs,
-                   "targets": tgts}
+                   "targets": tgts,
+                   "featureVectors": fVectors}
         torch.save(dataset, path_to_ds_cache)
     return dataset, vocab, max(dataset["sources"])+1    
 

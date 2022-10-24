@@ -38,31 +38,7 @@ def add_common_arg(parser):
     parser.add_argument("--log_frequency", type=int,
                         default=100,
                         help="How many minibatch to do before logging"
-                        "Default: %(default)s.")
-    
-def load_featVec_file(path_to_feature_file):
-    '''
-    path_to_feature_file: File containing the data
-    '''
-
-    path_to_ff_cache = path_to_feature_file.replace('.json', '.thdump')
-    if os.path.exists(path_to_ff_cache):
-        feature_data = torch.load(path_to_ff_cache)
-    else:
-        with open(path_to_feature_file, 'r') as feat_file:
-            fVector = []
-            fVectorIndex = []
-            for sample_str in tqdm(feat_file.readlines()):
-                sample_data = json.loads(sample_str)
-
-                # Get the target program
-                fVector.append(sample_data['FeatureVector'])
-                fVectorIndex.append(sample_data['FeatureVectorIndex'])
-        feature_data = {"featureVector": fVector,
-                   "featureVectorIndex": fVectorIndex}
-        torch.save(feature_data, path_to_ff_cache)
-    return feature_data 
-    
+                        "Default: %(default)s.")    
     
 def evaluate_model(model_weights,
                    vocabulary_path,
@@ -117,10 +93,9 @@ def evaluate_model(model_weights,
     tgt_pad = vocab["tkn2idx"]["<pad>"]
 
     simulator = Simulator(vocab["idx2tkn"])
-    
-    feature_data = load_featVec_file(feat_file)
-    fVector = feature_data["featureVector"]
-    fVectorIndex = feature_data["featureVectorIndex"]
+
+    fVector = dataset["featureVectors"]
+    fVectorIndex = dataset["sources"]
     
     # Load the model
     if not use_cuda:
@@ -158,12 +133,14 @@ def evaluate_model(model_weights,
         if use_cuda:
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
-        ndomains = 32#TODO
+        ndomains = 16#TODO
         
         
         saved_pred = [[] for i in range(batch_size)]
         for K in range(0,ndomains):
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), ndomains).fill_(0)
+            
+            
             index = torch.tensor(K)
             if use_cuda:
                 tgt_encoder_vector, index = tgt_encoder_vector.cuda(), index.cuda()
@@ -201,10 +178,11 @@ def evaluate_model(model_weights,
                         if(pred_feat_vec in fVector):
                             # Feature matches with target
                             if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
+                               # TODO check again
                                 saved_pred[batch_idx].append(pred)
                                 saved_pred_all.append(pred)
                                 if dump_programs:
-                                    file_name = str(K)+ " - " + str(ll)
+                                    file_name = str(K)+ " - " + str(ll) 
                                     write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
                                 for top_idx in range(rank, top_k):
                                     nb_featVec_match[top_idx] += 1
@@ -215,7 +193,8 @@ def evaluate_model(model_weights,
                 stx_res_file.write("\n" + str(sp_idx + i) + " : ")
                 numb_unique += (len(set(map(tuple, saved_pred[i]))))
                 stx_res_file.write(str(100*len(set(map(tuple, saved_pred[i])))/ ndomains ))
-        #    print(((saved_pred[i])))
+            
+        
     #for k in range(top_k):
         #with open(str(all_syntax_output_path[k]), "w") as stx_res_file:
             #stx_res_file.write(str(100*nb_syntax_correct[k]/total_nb))
@@ -223,7 +202,6 @@ def evaluate_model(model_weights,
     #for k in range(top_k):
         #with open(str(all_featVec_present_output_path[k]), "w") as stx_res_file:
             #stx_res_file.write(str(100*nb_featVec_present[k]/total_nb))
-            
     with open(str(uniqueness_file_name), "a") as stx_res_file:
         stx_res_file.write("\n" + "total unique" + " : ")
         stx_res_file.write(str( (100*len(set(map(tuple, saved_pred_all)))) / (ndomains*(len(dataset["sources"]))) ))

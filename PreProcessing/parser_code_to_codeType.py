@@ -160,6 +160,8 @@ def add_args(parser):
                             default="featVectors.json",
                             help="Path to the input code file. "
                             " Default: %(default)s")
+    parse_group.add_argument('--ndomains', type=int,
+                            default=5)
 
 
 parser = argparse.ArgumentParser(
@@ -231,21 +233,24 @@ for line in Lines:
         if(feat_vect not in feat_vect_elements):
             feat_vect_elements.append(feat_vect)
             no_of_vect_elements.append(0)
-            code_list.append([0] * 15)
+            code_list.append([0] * args.ndomains)
             
         no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
         
-        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= 15):
-            code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
+        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= args.ndomains):
+            if(prog_updated in code_list[feat_vect_elements.index(feat_vect)][:]):
+                 no_of_vect_elements[feat_vect_elements.index(feat_vect)] -=1
+            else:
+                code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
         
-        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == 15):
+        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
             featVec_evaluation.append({
                             "FeatureVector":feat_vect,
                             "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
                             "Code": code_list[feat_vect_elements.index(feat_vect)][0]
                             })
             
-            for i in range(0,15):
+            for i in range(0,args.ndomains):
                 list_obj.append({"CodeType": code_type,
                                 "FeatureVector":feat_vect,
                                 "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
