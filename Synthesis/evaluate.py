@@ -17,6 +17,10 @@ def add_eval_args(parser):
                         default=0,
                         help="How many samples to use to compute the accuracy."
                         "Default: %(default)s, for all the dataset")
+    parser.add_argument('--ndomains', type=int,
+                        default=20,
+                        help="Number of domains for target encoder. "
+                        "Default: %(default)s")
     parser.add_argument("--feat_file", type=str,
                         default="../PreProcessing/featVectors.json",
                         help="Path to the feature Vector data. "
@@ -44,6 +48,7 @@ def evaluate_model(model_weights,
                    vocabulary_path,
                    dataset_path,
                    nb_samples,
+                   ndomains,
                    use_grammar,
                    feat_file,
                    output_path,
@@ -133,9 +138,6 @@ def evaluate_model(model_weights,
         if use_cuda:
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
-        ndomains = 16#TODO
-        
-        
         saved_pred = [[] for i in range(batch_size)]
         for K in range(0,ndomains):
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), ndomains).fill_(0)
@@ -148,7 +150,6 @@ def evaluate_model(model_weights,
             tgt_encoder_vector.index_fill_(1, index, 1)
             decoded = model.beam_sample(in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, 
                                         max_len,beam_size, top_k)
-            
             for batch_idx, (target, sp_decoded) in \
                 enumerate(zip(out_tgt_seq.chunk(out_tgt_seq.size(0)), decoded)):
                 
@@ -169,7 +170,6 @@ def evaluate_model(model_weights,
                     feat_match = False
                     pred = dec[-1]
                     ll = dec[0]
-                  
                     parse_success, cand_prog = simulator.get_prog_ast(pred)
                     if parse_success:
                         pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in pred]

@@ -174,7 +174,7 @@ conv_stack = [64, 64, 64]
 fc_stack = [512]
 tgt_embedding_size = 256
 lstm_hidden_size = 256
-nb_lstm_layers = 1
+nb_lstm_layers = 2
 learn_syntax = False
 #ndomains = 200
 
@@ -226,11 +226,13 @@ optimizer = optimizer_cls(model.parameters(),
 
 losses = []
 recent_losses = []
+recent_losses_train = []
+recent_losses_entropy = []
 best_val_acc = np.NINF
 batch_size = args.batch_size
 for epoch_idx in range(0, args.nb_epochs):
     # This is definitely not the most efficient way to do it but oh well
-    dataset = shuffle_dataset(dataset, batch_size)
+   # dataset = shuffle_dataset(dataset, batch_size)
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
     #for sp_idx in tqdm(range(0, 1, batch_size)):
 
@@ -251,19 +253,23 @@ for epoch_idx in range(0, args.nb_epochs):
                                                               # out_tgt_seq,
                                                               # loss_criterion, beta)
             # else:
-            minibatch_loss = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
+            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
             
             recent_losses.append(minibatch_loss)
+            recent_losses_train.append(minibatch_loss_train)
+            recent_losses_entropy.append(minibatch_loss_entropy)
             
         optimizer.step()
         
         if (batch_idx % args.log_frequency == args.log_frequency-1 and len(recent_losses) > 0) or \
            (len(dataset["sources"]) - sp_idx ) < batch_size:
-            logging.info('Epoch : %d Minibatch : %d Loss : %.5f' % (
-                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses))
+            logging.info('Epoch : %d Minibatch : %d Loss : %.5f Loss_Train : %.5f Loss_Entropy : %.5f' % (
+                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses), sum(recent_losses_train)/len(recent_losses_train), sum(recent_losses_entropy)/len(recent_losses_entropy))
             )
             losses.extend(recent_losses)
             recent_losses = []
+            recent_losses_train = []
+            recent_losses_entropy = []
             # Dump the training losses
             with open(str(train_loss_path), "w") as train_loss_file:
                 json.dump(losses, train_loss_file, indent=2)

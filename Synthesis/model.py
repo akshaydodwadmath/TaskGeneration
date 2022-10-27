@@ -16,6 +16,8 @@ from typing import Tuple
 from torch import Tensor
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
+import numpy
+
 ### A module to ensure convolution happens in the correct manner and the required dimensions are obtained 
 ### after convolution. Example:
 # inp_grids torch.Size([16, 5, 16, 18, 18])
@@ -541,7 +543,7 @@ class TransformerModel(nn.Module):
         #self.decoder.bias.data.zero_()
         #self.decoder.weight.data.uniform_(-initrange, initrange)
 
-    def forward(self, src: Tensor) -> Tensor:
+    def forward(self, src: Tensor, tmprture) -> Tensor:
         """
         Args:
             src: Tensor, shape [seq_len, batch_size]
@@ -551,13 +553,26 @@ class TransformerModel(nn.Module):
             output Tensor of shape [seq_len, batch_size, ntoken]
         """
         src = self.encoder(src) * math.sqrt(self.d_model)
-        src = self.pos_encoder(src)
+       # src = self.pos_encoder(src)        #Pos Encoding was creating some randomness 
         output = self.transformer_encoder(src)
-       # print("Tx output", output)
-       # print("Tx output 1", output[0][0])
-        #TODO
-        output = self.decoder(output.permute(1,0,2)[0])
-        probs = F.gumbel_softmax(output, tau=1, hard=True)
+        output = self.decoder((output.permute(1,0,2)[3] * output.permute(1,0,2)[4]))
+        if(numpy.random.choice(4, 1) == 1): #prob = 0.25
+            probs = torch.Tensor(output.size()).fill_(0).cuda()
+            index = torch.argmax(output, dim=1)
+            count = 0 
+            for i in index:
+                probs[count][i] = 1
+                count+=1
+        else:                               #prob = 0.75
+            if(tmprture > 0 ):
+                probs = nn.Softmax(dim=1)(output/ tmprture)
+            else:
+                probs = torch.Tensor(output.size()).fill_(0).cuda()
+                index = torch.argmax(output, dim=1)
+                count = 0 
+                for i in index:
+                    probs[count][i] = 1
+                    count+=1
         return probs
     
 class CodeType2Code(nn.Module):
@@ -577,11 +592,12 @@ class CodeType2Code(nn.Module):
         
         
         ntokens = tgt_vocabulary_size  # size of vocabulary
-        emsize = 16 # embedding dimension
-        d_hid = 200  # dimension of the feedforward network model in nn.TransformerEncoder
-        nlayers = 2  # number of nn.TransformerEncoderLayer in nn.TransformerEncoder
-        nhead = 2  # number of heads in nn.MultiheadAttention
-        dropout = 0.2  # dropout probability
+        emsize = 256 # embedding dimension
+        d_hid = 512  # dimension of the feedforward network model in nn.TransformerEncoder
+        nlayers = 4  # number of nn.TransformerEncoderLayer in nn.TransformerEncoder
+        nhead = 8  # number of heads in nn.MultiheadAttention
+        dropout = 0.0  # dropout probability
+        self.tmprture = 1.0
         self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, ndomains, dropout )
         io_emb_size = fc_stack[-1]
         self.decoder = MultiIOProgramDecoder(tgt_vocabulary_size,
@@ -597,7 +613,9 @@ class CodeType2Code(nn.Module):
     def forward(self, tgt_inp_sequences, in_src_seq, out_tgt_seq):
 
        # io_embedding = self.encoder(input_grids, output_grids)
-        tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq)
+        tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq, self.tmprture)
+        if(self.tmprture > 0):
+            self.tmprture -= 0.01
 
       #  print("out_tgt_seq.size()", out_tgt_seq.size())
         _, seq_len  = out_tgt_seq.size()
