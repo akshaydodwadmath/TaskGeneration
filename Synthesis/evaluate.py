@@ -47,6 +47,7 @@ def add_common_arg(parser):
 def evaluate_model(model_weights,
                    vocabulary_path,
                    dataset_path,
+                   train_file_path,
                    nb_samples,
                    ndomains,
                    use_grammar,
@@ -102,6 +103,9 @@ def evaluate_model(model_weights,
     fVector = dataset["featureVectors"]
     fVectorIndex = dataset["sources"]
     
+    train_data, _, _ = load_input_file(train_file_path, vocabulary_path)
+    train_codes = train_data["targets"]
+    
     # Load the model
     if not use_cuda:
         # https://discuss.pytorch.org/t/on-a-cpu-device-how-to-load-checkpoint-saved-on-gpu-device/349/8
@@ -125,10 +129,12 @@ def evaluate_model(model_weights,
     nb_featVec_match = [0 for _ in range(top_k)]
     total_nb = 0
     numb_unique = 0
+    numb_unseen = 0
     
   #  dataset = shuffle_dataset(dataset, batch_size, randomize=False)
     
     saved_pred_all = []
+    unseen_pred_all = []
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
 
@@ -139,6 +145,7 @@ def evaluate_model(model_weights,
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
         saved_pred = [[] for i in range(batch_size)]
+        unseen_pred = [[] for i in range(batch_size)]
         for K in range(0,ndomains):
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), ndomains).fill_(0)
             
@@ -165,6 +172,7 @@ def evaluate_model(model_weights,
                         os.makedirs(decoded_dump_dir)
                     write_program(os.path.join(decoded_dump_dir, "target"), target, vocab["idx2tkn"])
                 
+                ranked_entered = False
                 # Correct syntaxes
                 for rank, dec in enumerate(sp_decoded):
                     feat_match = False
@@ -178,21 +186,30 @@ def evaluate_model(model_weights,
                         if(pred_feat_vec in fVector):
                             # Feature matches with target
                             if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
-                               # TODO check again
-                                saved_pred[batch_idx].append(pred)
-                                saved_pred_all.append(pred)
-                                if dump_programs:
-                                    file_name = str(K)+ " - " + str(ll) 
-                                    write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
-                                for top_idx in range(rank, top_k):
-                                    nb_featVec_match[top_idx] += 1
-                                break
+                                if(not(pred in saved_pred[batch_idx])):
+                                    saved_pred[batch_idx].append(pred)
+                                    saved_pred_all.append(pred)
+                                    if(not(pred in train_codes)):
+                                        unseen_pred[batch_idx].append(pred)
+                                        unseen_pred_all.append(pred)
+                                    if dump_programs:
+                                        file_name = str(K)+ " - " + str(rank) + " - " + str(ll) 
+                                        write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
+                                if(not ranked_entered):
+                                    for top_idx in range(rank, top_k):
+                                        nb_featVec_match[top_idx] += 1
+                                    ranked_entered = True
                 
         for i in range(0,batch_size):
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\n" + str(sp_idx + i) + " : ")
-                numb_unique += (len(set(map(tuple, saved_pred[i]))))
-                stx_res_file.write(str(100*len(set(map(tuple, saved_pred[i])))/ ndomains ))
+                numb_unique = (len(set(map(tuple, saved_pred[i]))))
+                stx_res_file.write(str(numb_unique)+ " : " )
+                stx_res_file.write(str(100*numb_unique/ (ndomains*top_k )))
+                
+                numb_unseen = (len(set(map(tuple, unseen_pred[i]))))
+                stx_res_file.write(" : " + str(numb_unseen)+ " : " )
+                stx_res_file.write(str(100*numb_unseen/ (ndomains*top_k )))
             
         
     #for k in range(top_k):
@@ -204,7 +221,13 @@ def evaluate_model(model_weights,
             #stx_res_file.write(str(100*nb_featVec_present[k]/total_nb))
     with open(str(uniqueness_file_name), "a") as stx_res_file:
         stx_res_file.write("\n" + "total unique" + " : ")
-        stx_res_file.write(str( (100*len(set(map(tuple, saved_pred_all)))) / (ndomains*(len(dataset["sources"]))) ))
+        numb_unique = len(set(map(tuple, saved_pred_all)))
+        stx_res_file.write(str(numb_unique)+ " : " )
+        stx_res_file.write(str( (100*numb_unique) / (ndomains*(len(dataset["sources"]))*top_k ) ))
+        
+        numb_unseen = len(set(map(tuple, unseen_pred_all)))
+        stx_res_file.write(" : " + str(numb_unseen)+ " : " )
+        stx_res_file.write(str( (100*numb_unseen) / (ndomains*(len(dataset["sources"]))*top_k ) ))
     
     for k in range(top_k):
         with open(str(all_featVec_match_output_path[k]), "w") as stx_res_file:

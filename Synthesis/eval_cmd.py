@@ -15,6 +15,9 @@ parser.add_argument("--vocabulary", type=str,
 parser.add_argument("--dataset", type=str,
                     default="data/1m_6ex_karel/val.json",
                     help="Dataset to evaluate against")
+parser.add_argument("--train_file_path", type=str,
+                    default="data/1m_6ex_karel/train.json",
+                    help="Train file that was used")
 parser.add_argument("--output_path", type=str,
                     default="exps/fake_run/val_.txt",
                     help="Where to dump the result")
@@ -29,6 +32,7 @@ args = parser.parse_args()
 evaluate_model(args.model_weights,
                args.vocabulary,
                args.dataset,
+               args.train_file_path,
                args.val_nb_samples,
                args.ndomains,
                args.use_grammar,
