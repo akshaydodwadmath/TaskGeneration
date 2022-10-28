@@ -59,7 +59,7 @@ def add_train_cli_args(parser):
                              default="data/1m_6ex_karel/train.json",
                              help="Path to the training data. "
                              " Default: %(default)s")
-    train_group.add_argument("--val_file", type=str,
+    train_group.add_argument("--val_feature_file", type=str,
                              default="data/1m_6ex_karel/val.json",
                              help="Path to the validation data. "
                              " Default: %(default)s")
@@ -83,9 +83,9 @@ def add_train_cli_args(parser):
                              help="Gain applied to syntax loss. "
                              "Default: %(default)s")
     train_group.add_argument("--val_frequency", type=int,
-                             default=1,
+                             default=5,
                              help="Frequency (in epochs) of validation.")
-    train_group.add_argument('--ndomains', type=int,
+    train_group.add_argument('--n_domains', type=int,
                              default=20,
                              help="Number of domains for target encoder. "
                              "Default: %(default)s")
@@ -176,12 +176,11 @@ tgt_embedding_size = 256
 lstm_hidden_size = 256
 nb_lstm_layers = 2
 learn_syntax = False
-#ndomains = 200
 
 #Need to setup paths
 model = CodeType2Code(kernel_size, conv_stack, fc_stack,
                 vocabulary_size, tgt_embedding_size,
-                lstm_hidden_size, nb_lstm_layers, args.ndomains ,
+                lstm_hidden_size, nb_lstm_layers, args.n_domains ,
                 nfeaturevectors,learn_syntax)
 # Dump initial weights
 path_to_ini_weight_dump = models_dir / "ini_weights.model"
@@ -275,7 +274,7 @@ for epoch_idx in range(0, args.nb_epochs):
                 json.dump(losses, train_loss_file, indent=2)
                 
     # Dump the weights at the end of the epoch
-    if ((epoch_idx % 5 == 0) or (epoch_idx == args.nb_epochs-1)):
+    if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
         path_to_weight_dump = models_dir / ("weights_%d.model" % epoch_idx)
         with open(str(path_to_weight_dump), "wb") as weight_file:
             # Needs to be in cpu mode to dump, otherwise will be annoying to load
@@ -291,22 +290,24 @@ for epoch_idx in range(0, args.nb_epochs):
     logging.info("Done with epoch %d." % epoch_idx)
     
     
-    #if (epoch_idx+1) % args.val_frequency == 0 or (epoch_idx+1) == args.nb_epochs:
-        ## Evaluate the model on the validation set
-        #out_path = str(result_dir / ("eval/epoch_%d/val_.txt" % epoch_idx))
-        #val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
-                                 #args.val_file, 5, 0, use_grammar,
-                                 #out_path, 100, 50, batch_size,
-                                 #args.use_cuda, False)
-        #logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
-        #if val_acc > best_val_acc:
-            #logging.info("Epoch : %d ValidationBest : %f." % (epoch_idx, val_acc))
-            #best_val_acc = val_acc
-            #path_to_weight_dump = models_dir / "best.model"
-            #with open(str(path_to_weight_dump), "wb") as weight_file:
-                ## Needs to be in cpu mode to dump, otherwise will be annoying to load
-                #if args.use_cuda:
-                    #model.cpu()
-                #torch.save(model, weight_file)
-                #if args.use_cuda:
-                    #model.cuda()
+    if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
+        # Evaluate the model on the validation set
+        out_path = str(result_dir / ("eval/epoch_%d/epoch_%d_" % epoch_idx))
+        print("path_to_weight_dump", path_to_weight_dump)
+        val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
+                                 args.val_feature_file, args.train_file, 0, 
+                                 args.n_domains, use_grammar,
+                                 out_path, 10, 10, batch_size,
+                                 args.use_cuda, False)
+        logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
+        if val_acc > best_val_acc:
+            logging.info("Epoch : %d ValidationBest : %f." % (epoch_idx, val_acc))
+            best_val_acc = val_acc
+            path_to_weight_dump = models_dir / "best.model"
+            with open(str(path_to_weight_dump), "wb") as weight_file:
+                # Needs to be in cpu mode to dump, otherwise will be annoying to load
+                if args.use_cuda:
+                    model.cpu()
+                torch.save(model, weight_file)
+                if args.use_cuda:
+                    model.cuda()

@@ -71,7 +71,7 @@ class MultiIOProgramDecoder(nn.Module):
     '''
     def __init__(self, vocab_size, embedding_dim,
                  io_emb_size, lstm_hidden_size, nb_layers,
-                 ndomains, nfeaturevectors, learn_syntax):
+                 n_domains, nfeaturevectors, learn_syntax):
         super(MultiIOProgramDecoder, self).__init__()
 
         self.vocab_size = vocab_size
@@ -95,7 +95,7 @@ class MultiIOProgramDecoder(nn.Module):
         )
 
         self.embedding_output = nn.Embedding(
-            ndomains,
+            n_domains,
             self.embedding_dim
         )
         self.rnn = nn.LSTM(
@@ -525,7 +525,7 @@ class PositionalEncoding(nn.Module):
 class TransformerModel(nn.Module):
 
     def __init__(self, ntoken: int, d_model: int, nhead: int, d_hid: int,
-                 nlayers: int, ndomains, dropout: float = 0.5 ):
+                 nlayers: int, n_domains, dropout: float = 0.5 ):
         super().__init__()
         self.model_type = 'Transformer'
         self.pos_encoder = PositionalEncoding(d_model, dropout)
@@ -533,7 +533,7 @@ class TransformerModel(nn.Module):
         self.transformer_encoder = TransformerEncoder(encoder_layers, nlayers)
         self.encoder = nn.Embedding(ntoken, d_model)
         self.d_model = d_model
-        self.decoder = nn.Linear(d_model, ndomains)
+        self.decoder = nn.Linear(d_model, n_domains)
 
         self.init_weights()
 
@@ -585,7 +585,7 @@ class CodeType2Code(nn.Module):
                  tgt_embedding_dim,
                  decoder_lstm_hidden_size,
                  decoder_nb_lstm_layers,
-                 ndomains,
+                 n_domains,
                  nfeaturevectors,
                  learn_syntax):
         super(CodeType2Code, self).__init__()
@@ -598,14 +598,14 @@ class CodeType2Code(nn.Module):
         nhead = 8  # number of heads in nn.MultiheadAttention
         dropout = 0.0  # dropout probability
         self.tmprture = 1.0
-        self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, ndomains, dropout )
+        self.trnsfrmrEncoder = TransformerModel(ntokens, emsize, nhead, d_hid, nlayers, n_domains, dropout )
         io_emb_size = fc_stack[-1]
         self.decoder = MultiIOProgramDecoder(tgt_vocabulary_size,
                                              tgt_embedding_dim,
                                              io_emb_size,
                                              decoder_lstm_hidden_size,
                                              decoder_nb_lstm_layers,
-                                             ndomains,
+                                             n_domains,
                                              nfeaturevectors,
                                              learn_syntax)
                                              

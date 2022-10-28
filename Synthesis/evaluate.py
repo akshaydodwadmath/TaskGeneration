@@ -13,18 +13,14 @@ from preprocessing.code_to_codeType import getFeatureVector
 
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")
-    parser.add_argument("--val_nb_samples", type=int,
+    parser.add_argument("--nb_samples", type=int,
                         default=0,
                         help="How many samples to use to compute the accuracy."
                         "Default: %(default)s, for all the dataset")
-    parser.add_argument('--ndomains', type=int,
+    parser.add_argument('--n_domains', type=int,
                         default=20,
                         help="Number of domains for target encoder. "
                         "Default: %(default)s")
-    parser.add_argument("--feat_file", type=str,
-                        default="../PreProcessing/featVectors.json",
-                        help="Path to the feature Vector data. "
-                        " Default: %(default)s")
     
 def add_beam_size_arg(parser):
     parser.add_argument("--eval_batch_size", type=int,
@@ -46,19 +42,18 @@ def add_common_arg(parser):
     
 def evaluate_model(model_weights,
                    vocabulary_path,
-                   dataset_path,
+                   feature_file_path,
                    train_file_path,
                    nb_samples,
-                   ndomains,
+                   n_domains,
                    use_grammar,
-                   feat_file,
                    output_path,
                    beam_size,
                    top_k,
                    batch_size,
                    use_cuda,
                    dump_programs):
-
+    
     all_semantic_output_path = []
     all_syntax_output_path = []
     all_featVec_present_output_path = []
@@ -90,10 +85,10 @@ def evaluate_model(model_weights,
     
     uniqueness_file_name = output_path + "uniqueness_evaluation.txt"
     with open(str(uniqueness_file_name), "w") as stx_res_file:
-        stx_res_file.write("\n" + "Uniqueness")
+        stx_res_file.write("\n" + "Uniqueness(count,%) and Generated Unseen(count,%)")
         
     # Load the vocabulary of the trained model
-    dataset, vocab, nfeaturevectors = load_input_file(dataset_path, vocabulary_path)
+    dataset, vocab, nfeaturevectors = load_input_file(feature_file_path, vocabulary_path)
     tgt_start = vocab["tkn2idx"]["<s>"]
     tgt_end = vocab["tkn2idx"]["m)"]
     tgt_pad = vocab["tkn2idx"]["<pad>"]
@@ -146,8 +141,8 @@ def evaluate_model(model_weights,
         
         saved_pred = [[] for i in range(batch_size)]
         unseen_pred = [[] for i in range(batch_size)]
-        for K in range(0,ndomains):
-            tgt_encoder_vector = torch.Tensor(len(in_src_seq), ndomains).fill_(0)
+        for K in range(0,n_domains):
+            tgt_encoder_vector = torch.Tensor(len(in_src_seq), n_domains).fill_(0)
             
             
             index = torch.tensor(K)
@@ -202,14 +197,14 @@ def evaluate_model(model_weights,
                 
         for i in range(0,batch_size):
             with open(str(uniqueness_file_name), "a") as stx_res_file:
-                stx_res_file.write("\n" + str(sp_idx + i) + " : ")
+                stx_res_file.write("\nFeatureVector " + str((sp_idx+1) + i) + " -> ")
                 numb_unique = (len(set(map(tuple, saved_pred[i]))))
-                stx_res_file.write(str(numb_unique)+ " : " )
-                stx_res_file.write(str(100*numb_unique/ (ndomains*top_k )))
+                stx_res_file.write("numb_unique : " + str(numb_unique)+ " , " )
+                stx_res_file.write(str(100*numb_unique/ (n_domains*top_k )))
                 
                 numb_unseen = (len(set(map(tuple, unseen_pred[i]))))
-                stx_res_file.write(" : " + str(numb_unseen)+ " : " )
-                stx_res_file.write(str(100*numb_unseen/ (ndomains*top_k )))
+                stx_res_file.write(";    numb_unseen : " + str(numb_unseen)+ " , " )
+                stx_res_file.write(str(100*numb_unseen/ (n_domains*top_k )))
             
         
     #for k in range(top_k):
@@ -220,21 +215,21 @@ def evaluate_model(model_weights,
         #with open(str(all_featVec_present_output_path[k]), "w") as stx_res_file:
             #stx_res_file.write(str(100*nb_featVec_present[k]/total_nb))
     with open(str(uniqueness_file_name), "a") as stx_res_file:
-        stx_res_file.write("\n" + "total unique" + " : ")
+        stx_res_file.write("\n" + "total unique : ")
         numb_unique = len(set(map(tuple, saved_pred_all)))
-        stx_res_file.write(str(numb_unique)+ " : " )
-        stx_res_file.write(str( (100*numb_unique) / (ndomains*(len(dataset["sources"]))*top_k ) ))
+        stx_res_file.write(str(numb_unique)+ " , " )
+        stx_res_file.write(str( (100*numb_unique) / (n_domains*(len(dataset["sources"]))*top_k ) ))
         
         numb_unseen = len(set(map(tuple, unseen_pred_all)))
-        stx_res_file.write(" : " + str(numb_unseen)+ " : " )
-        stx_res_file.write(str( (100*numb_unseen) / (ndomains*(len(dataset["sources"]))*top_k ) ))
+        stx_res_file.write(";    total unseen : " + str(numb_unseen)+ " , " )
+        stx_res_file.write(str( (100*numb_unseen) / (n_domains*(len(dataset["sources"]))*top_k ) ))
     
     for k in range(top_k):
         with open(str(all_featVec_match_output_path[k]), "w") as stx_res_file:
             stx_res_file.write(str(100*nb_featVec_match[k]/total_nb))
             
-    syntax_at_one = 100*nb_syntax_correct[0]/total_nb
-    return syntax_at_one
+    featVec_match_at_one = 100*nb_featVec_match[0]/total_nb
+    return featVec_match_at_one
 
 def write_program(path, tkn_idxs, vocab):
     program_tkns = [vocab[tkn_idx] for tkn_idx in tkn_idxs]
