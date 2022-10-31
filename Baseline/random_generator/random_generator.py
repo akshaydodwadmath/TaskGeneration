@@ -3,6 +3,10 @@ import math
 import argparse
 import json
 import random
+
+from karel.consistency import Simulator
+
+
 actions = [
     'move',
     'turnLeft',
@@ -11,13 +15,14 @@ actions = [
     'putMarker',
 ]
 
-commands = ['REPEAT',
-            'WHILE',
-            'IF',
+commands = [
+            ['REPEAT','r(','r)'],
+            ['WHILE','w(','w)'],
+            ['IF','i(','i)']
             ]
 command_if_else = [
-            'IFELSE',
-            'ELSE',
+            ['IFELSE','i(','i)'],
+            ['ELSE','e(','e)']
             ]
 
 cond = [
@@ -33,29 +38,19 @@ cond = [
     ['c(','not','c(','frontIsClear','c)','c)'],
     ['R=']# repeat options 2 to 10
     ]
-control_open = [
-         'r(',
-         'w(',
-         'i(',
-         'e(',
-    ]
 
-
-control_close = [
-         'r)',
-         'w)',
-         'i)',
-         'e)',
-    ]
-
-#FeatureVector format: [C1_D1_WHILE, C1_D1_REPEAT, C1_D1_IF, [C1_D1_IFELSE, C1_D1_ELSE] ,C1_D2_WHILE, C1_D2_REPEAT, C1_D2_IF, [C1_D2_IFELSE, C1_D2_ELSE] , 
-#                       C2_D1_WHILE ,C2_D1_REPEAT, C2_D1_IF, [C2_D1_IFELSE, C2_D1_ELSE] ,C2_D2_WHILE ,C2_D2_REPEAT, C2_D2_IF, [C2_D2_IFELSE, C2_D2_ELSE]]
-required_ctypes = [['action1'],
+required_ctypes = [#['action1'],
                    
-                   ['action1', 'commands', 'cond', 'control_open', 'action2', 'control_close', 'action3'] ] 
-                   #'(D_IF()D_ELSE())',
+                   #['action1', 'ctrl1', 'cond', 'copen1', 'action2', 'cclose1', 'action3'] ], 
+                   #['action1', 'cif1', 'cond', 'c_ifopen1', 'action2', 'c_ifclose1',
+                   #             'celse1', 'c_elseopen1', 'action3', 'c_elseclose1', 'action4'] ], 
                    
-                   #'(D_CTRL()D_CTRL())',
+                    #['action1', 'ctrl1', 'cond', 'copen1', 'action2', 'cclose1', 'action3',
+                    # 'action4', 'ctrl2', 'cond', 'copen2', 'action5', 'cclose2', 'action6'],
+                    #]
+                    ['action1', 'cif1', 'cond', 'c_ifopen1', 'action2', 'c_ifclose1',
+                                'celse1', 'c_elseopen1', 'action3', 'c_elseclose1', 'action4',
+                    'action5', 'ctrl1', 'cond', 'copen1', 'action6', 'cclose1', 'action7'] ]
                    #'(D_IF()D_ELSE()D_CTRL())',
                    #'(D_CTRL()D_IF()D_ELSE())',
                    #'(D_IF()D_ELSE()D_IF()D_ELSE())',
@@ -84,43 +79,41 @@ required_ctypes = [['action1'],
                    #'( D_CTRL ( D_CTRL ( ) ) D_CTRL ( ) D_CTRL ( ) )'
                    
 token_beg = ['DEF', 'run', 'm(']
-token_end = [')m' ] 
-
+token_end = ['m)' ] 
 max_actions = [i for i in range(2,17)]
 max_repeat =  [i for i in range(2,11)]
 
 def generate_codes(code_type, max_nb_actions):
+    
     code= []
-
     code += token_beg
-
     action_set = random.choices(actions, k=max_nb_actions)
-    print(action_set)
     action_in_code_type = []
+    ctrl_count = 0
+    cifelse_count = 0
     
     for token in code_type:
-        if (('action' in token)):
+        if('cif' in token):
             code.append(token)
-           # action_in_code_type.append(token)
-            #action_count +=1
-        elif(token == 'commands'):
-            code.append(random.choice(commands))
+            cifelse_count += 1
+        elif('ctrl' in token):
+            code.append(token)
+            ctrl_count += 1
         elif(token == 'cond'):
             rand_cond = random.choice(cond)
             if(rand_cond == cond[-1]):# for repeat
                 rand_cond = [str(rand_cond[0]) + str(random.choice(max_repeat))]
             code += rand_cond
-        elif(token == 'control_open'):
-            code.append(random.choice(control_open))
-        elif(token == 'control_close'):
-            code.append(random.choice(control_close))
-  #  print(code)
+        else:
+            code.append(token)
     
+    ctrl_set = random.choices(commands, k=ctrl_count)
     
+    #Add actions
     while(action_set):
         index = 0
         for token in code:
-            if(np.random.choice(2, 1) == 1): #prob = 0.25
+            if(np.random.choice(2, 1) == 1): #prob = 0.5
                 if('action' in token):
                     code[index] = action_set.pop()
                 elif(token in actions):
@@ -129,22 +122,76 @@ def generate_codes(code_type, max_nb_actions):
                 if(not action_set):
                     break
             index+=1
-            
+    
+    
+    #Add control statements and brackets
+    open_set = []
+    close_set = []
+    index = 0
     for token in code:
-        if ('action' in token):
-            code.remove(token)
- #   print("code_updated", code)
- #   print("action_set", action_set)
+        if('ctrl' in token):
+            current_ctrl_set = ctrl_set.pop()
+            code[index] = current_ctrl_set[0]
+            open_set.append(current_ctrl_set[1])
+            close_set.append(current_ctrl_set[2])
+        elif('copen' in token):
+            code[index] = open_set[int(token[-1])-1]
+        elif('cclose' in token):
+            code[index] = close_set[int(token[-1])-1]
+        index+=1
 
-    code += token_end
-    code = list(filter(None, code))
-    return code
+    #Add if else statements
+    index = 0
+    for token in code:
+        if('cif' in token):
+            code[index]  = command_if_else[0][0]
+        elif('celse' in token):
+            code[index]  = command_if_else[1][0]
+        elif('c_ifopen' in token):
+            code[index]  = command_if_else[0][1]
+        elif('c_ifclose' in token):
+            code[index]  = command_if_else[0][2]
+        elif('c_elseopen' in token):
+            code[index]  = command_if_else[1][1]
+        elif('c_elseclose' in token):
+            code[index]  = command_if_else[1][2]
+        index+=1
+    
+    #Remove redundant tokens
+    index = 0
+    ret_code = []
+    while(index != len(code)):
+        if (not('action' in code[index])):
+             ret_code.append(code[index])
+        index +=1
 
-for code_type in required_ctypes: 
-    for nb_actions in max_actions:
-        random_code = generate_codes(code_type, nb_actions)
-        print(random_code)
-        print(nb_actions)
+    ret_code += token_end
+    ret_code = list(filter(None, ret_code))
+    return ret_code
+
+
+#Main code
+n_domains = 8
+top_k = 10
+final_codes = []
+simulator = Simulator()
+
+for i in range(0, (n_domains*top_k)):
+    for code_type in required_ctypes: 
+        for nb_actions in max_actions:
+            random_code = generate_codes(code_type, nb_actions)
+            print(random_code)
+            print(nb_actions)
+            parse_success, _ = simulator.get_prog_ast(random_code)
+            print("parse_success", parse_success)
+            if(parse_success):
+                final_codes.append(random_code)
+            
+            
+numb_unique = len(set(map(tuple, final_codes)))        
+print("numb_unique", numb_unique)
+print("total_generated", (n_domains * top_k * len(max_actions)*(len(required_ctypes))))
+print("percentage unique", (100*numb_unique/ (n_domains * top_k * len(max_actions)*(len(required_ctypes)))))
 
                
                 
