@@ -78,6 +78,7 @@ def add_train_cli_args(parser):
     train_group.add_argument("--init_weights", type=str,
                              default=None)
     train_group.add_argument("--use_grammar", action="store_true")
+    train_group.add_argument("--shuffle_data", action="store_true")
     train_group.add_argument('--beta', type=float,
                              default=1e-3,
                              help="Gain applied to syntax loss. "
@@ -231,7 +232,8 @@ best_val_acc = np.NINF
 batch_size = args.batch_size
 for epoch_idx in range(0, args.nb_epochs):
     # This is definitely not the most efficient way to do it but oh well
-   # dataset = shuffle_dataset(dataset, batch_size)
+    if(args.shuffle_data):
+        dataset = shuffle_dataset(dataset, batch_size)
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
     #for sp_idx in tqdm(range(0, 1, batch_size)):
 
@@ -292,7 +294,7 @@ for epoch_idx in range(0, args.nb_epochs):
     
     if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
         # Evaluate the model on the validation set
-        out_path = str(result_dir / ("eval/epoch_%d/epoch_%d_" % epoch_idx))
+        out_path = str(result_dir / ("eval/epoch_%d/epoch_" % epoch_idx))
         print("path_to_weight_dump", path_to_weight_dump)
         val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
                                  args.val_feature_file, args.train_file, 0, 

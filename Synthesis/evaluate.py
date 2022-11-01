@@ -59,6 +59,9 @@ def evaluate_model(model_weights,
     all_featVec_present_output_path = []
     all_featVec_match_output_path = []
     res_dir = os.path.dirname(output_path)
+    
+    text = ""
+    text_path = os.path.join(res_dir, "{}.txt".format('train'))
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
     for k in range(top_k):
@@ -129,6 +132,7 @@ def evaluate_model(model_weights,
   #  dataset = shuffle_dataset(dataset, batch_size, randomize=False)
     
     saved_pred_all = []
+    unique_pred_all = []
     unseen_pred_all = []
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
@@ -139,7 +143,7 @@ def evaluate_model(model_weights,
         if use_cuda:
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
-        saved_pred = [[] for i in range(batch_size)]
+        unique_pred = [[] for i in range(batch_size)]
         unseen_pred = [[] for i in range(batch_size)]
         for K in range(0,n_domains):
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), n_domains).fill_(0)
@@ -181,9 +185,10 @@ def evaluate_model(model_weights,
                         if(pred_feat_vec in fVector):
                             # Feature matches with target
                             if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
-                                if(not(pred in saved_pred[batch_idx])):
-                                    saved_pred[batch_idx].append(pred)
-                                    saved_pred_all.append(pred)
+                                if(not(pred in unique_pred[batch_idx])):
+                                    unique_pred[batch_idx].append(pred)
+                                    unique_pred_all.append(pred)
+                                    text += str(pred_tkns)  + "\n"
                                     if(not(pred in train_codes)):
                                         unseen_pred[batch_idx].append(pred)
                                         unseen_pred_all.append(pred)
@@ -198,7 +203,7 @@ def evaluate_model(model_weights,
         for i in range(0,batch_size):
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\nFeatureVector " + str((sp_idx+1) + i) + " -> ")
-                numb_unique = (len(set(map(tuple, saved_pred[i]))))
+                numb_unique = (len(set(map(tuple, unique_pred[i]))))
                 stx_res_file.write("numb_unique : " + str(numb_unique)+ " , " )
                 stx_res_file.write(str(100*numb_unique/ (n_domains*top_k )))
                 
@@ -216,20 +221,25 @@ def evaluate_model(model_weights,
             #stx_res_file.write(str(100*nb_featVec_present[k]/total_nb))
     with open(str(uniqueness_file_name), "a") as stx_res_file:
         stx_res_file.write("\n" + "total unique : ")
-        numb_unique = len(set(map(tuple, saved_pred_all)))
+        numb_unique = len(set(map(tuple, unique_pred_all)))
         stx_res_file.write(str(numb_unique)+ " , " )
         stx_res_file.write(str( (100*numb_unique) / (n_domains*(len(dataset["sources"]))*top_k ) ))
         
         numb_unseen = len(set(map(tuple, unseen_pred_all)))
         stx_res_file.write(";    total unseen : " + str(numb_unseen)+ " , " )
         stx_res_file.write(str( (100*numb_unseen) / (n_domains*(len(dataset["sources"]))*top_k ) ))
+        
+        numb_feat = len(saved_pred_all)
+        stx_res_file.write("\n" + "total matching feat vector : " + str(numb_feat)+ " , " )
+        stx_res_file.write(str( (100*numb_feat) / (n_domains*(len(dataset["sources"]))*top_k ) ))
     
     for k in range(top_k):
         with open(str(all_featVec_match_output_path[k]), "w") as stx_res_file:
             stx_res_file.write(str(100*nb_featVec_match[k]/total_nb))
-            
-    featVec_match_at_one = 100*nb_featVec_match[0]/total_nb
-    return featVec_match_at_one
+    with open(text_path, 'w') as f:
+        f.write(text)
+    uniquenss_value = (100*numb_unseen) / (n_domains*(len(dataset["sources"]))*top_k ) 
+    return uniquenss_value
 
 def write_program(path, tkn_idxs, vocab):
     program_tkns = [vocab[tkn_idx] for tkn_idx in tkn_idxs]
