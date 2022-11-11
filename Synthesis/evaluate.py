@@ -61,7 +61,7 @@ def evaluate_model(model_weights,
     res_dir = os.path.dirname(output_path)
     
     text = ""
-    text_path = os.path.join(res_dir, "{}.txt".format('train'))
+    text_path = os.path.join(res_dir, "{}.txt".format('model_generated'))
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
     for k in range(top_k):
@@ -185,6 +185,7 @@ def evaluate_model(model_weights,
                         if(pred_feat_vec in fVector):
                             # Feature matches with target
                             if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
+                                saved_pred_all.append(pred)
                                 if(not(pred in unique_pred[batch_idx])):
                                     unique_pred[batch_idx].append(pred)
                                     unique_pred_all.append(pred)
