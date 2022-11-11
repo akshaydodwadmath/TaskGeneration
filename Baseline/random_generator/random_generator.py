@@ -6,7 +6,7 @@ import random
 import os
 
 from karel.consistency import Simulator
-
+from itertools import product
 
 actions = [
     'move',
@@ -40,24 +40,26 @@ cond = [
     ['R=']# repeat options 2 to 10
     ]
 
-required_ctypes = [['action'], #Type01
+required_ctypes = [ ['action'], #Type01
                    
-                   ['action', 
-                    'ctrl1', 'cond1', 'copen1', 'action', 'cclose1', 
-                    'action' ], #Type02
+                    ['action', 
+                        'ctrl1', 'cond1', 'copen1', 'action', 'cclose1', 
+                        'action' ], #Type02
                    
-                   ['action', 
-                    'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
-                    'celse', 'c_elseopen', 'action', 'c_elseclose', 
-                    'action'], #Type03
-                   ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2', 
-                     'action'],#Type04
+                    ['action', 
+                        'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                        'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                        'action'], #Type03
+                    ['action', 
+                        'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                        'action', 
+                        'ctrl2', 'cond2', 'copen2', 'action', 'cclose2', 
+                        'action'],#Type04
                     ['action', 
                      'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                    'action',
+                    'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
                     'action'],#Type05
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
@@ -82,8 +84,8 @@ required_ctypes = [['action'], #Type01
                      'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
                      'celse', 'c_elseopen', 'action', 'c_elseclose', 
                      'action', 'cclose1',
-                     'action'],
-                    ['action', #Type 09
+                     'action'],#Type 09
+                    ['action', 
                      'cif', 'c_cndif', 'c_ifopen', 
                      'ctrl1', 'cond1', 'copen1', 'action', 'cclose1', 
                      'action','c_ifclose',
@@ -172,9 +174,11 @@ token_beg = ['DEF', 'run', 'm(']
 token_end = ['m)' ] 
 max_actions = [i for i in range(2,17)]
 max_repeat =  [i for i in range(2,11)]
+min_no_actions = 2
+max_no_actions = 16
 
-def generate_codes(code_type, max_nb_actions):
-    
+
+def generate_codes(code_type, selected_ctrl, max_nb_actions):
     code= []
     code += token_beg
     action_set = random.choices(actions, k=max_nb_actions)
@@ -182,10 +186,8 @@ def generate_codes(code_type, max_nb_actions):
     ctrl_count = 0
     cifelse_count = 0
     for token in code_type:
-        if('ctrl' in token):
-            ctrl_count += 1
         code.append(token)
-    ctrl_set = random.choices(commands, k=ctrl_count)
+    
 
     #Add actions
     while(action_set):
@@ -208,7 +210,7 @@ def generate_codes(code_type, max_nb_actions):
     index = 0
     for token in code:
         if('ctrl' in token):
-            current_ctrl_set = ctrl_set.pop()
+            current_ctrl_set = selected_ctrl.pop()
             code[index] = current_ctrl_set[0]
             open_set.append(current_ctrl_set[1])
             close_set.append(current_ctrl_set[2])
@@ -262,17 +264,33 @@ def generate_codes(code_type, max_nb_actions):
 
 
 #Main code
-n_domains = 24
+n_domains = 8
 top_k = 10
 final_codes = []
 simulator = Simulator()
 
 for i in range(0, (n_domains*top_k)):
+    numb_feat_vectors = 0
     for code_type in required_ctypes: 
-        for nb_actions in max_actions:
-            random_code = generate_codes(code_type, nb_actions)
-            parse_success, _ = simulator.get_prog_ast(random_code)
-            if(parse_success):
+
+        ctrl_count = 0
+        ctrl_all_count = 0
+        for token in code_type:
+            if('ctrl' in token):
+                ctrl_count += 1
+                ctrl_all_count += 1
+            if(('cif' in token) or ('celse' in token)):
+                ctrl_all_count +=1
+                
+        for nb_actions in range(max(min_no_actions,ctrl_all_count), (max_no_actions+1)):
+            
+            all_perm = ([p for p in product(commands, repeat=ctrl_count)])
+            for selected_ctrl in all_perm:
+                numb_feat_vectors +=1
+                parse_success = False
+                while(not parse_success):
+                    random_code = generate_codes(code_type, list(selected_ctrl), nb_actions)
+                    parse_success, _ = simulator.get_prog_ast(random_code)
                 final_codes.append(random_code)
                 text += str(random_code)  + "\n"
 numb_unique = len(set(map(tuple, final_codes)))   
