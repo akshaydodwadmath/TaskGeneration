@@ -103,8 +103,10 @@ def getFeatureVector(prog):
                       'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
     featVec = [[0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
+               [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
     featVec_undefined = [[1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
+               [1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
                [1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     #for token in prog[index:]:
@@ -113,7 +115,7 @@ def getFeatureVector(prog):
     while(index < len(prog)):
         token = prog[index]
         if((token in commands) or (token in command_if_else)):
-            if(ctrl_index > 1):
+            if(ctrl_index > 2):
                 return featVec_undefined, numb_actions
         
         if(token == 'REPEAT'):
@@ -140,5 +142,5 @@ def getFeatureVector(prog):
             featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
             ctrl_index+=1
         index+=1
-    featVec[2][numb_actions] = 1
+    featVec[3][numb_actions] = 1
     return featVec, numb_actions
