@@ -40,7 +40,8 @@ cond = [
     ['R=']# repeat options 2 to 10
     ]
 
-required_ctypes = [ ['action'], #Type01 CT1
+required_ctypes = [ 
+                    ['action'], #Type01 CT1
                    
                     ['action', 
                         'ctrl1', 'cond1', 'copen1', 'action', 'cclose1', 
@@ -565,13 +566,16 @@ def generate_codes(code_type, selected_ctrl, max_nb_actions):
 
 
 #Main code
-n_domains = 12
-top_k = 2
+n_domains = 10
+top_k = 10
 final_codes = []
 simulator = Simulator()
 numb_feat_vectors = 0
 
-
+unique_count_5 = 0
+unique_count_10 = 0
+unique_count_50 = 0
+unique_count_90 = 0
 for code_type in required_ctypes: 
     
     ctrl_count = 0
@@ -587,16 +591,34 @@ for code_type in required_ctypes:
         
         all_perm = ([p for p in product(commands, repeat=ctrl_count)])
         for selected_ctrl in all_perm:
+            numb_for_code_type = 0
             for i in range(0, (n_domains*top_k)):
                 numb_feat_vectors +=1
                 parse_success = False
             
+                ##For generation
+                #while(not parse_success):
+                    #random_code = generate_codes(code_type, list(selected_ctrl), nb_actions)
+                    #parse_success, _ = simulator.get_prog_ast(random_code)
+                #final_codes.append(random_code)
+                #text += str(random_code)  + "\n"
                 
-                while(not parse_success):
-                    random_code = generate_codes(code_type, list(selected_ctrl), nb_actions)
-                    parse_success, _ = simulator.get_prog_ast(random_code)
-                final_codes.append(random_code)
-                text += str(random_code)  + "\n"
+                ##For evaluation
+                random_code = generate_codes(code_type, list(selected_ctrl), nb_actions)
+                parse_success, _ = simulator.get_prog_ast(random_code)
+                if(parse_success):
+                    final_codes.append(random_code)
+                    text += str(random_code)  + "\n"
+                    numb_for_code_type +=1
+                    
+            if(numb_for_code_type>4):
+                unique_count_5+=1
+            if(numb_for_code_type>9):
+                unique_count_10+=1
+            if(numb_for_code_type>49):
+                unique_count_50+=1
+            if(numb_for_code_type>89):
+                unique_count_90+=1
     print("code_type", required_ctypes.index(code_type))
     
 numb_unique = len(set(map(tuple, final_codes)))   
@@ -610,6 +632,10 @@ print("total_generated", total_generated)
 print("percentage unique", (100*numb_unique/ total_generated))
 print("percentage feature", (100*numb_feat/ total_generated))
 
+print("unique_count_5", unique_count_5)
+print("unique_count_10", unique_count_10)
+print("unique_count_50", unique_count_50)
+print("unique_count_90", unique_count_90)
                
                 
     

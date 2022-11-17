@@ -132,16 +132,21 @@ def evaluate_model(model_weights,
     unique_count_5 = 0
     unique_count_10 = 0
     unique_count_50 = 0
+    unique_count_90 = 0
     
     unseen_count_5 = 0
     unseen_count_10 = 0
     unseen_count_50 = 0
+    unseen_count_90 = 0
     
   #  dataset = shuffle_dataset(dataset, batch_size, randomize=False)
     
     saved_pred_all = []
     unique_pred_all = []
     unseen_pred_all = []
+    failed_syntax_all = 0
+    feature_mismatch_all = 0
+    
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
         
@@ -152,7 +157,12 @@ def evaluate_model(model_weights,
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
         sample_count = [0 for i in range(batch_size)]
+        syntax_failed_count = [0 for i in range(batch_size)]
+        feat_mismatch_count = [0 for i in range(batch_size)]
+        
+        
         unique_pred = [[] for i in range(batch_size)]
+        corsp_domain = [[] for i in range(batch_size)]
         target_pred = [[] for i in range(batch_size)]
         failed_pred = [[] for i in range(batch_size)]
         unseen_pred = [[] for i in range(batch_size)]
@@ -191,7 +201,7 @@ def evaluate_model(model_weights,
                     model_failed = True
                     if(sample_count[batch_idx]< nb_samples):
                         sample_count[batch_idx] += 1
-                        feat_match = False
+                        failed_syntax = False
                         pred = dec[-1]
                         ll = dec[0]
                         parse_success, cand_prog = simulator.get_prog_ast(pred)
@@ -206,6 +216,7 @@ def evaluate_model(model_weights,
                                     saved_pred_all.append(pred)
                                     if(not(pred in unique_pred[batch_idx])):
                                         unique_pred[batch_idx].append(pred)
+                                        corsp_domain[batch_idx].append(K)
                                         unique_pred_all.append(pred)
                                         
                                         if(not(pred in train_codes)):
@@ -218,8 +229,18 @@ def evaluate_model(model_weights,
                                         for top_idx in range(rank, top_k):
                                             nb_featVec_match[top_idx] += 1
                                         ranked_entered = True
+                        else:
+                            failed_syntax = True
+                            
                         if(model_failed):
                             failed_pred[batch_idx].append(pred)
+                            if(failed_syntax):
+                                syntax_failed_count[batch_idx] += 1
+                                failed_syntax_all += 1
+                            else:
+                                feat_mismatch_count[batch_idx] += 1
+                                feature_mismatch_all += 1
+                            
         for i in range(0,batch_size):
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\nFeatureVector " + str((sp_idx+1) + i) + " -> ")
@@ -231,12 +252,18 @@ def evaluate_model(model_weights,
                     unique_count_10 += 1
                 if(numb_unique> 49):
                     unique_count_50 += 1
+                if(numb_unique> 89):
+                    unique_count_90 += 1
                 
                 text += "TargetVectors: " + str(target_pred[i])  + "\n"
+                text += "Failed Syntax: " + str(syntax_failed_count[i])  + "\n"
+                text += "Feature Mismatch: " + str(feat_mismatch_count[i])  + "\n"
+                
+                
                 text += "Passed"  + "\n"
-                for unique_prog in unique_pred[i]:
+                for unique_prog,k_value in zip(unique_pred[i],corsp_domain[i]):
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
-                    text += str(pred_tkns)  + "\n"
+                    text += str(k_value) + "    " + str(pred_tkns)  + "\n"
                 
                 text += "Failed"  + "\n"
                 for failed_prog in failed_pred[i]:
@@ -254,9 +281,13 @@ def evaluate_model(model_weights,
                     unseen_count_10 += 1
                 if(numb_unseen> 49):
                     unseen_count_50 += 1
+                if(numb_unseen> 89):
+                    unseen_count_90 += 1
                 
                 stx_res_file.write(";    numb_unseen : " + str(numb_unseen)+ " , " )
                 stx_res_file.write(str(100*numb_unseen/ (nb_samples )))
+                
+               
             
         
     #for k in range(top_k):
@@ -283,10 +314,15 @@ def evaluate_model(model_weights,
         stx_res_file.write("\n" + "Unique 5 : " + str(unique_count_5)+ " , " )
         stx_res_file.write("\n" + "Unique 10 : " + str(unique_count_10)+ " , " )
         stx_res_file.write("\n" + "Unique 50 : " + str(unique_count_50)+ " , " )
+        stx_res_file.write("\n" + "Unique 90 : " + str(unique_count_90)+ " , " )
         
         stx_res_file.write("\n" + "Unseen 5 : " + str(unseen_count_5)+ " , " )
         stx_res_file.write("\n" + "Unseen 10 : " + str(unseen_count_10)+ " , " )
         stx_res_file.write("\n" + "Unseen 50 : " + str(unseen_count_50)+ " , " )
+        stx_res_file.write("\n" + "Unseen 90 : " + str(unseen_count_90)+ " , " )
+        
+        stx_res_file.write("\n" + " failed syntax : " + str(failed_syntax_all)+ " , " )
+        stx_res_file.write("\n" + " feature mismatch : " + str(feature_mismatch_all)+ " , " )
     
     for k in range(top_k):
         with open(str(all_featVec_match_output_path[k]), "w") as stx_res_file:
