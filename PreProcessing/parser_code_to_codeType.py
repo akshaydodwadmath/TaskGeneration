@@ -35,7 +35,8 @@ control_close = ['m)',
 
 #FeatureVector format: [C1_D1_WHILE, C1_D1_REPEAT, C1_D1_IF, [C1_D1_IFELSE, C1_D1_ELSE] ,C1_D2_WHILE, C1_D2_REPEAT, C1_D2_IF, [C1_D2_IFELSE, C1_D2_ELSE] , 
 #                       C2_D1_WHILE ,C2_D1_REPEAT, C2_D1_IF, [C2_D1_IFELSE, C2_D1_ELSE] ,C2_D2_WHILE ,C2_D2_REPEAT, C2_D2_IF, [C2_D2_IFELSE, C2_D2_ELSE]]
-required_ctypes = ['()', #Type01 #CT1
+required_ctypes = [
+                    '()', #Type01 #CT1
                    
                    '(D_CTRL())', #Type02 #CT2
                    '(D_IF()D_ELSE())', #Type03 #CT2
@@ -94,7 +95,22 @@ required_ctypes = ['()', #Type01 #CT1
                    '(D_CTRL()D_IF()D_ELSE()D_IF()D_ELSE())',#Type46 #CT7
                    '(D_IF()D_ELSE()D_IF()D_ELSE()D_CTRL())',#Type47 #CT7
                    '(D_IF()D_ELSE()D_CTRL()D_IF()D_ELSE())',#Type48 #CT7
-                   '(D_IF()D_ELSE()D_IF()D_ELSE()D_IF()D_ELSE())'#Type49 #CT7
+                   '(D_IF()D_ELSE()D_IF()D_ELSE()D_IF()D_ELSE())',#Type49 #CT7
+                   
+                   '(D_CTRL(D_CTRL()D_CTRL()))', #Type50 #CT8
+                   '(D_CTRL(D_IF()D_ELSE()D_CTRL()))', #Type51  #CT8
+                   '(D_CTRL(D_CTRL()D_IF()D_ELSE()))', #Type52 #CT8
+                   '(D_CTRL(D_IF()D_ELSE()D_IF()D_ELSE()))', #Type53 #CT8
+                   
+                   '(D_IF(D_CTRL()D_CTRL())D_ELSE())', #Type54 #CT8
+                   '(D_IF(D_IF()D_ELSE()D_CTRL())D_ELSE())', #Type55  #CT8
+                   '(D_IF(D_CTRL()D_IF()D_ELSE())D_ELSE())', #Type56 #CT8
+                   '(D_IF(D_IF()D_ELSE()D_IF()D_ELSE())D_ELSE())', #Type57 #CT8
+                   
+                   '(D_IF()D_ELSE(D_CTRL()D_CTRL()))', #Type58 #CT8
+                   '(D_IF()D_ELSE(D_IF()D_ELSE()D_CTRL()))', #Type59  #CT8
+                   '(D_IF()D_ELSE(D_CTRL()D_IF()D_ELSE()))', #Type60 #CT8
+                   '(D_IF()D_ELSE(D_IF()D_ELSE()D_IF()D_ELSE()))', #Type61 #CT8
                    ]
 
 
@@ -145,7 +161,8 @@ def getFeatureVector(prog):
     ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
     featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
                       'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
-    featVec = [[0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
+    subVec_format = ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']
+    featVec = [[0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],[[0,0,0,0,0],[0,0,0,0,0]]],
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
@@ -157,25 +174,70 @@ def getFeatureVector(prog):
         if(token == 'REPEAT'):
             featVec[ctrl_index][featVec_format.index('REPEAT')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
-            featVec[ctrl_index][featVec_format.index('REPEAT')+1][value] = 1
+            if(ctrl_index == 0):
+                featVec[ctrl_index][featVec_format.index('REPEAT')+1][0][value] = 1
+                if(value != subVec_format.index('NO_CTRL')):
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    featVec[ctrl_index][featVec_format.index('REPEAT')+1][1][value] = 1
+                else:
+                    featVec[ctrl_index][featVec_format.index('REPEAT')+1][1][subVec_format.index('NO_CTRL')] = 1
+            else:
+                featVec[ctrl_index][featVec_format.index('REPEAT')+1][value] = 1
             ctrl_index+=1
         elif(token == 'WHILE'):
             featVec[ctrl_index][featVec_format.index('WHILE')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
-            featVec[ctrl_index][featVec_format.index('WHILE')+1][value] = 1
+            if(ctrl_index == 0):
+                featVec[ctrl_index][featVec_format.index('WHILE')+1][0][value] = 1
+                if(value != subVec_format.index('NO_CTRL')):
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    featVec[ctrl_index][featVec_format.index('WHILE')+1][1][value] = 1
+                else:
+                    featVec[ctrl_index][featVec_format.index('WHILE')+1][1][subVec_format.index('NO_CTRL')] = 1
+            else:
+                featVec[ctrl_index][featVec_format.index('WHILE')+1][value] = 1
             ctrl_index+=1
         elif(token == 'IF'):
             featVec[ctrl_index][featVec_format.index('IF')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
-            featVec[ctrl_index][featVec_format.index('IF')+1][value] = 1
+            if(ctrl_index == 0):
+                featVec[ctrl_index][featVec_format.index('IF')+1][0][value] = 1
+                if(value != subVec_format.index('NO_CTRL')):
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    featVec[ctrl_index][featVec_format.index('IF')+1][1][value] = 1
+                else:
+                    featVec[ctrl_index][featVec_format.index('IF')+1][1][subVec_format.index('NO_CTRL')] = 1
+            else:
+                featVec[ctrl_index][featVec_format.index('IF')+1][value] = 1
             ctrl_index+=1
         elif(token == 'IFELSE'):
             featVec[ctrl_index][featVec_format.index('IFELSE')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
-            featVec[ctrl_index][featVec_format.index('IFELSE')+1][value] = 1
+            if(ctrl_index == 0):
+                featVec[ctrl_index][featVec_format.index('IFELSE')+1][0][value] = 1
+                if(value != subVec_format.index('NO_CTRL')):
+                    value, index = checkNextCtrl(prog[index+1:], index+1) #For closing bracket
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    featVec[ctrl_index][featVec_format.index('IFELSE')+1][1][value] = 1
+                else:
+                    featVec[ctrl_index][featVec_format.index('IFELSE')+1][1][subVec_format.index('NO_CTRL')] = 1
+            else:
+                featVec[ctrl_index][featVec_format.index('IFELSE')+1][value] = 1
         elif(token == 'ELSE'):
             value, index = checkNextCtrl(prog[index+1:], index+1)
-            featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
+            if(ctrl_index == 0):
+                featVec[ctrl_index][featVec_format.index('IFELSE')+2][0][value] = 1
+                if(value != subVec_format.index('NO_CTRL')):
+                    value, index = checkNextCtrl(prog[index+1:], index+1) #For closing bracket
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    featVec[ctrl_index][featVec_format.index('IFELSE')+2][1][value] = 1
+                else:
+                    featVec[ctrl_index][featVec_format.index('IFELSE')+2][1][subVec_format.index('NO_CTRL')] = 1
+            else:
+                featVec[ctrl_index][featVec_format.index('IFELSE')+2][value] = 1
             ctrl_index+=1
         index+=1
     featVec[3][numb_actions] = 1
@@ -291,13 +353,14 @@ for line in Lines:
         
         if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
             featVec_evaluation.append({
+                            "CodeTypeIndex": required_ctypes.index(code_type),
                             "FeatureVector":feat_vect,
                             "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
                             "Code": code_list[feat_vect_elements.index(feat_vect)][0]
                             })
             
             for i in range(0,args.ndomains):
-                list_obj.append({"CodeType": code_type,
+                list_obj.append({"CodeTypeIndex": required_ctypes.index(code_type),
                                 "FeatureVector":feat_vect,
                                 "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
                                 "Code": code_list[feat_vect_elements.index(feat_vect)][i]})

@@ -454,7 +454,115 @@ required_ctypes = [
                      'celse', 'c_elseopen', 'action', 'c_elseclose', 
                      'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
                      'celse', 'c_elseopen', 'action', 'c_elseclose',  
-                     'action']#Type49 #CT7
+                     'action'],#Type49 #CT7
+                
+                    ['action', 
+                     'ctrl1', 'cond1', 'copen1', 
+                     'action', 
+                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2',
+                     'action', 
+                     'ctrl3', 'cond3', 'copen3', 'action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
+                    ['action', 
+                     'ctrl1', 'cond1', 'copen1', 
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action',
+                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2',
+                     'action', 'cclose1',
+                     'action'],#Type51 #CT8
+                    ['action', 
+                     'ctrl1', 'cond1', 'copen1', 
+                     'action', 
+                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2',
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action', 'cclose1',
+                     'action'],#Type52 #CT8
+                    ['action', 
+                     'ctrl1', 'cond1', 'copen1', 
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose',  
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action', 'cclose1',
+                     'action'],#Type53 #CT8
+                    
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'action', 
+                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2', 
+                     'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action'],#Type54 #CT8
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action',
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action'],#Type55 #CT8
+                    ['action',
+                     'cif', 'c_cndif', 'c_ifopen', 
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action'],#Type56 #CT8
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose',  
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action'],#Type57 #CT8
+                    
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action',
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'action', 
+                     'ctrl2', 'cond2', 'copen2', 'action', 'cclose2', 
+                     'c_elseclose', 
+                     'action'],#Type58 #CT8
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action',
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'action',
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'c_elseclose',
+                     'action'],#Type59 #CT8
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action',
+                     'ctrl1', 'cond1', 'copen1', 'action', 'cclose1',
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'c_elseclose',
+                     'action'],#Type60 #CT8
+                    ['action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action',
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose',  
+                     'cif', 'c_cndif', 'c_ifopen', 'action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'action', 'c_elseclose', 
+                     'c_elseclose',
+                     'action']#Type61 #CT8
                     
                     ]
 def add_args(parser):
@@ -564,7 +672,6 @@ def generate_codes(code_type, selected_ctrl, max_nb_actions):
     ret_code = list(filter(None, ret_code))
     return ret_code
 
-
 #Main code
 n_domains = 10
 top_k = 10
@@ -576,8 +683,8 @@ unique_count_5 = 0
 unique_count_10 = 0
 unique_count_50 = 0
 unique_count_90 = 0
+
 for code_type in required_ctypes: 
-    
     ctrl_count = 0
     ctrl_all_count = 0
     for token in code_type:
