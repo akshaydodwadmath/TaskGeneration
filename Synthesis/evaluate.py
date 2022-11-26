@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from dataloader import load_input_file, get_minibatch, shuffle_dataset
 from karel.consistency import Simulator
-from preprocessing.code_to_codeType import getFeatureVector
+from preprocessing.parser_code_to_codeType import getFeatureVector
 
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")

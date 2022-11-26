@@ -166,11 +166,19 @@ def getFeatureVector(prog):
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],
                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+    featVec_undefined = [[1,[[1,1,1,1,1],[1,1,1,1,1]],1,[[1,1,1,1,1],[1,1,1,1,1]],1,[[1,1,1,1,1],[1,1,1,1,1]],1,[[1,1,1,1,1],[1,1,1,1,1]],[[1,1,1,1,1],[1,1,1,1,1]]],
+               [1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
+               [1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],1,[1,1,1,1,1],[1,1,1,1,1]],
+               [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     #for token in prog[index:]:
     ctrl_index = 0
     numb_actions = getNumberOfActions(prog)
     while(index < len(prog)):
         token = prog[index]
+        if((token in commands) or (token in command_if_else)):
+            if(ctrl_index > 2):
+                return featVec_undefined, numb_actions
+            
         if(token == 'REPEAT'):
             featVec[ctrl_index][featVec_format.index('REPEAT')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
@@ -270,134 +278,134 @@ def add_args(parser):
     parse_group.add_argument('--ndomains', type=int,
                             default=5)
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Convert code to code types.')
+    add_args(parser)
+    args = parser.parse_args()
 
-parser = argparse.ArgumentParser(
-    description='Convert code to code types.')
-add_args(parser)
-args = parser.parse_args()
+    code_file = open(args.input_code_file, 'r')
 
-code_file = open(args.input_code_file, 'r')
+    code_type_file = open(args.code_type_file, "w")
 
-code_type_file = open(args.code_type_file, "w")
+    Lines = code_file.readlines() 
 
-Lines = code_file.readlines() 
+    line_count = 0
+    code_type_list = []
+    #dict_obj = my_dictionary()
+    list_obj = []
+    featVec_evaluation = []
+    feat_vect_elements = []
+    no_of_vect_elements =  []
+    action_temp = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-line_count = 0
-code_type_list = []
-#dict_obj = my_dictionary()
-list_obj = []
-featVec_evaluation = []
-feat_vect_elements = []
-no_of_vect_elements =  []
-action_temp = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
-code_list = []
-for line in Lines:
-    
-    prog_updated = []
-    
-    prog = line.split(" ")
-    for token in prog:
-    #    token = token.replace('[', '')
-    #    token = token.replace(']', '')
-        token = token.replace("'", "")
-        token = token.replace('"', '')
-        token = token.replace(' ', '')
-        token = token.replace(',', '')
-        token = token.replace('[', '')
-        token = token.replace(']', '')
-        token = token.replace('\n', '')
-        prog_updated.append(token)
-        #Example format: ['DEF', 'run', 'm(', 'move', 'move', 'WHILE', 'c(', 'noMarkersPresent', 'c)', 'w(', 'putMarker', 'move', 'w)', 'm)']
-
-
-    #print("prog", prog_updated)
-    
-    pattern_only = []
-    
-    for token in prog_updated:
-        if(token in commands):
-            pattern_only.append("D_CTRL" )
-        if(token == command_if_else[0]):
-            pattern_only.append("D_" + "IF")
-        if(token == command_if_else[1]):
-            pattern_only.append("D_" + "ELSE")
-        if(token in control_open):
-            pattern_only.append("(")
-        if(token in control_close):
-            pattern_only.append(")")
-            
-            
-   # print("pattern_only", pattern_only)
-    code_type = "".join(pattern_only) 
-    
-    code_type_list.append(code_type)
-    code_type_file.write( code_type + "\n" )
-
-    if(code_type in required_ctypes):
+    code_list = []
+    for line in Lines:
         
-        feat_vect,numb_actions = getFeatureVector(prog_updated)
-        action_temp[numb_actions] +=1
-        if(feat_vect not in feat_vect_elements):
-            feat_vect_elements.append(feat_vect)
-            no_of_vect_elements.append(0)
-            code_list.append([0] * args.ndomains)
-            
-        no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
+        prog_updated = []
         
-        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= args.ndomains):
-            if(prog_updated in code_list[feat_vect_elements.index(feat_vect)][:]):
-                 no_of_vect_elements[feat_vect_elements.index(feat_vect)] -=1
-            else:
-                code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
+        prog = line.split(" ")
+        for token in prog:
+        #    token = token.replace('[', '')
+        #    token = token.replace(']', '')
+            token = token.replace("'", "")
+            token = token.replace('"', '')
+            token = token.replace(' ', '')
+            token = token.replace(',', '')
+            token = token.replace('[', '')
+            token = token.replace(']', '')
+            token = token.replace('\n', '')
+            prog_updated.append(token)
+            #Example format: ['DEF', 'run', 'm(', 'move', 'move', 'WHILE', 'c(', 'noMarkersPresent', 'c)', 'w(', 'putMarker', 'move', 'w)', 'm)']
+
+
+        #print("prog", prog_updated)
         
-        if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
-            featVec_evaluation.append({
-                            "CodeTypeIndex": required_ctypes.index(code_type),
-                            "FeatureVector":feat_vect,
-                            "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                            "Code": code_list[feat_vect_elements.index(feat_vect)][0]
-                            })
+        pattern_only = []
+        
+        for token in prog_updated:
+            if(token in commands):
+                pattern_only.append("D_CTRL" )
+            if(token == command_if_else[0]):
+                pattern_only.append("D_" + "IF")
+            if(token == command_if_else[1]):
+                pattern_only.append("D_" + "ELSE")
+            if(token in control_open):
+                pattern_only.append("(")
+            if(token in control_close):
+                pattern_only.append(")")
+                
+                
+    # print("pattern_only", pattern_only)
+        code_type = "".join(pattern_only) 
+        
+        code_type_list.append(code_type)
+        code_type_file.write( code_type + "\n" )
+
+        if(code_type in required_ctypes):
             
-            for i in range(0,args.ndomains):
-                list_obj.append({"CodeTypeIndex": required_ctypes.index(code_type),
+            feat_vect,numb_actions = getFeatureVector(prog_updated)
+            action_temp[numb_actions] +=1
+            if(feat_vect not in feat_vect_elements):
+                feat_vect_elements.append(feat_vect)
+                no_of_vect_elements.append(0)
+                code_list.append([0] * args.ndomains)
+                
+            no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
+            
+            if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= args.ndomains):
+                if(prog_updated in code_list[feat_vect_elements.index(feat_vect)][:]):
+                    no_of_vect_elements[feat_vect_elements.index(feat_vect)] -=1
+                else:
+                    code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
+            
+            if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
+                featVec_evaluation.append({
+                                "CodeTypeIndex": required_ctypes.index(code_type),
                                 "FeatureVector":feat_vect,
                                 "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                                "Code": code_list[feat_vect_elements.index(feat_vect)][i]})
-              
+                                "Code": code_list[feat_vect_elements.index(feat_vect)][0]
+                                })
+                
+                for i in range(0,args.ndomains):
+                    list_obj.append({"CodeTypeIndex": required_ctypes.index(code_type),
+                                    "FeatureVector":feat_vect,
+                                    "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
+                                    "Code": code_list[feat_vect_elements.index(feat_vect)][i]})
+                
+            
+                    line_count+=1
+    #  if(line_count>1):
+    #      break
         
-                line_count+=1
-  #  if(line_count>1):
-  #      break
-    
-values, counts = np.unique(code_type_list, return_counts=True)    
+    values, counts = np.unique(code_type_list, return_counts=True)    
 
-with open(args.json_featVectors_file, 'w') as json_file:
-    for dict_ in featVec_evaluation:
-        json.dump(dict_, json_file, 
-                        separators=(',',': '))
-        json_file.write('\n')
+    with open(args.json_featVectors_file, 'w') as json_file:
+        for dict_ in featVec_evaluation:
+            json.dump(dict_, json_file, 
+                            separators=(',',': '))
+            json_file.write('\n')
 
-with open(args.json_data_file, 'w') as json_file:
-    for dict_ in list_obj:
-        json.dump(dict_, json_file, 
-                        separators=(',',': '))
-        json_file.write('\n')
-    
-    
-print("Total count\n", line_count)
-print("Number of feature vectors\n", len(no_of_vect_elements))
-print("Action temp\n", action_temp)
-#dict_obj = {}
-#for v, c in zip(values, counts):
-    
-    
-    #dict_obj[v] = c
+    with open(args.json_data_file, 'w') as json_file:
+        for dict_ in list_obj:
+            json.dump(dict_, json_file, 
+                            separators=(',',': '))
+            json_file.write('\n')
+        
+        
+    print("Total count\n", line_count)
+    print("Number of feature vectors\n", len(no_of_vect_elements))
+    print("Action temp\n", action_temp)
+    #dict_obj = {}
+    #for v, c in zip(values, counts):
+        
+        
+        #dict_obj[v] = c
 
-    
-#sorted_dict_obj = {k: v for k, v in sorted(dict_obj.items(), key=lambda item: item[1], reverse=True)[:100]}
-#print("sorted_dict_obj",sorted_dict_obj) 
-#print("len", len(counts))
+        
+    #sorted_dict_obj = {k: v for k, v in sorted(dict_obj.items(), key=lambda item: item[1], reverse=True)[:100]}
+    #print("sorted_dict_obj",sorted_dict_obj) 
+    #print("len", len(counts))
     
     
     
