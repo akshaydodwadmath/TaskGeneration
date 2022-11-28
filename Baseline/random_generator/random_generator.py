@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import math
 import argparse
@@ -5,6 +6,7 @@ import json
 import random
 import os
 
+from pathlib import Path
 from karel.consistency import Simulator
 from itertools import product
 
@@ -746,10 +748,10 @@ def checkQuality(simulator, prg_ast_json, max_iterations):
 
         code = Code('karel', code_json)
         scores = []
-        for _ in range(20):
-            score = obtain_karel_saturation_score_for_code(code, max_iterations)
-            scores.append(score)
-        
+
+        score = obtain_karel_saturation_score_for_code(code, max_iterations)
+        scores.append(score)
+
         avg_score = np.mean(scores)
         return avg_score
     
@@ -761,6 +763,10 @@ if __name__ == '__main__':
     add_args(parser)
     args = parser.parse_args()
 
+    result_dir = Path(args.data_dir)
+    if not result_dir.exists():
+        os.makedirs(str(result_dir))
+    
     log_path = os.path.join(args.data_dir, "{}.txt".format('train_log'))
     log = ""
     
@@ -784,8 +790,7 @@ if __name__ == '__main__':
     # clear the data in the info file
     with open(log_path,'w') as file:
         pass
-
-
+        
     for code_type in required_ctypes: 
         print("code_type", required_ctypes.index(code_type))
         log = "code_type " + str(required_ctypes.index(code_type))  + "\n"
@@ -813,13 +818,13 @@ if __name__ == '__main__':
                     quality_good = False
                     qual_bad = True
                     nb_attempts = 0
-                    best_score = 0.0
-                    best_code = ['DEF', 'run', 'm(', 'turnLeft', 'move', 'm)'] #Sample Code
+                    best_score = -1.0
+
                     ##For generation
                     print("Numb_Actions", nb_actions)
                     log = ""
                     log += "Numb_Actions: " + str(nb_actions)  + "\n"
-    
+                    start = time.time()
                     if(args.data_generator):
                         while(not quality_good):
                             random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
@@ -836,23 +841,28 @@ if __name__ == '__main__':
                                     current_spec_codes.append(random_code)   
                                     quality_score = checkQuality(simulator, random_code_ast_json, args.max_iterations)
                                     nb_attempts +=1
+                                #    log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
+                                #    log += "Code " + str(random_code)  + "\n"
+                                #    log += "quality_score " + str(quality_score)  + "\n"
+                                #    print("quality_score",quality_score)
                                     if(quality_score > args.quality_threshold):
                                         quality_good = True
                                     else:
-                                        print("quality_score",quality_score)
+                                        
                                         if(quality_score> best_score):
                                             best_score = quality_score
                                             best_code = random_code
                                             
                                     if(nb_attempts == 50):
                                         quality_good = True
-                                        random_code = current_spec_codes[0] 
-                                         
-                                        
+                                        random_code = best_code
                     else:
                         while(not parse_success):
                             random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
                             parse_success, _ = simulator.get_prog_ast(random_code)
+                            
+                    end = time.time()
+                    print(f"Time taken: {end - start}")
                             
                     log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
                 
