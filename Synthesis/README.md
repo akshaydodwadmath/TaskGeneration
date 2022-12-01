@@ -22,4 +22,7 @@ python3 eval_cmd.py --model_weights exps_batch8_better_quality/Weights/best.mode
 
 python3 main.py --train_file=../PreProcessing/train_betterquality.json --val_feature_file=../PreProcessing/featVectors_betterquality.json --batch_size=8  --nb_epochs=200 --n_domains 8 --shuffle_data --use_cuda --result_folder exps_batch8_better_quality --nb_samples 100
 
+RL Training:
+python3 main.py  --signal rl --learning_rate 1e-5 --init_weights model_weights/SL_C49_poor_quality.model --train_file ../PreProcessing/train_betterquality.json--result_folder exps/reinforce_finetune --batch_size 8 --nb_rollouts 100 --nb_epochs 5 --use_cuda
+
 

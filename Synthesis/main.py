@@ -8,9 +8,11 @@ import time
 
 import argparse
 from dataloader import load_input_file,get_minibatch, shuffle_dataset
-from train_helper import do_supervised_minibatch
+from train_helper import do_supervised_minibatch,do_rl_minibatch
 from model import CodeType2Code
 from evaluate import evaluate_model
+from reinforce import EnvironmentClasses
+from karel.consistency import Simulator
 
 import torch
 import torch.autograd as autograd
@@ -99,11 +101,11 @@ def add_train_cli_args(parser):
                         "Default: %(default)s.")
 
     rl_group = parser.add_argument_group("RL-specific training options")
-    # rl_group.add_argument("--environment", type=str,
-                          # choices=EnvironmentClasses.keys(),
-                          # default="BlackBoxGeneralization",
-                          # help="What type of environment to get a reward from"
-                          # "Default: %(default)s.")
+    rl_group.add_argument("--environment", type=str,
+                          choices=EnvironmentClasses.keys(),
+                          default="BlackBoxGeneralization",
+                          help="What type of environment to get a reward from"
+                          "Default: %(default)s.")
     # rl_group.add_argument("--reward_comb", type=str,
                           # choices=RewardCombinationFun.keys(),
                           # default="RenormExpected",
@@ -179,15 +181,18 @@ nb_lstm_layers = 2
 learn_syntax = False
 
 #Need to setup paths
-model = CodeType2Code(kernel_size, conv_stack, fc_stack,
-                vocabulary_size, tgt_embedding_size,
-                lstm_hidden_size, nb_lstm_layers, args.n_domains ,
-                nfeaturevectors,learn_syntax)
+if args.init_weights is None:
+    model = CodeType2Code(kernel_size, conv_stack, fc_stack,
+                    vocabulary_size, tgt_embedding_size,
+                    lstm_hidden_size, nb_lstm_layers, args.n_domains ,
+                    nfeaturevectors,learn_syntax)
+else:
+    model = torch.load(args.init_weights,
+                    map_location=lambda storage, loc: storage)
 # Dump initial weights
 path_to_ini_weight_dump = models_dir / "ini_weights.model"
 with open(str(path_to_ini_weight_dump), "wb") as weight_file:
     torch.save(model, weight_file)                
-
 
 if use_grammar:
     model.set_syntax_checker(syntax_checker)    
@@ -205,6 +210,13 @@ if signal == TrainSignal.SUPERVISED:
     # Setup the criterion
     loss_criterion = nn.CrossEntropyLoss(weight=weight_mask)
     weight_lambda = 0.1
+    
+elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
+    simulator = Simulator(vocab["idx2tkn"])
+    if signal == TrainSignal.BEAM_RL:
+        reward_comb_fun = RewardCombinationFun[reward_comb]
+else:
+    raise Exception("Unknown TrainingSignal.")
     
 #TODO    
 if args.use_cuda:
@@ -230,6 +242,8 @@ recent_losses_train = []
 recent_losses_entropy = []
 best_val_acc = np.NINF
 batch_size = args.batch_size
+env = args.environment
+
 for epoch_idx in range(0, args.nb_epochs):
     # This is definitely not the most efficient way to do it but oh well
     if(args.shuffle_data):
@@ -259,6 +273,40 @@ for epoch_idx in range(0, args.nb_epochs):
             recent_losses.append(minibatch_loss)
             recent_losses_train.append(minibatch_loss_train)
             recent_losses_entropy.append(minibatch_loss_entropy)
+            
+        elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
+            _, in_src_seq, out_tgt_seq, srcs,_, srcs_fVector= get_minibatch(dataset, sp_idx, batch_size,
+                                                tgt_start, tgt_end, tgt_pad)
+            if args.use_cuda:
+                in_src_seq = in_src_seq.cuda()
+                out_tgt_seq = out_tgt_seq.cuda()
+
+            # We use 1/nb_rollouts as the reward to normalize wrt the
+            # size of the rollouts
+            if signal == TrainSignal.RL:
+                reward_norm = 1 / float(args.nb_rollouts)
+
+
+            _,max_len = out_tgt_seq.size()
+
+            env_cls = EnvironmentClasses[env]
+            fVector = dataset["featureVectors"]
+            if "Consistency" in env:
+                envs = [env_cls(reward_norm, srcs_fVector[batch_idx], simulator, vocab, fVector)]
+            elif "Generalization" in env:
+                envs = [env_cls(reward_norm, srcs_fVector[batch_idx], simulator, vocab, fVector)]
+            else:
+                raise NotImplementedError("Unknown environment type")
+            
+            if signal == TrainSignal.RL:
+                minibatch_reward = do_rl_minibatch(model,in_src_seq,
+                                                    envs,tgt_start, tgt_end, max_len,
+                                                    args.n_domains,
+                                                    args.nb_rollouts)
+            recent_losses.append(minibatch_reward)
+
+        else:
+            raise NotImplementedError("Unknown Training method")    
             
         optimizer.step()
         

@@ -119,6 +119,8 @@ def get_minibatch(dataset, sp_idx, batch_size,
 
     # Prepare the target sequences
     targets = dataset["targets"][sp_idx:sp_idx+batch_size]
+    
+    srcs_fVector = dataset["featureVectors"][sp_idx:sp_idx+batch_size]
 
     lines = [
         [start_idx] + line for line in targets
@@ -143,4 +145,4 @@ def get_minibatch(dataset, sp_idx, batch_size,
     tgt_inp_sequences = Variable(torch.LongTensor(input_lines), volatile=volatile_vars)
     out_tgt_seq = Variable(torch.LongTensor(output_lines), volatile=volatile_vars)
 
-    return tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets
+    return tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets,srcs_fVector

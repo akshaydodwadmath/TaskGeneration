@@ -18,9 +18,9 @@ class Simulator(object):
         try:
             prg_ast_json = self.ast_parser.parse(prg_tkns)
         except AstParseException as e:
-            return False, None
+            return False, None, None
         prog_ast = Ast(prg_ast_json)
-        return True, prog_ast
+        return True, prog_ast, prg_ast_json
 
     def run_prog(self, prog_ast, inp_grid):
         emu_result = self.emulator.emulate(prog_ast, inp_grid)
