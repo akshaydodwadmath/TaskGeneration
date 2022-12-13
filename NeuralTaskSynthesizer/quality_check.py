@@ -127,8 +127,8 @@ if __name__ == '__main__':
         code = Code('karel', code_json)
         scores = []
         start = time.time()
-        for _ in range(20):
-            score = obtain_karel_saturation_score_for_code(code, 200)
+        for _ in range(1):
+            score = obtain_karel_saturation_score_for_code(code, 2000)
             scores.append(score)
         end = time.time()
     #  print(f"Time taken: {end - start}")

@@ -71,6 +71,9 @@ def add_train_cli_args(parser):
                              default=5,
                              help="Max number of samples to look at."
                              "If 0, look at the whole dataset.")
+    train_group.add_argument("--top_k", type=int,
+                        default=5,
+                        help="How many candidates to return. For evaluation. Default %(default)s")
     train_group.add_argument("--result_folder", type=str,
                              default="exps/fake_run",
                              help="Where to store the results. "

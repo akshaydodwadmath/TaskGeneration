@@ -26,7 +26,7 @@ actions = [
 commands = [
             ['REPEAT','r(','r)', 0],
             ['WHILE','w(','w)', 1],
-            ['IF','i(','i)', 1]
+            #['IF','i(','i)', 1]
             ]
 command_if_else = [
             ['IFELSE','i(','i)', 1],
@@ -45,41 +45,41 @@ cond = [
     ['R=']# repeat options 2 to 10
     ]
 
-required_ctypes = [ 
+required_ctypes =   [ 
                     ['action'], #Type01 CT1
                    
                     ['action', 
                         'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                         'action' ], #Type02 #CT2
                    
-                    ['action', 
-                        'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                        'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                        'action'], #Type03 #CT2
+                    #['action', 
+                        #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                        #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                        #'action'], #Type03 #CT2
                     ['action', 
                         'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
                         'action', 
                         'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
                         'action'],#Type04 #CT3
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    'action',
-                    'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                    'action'],#Type05 #CT3
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                    'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    'action'],#Type06 #CT3
-                    ['action', 
-                    'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                    'action',
-                    'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    'action'],#Type07 #CT3
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                    #'action',
+                    #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                    #'action'],#Type05 #CT3
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                    #'action'],#Type06 #CT3
+                    #['action', 
+                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
+                    #'action',
+                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                    #'action'],#Type07 #CT3
                    
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'action',
@@ -92,75 +92,75 @@ required_ctypes = [
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
                      'action'],#Type 09 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 10 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 11 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 12 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 13 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 10 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 11 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 12 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 13 #CT4
                     
                     
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 14 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 15 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 14 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 15 #CT4
                    
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 16 #CT4
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 17 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 16 #CT4
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 17 #CT4
                     
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'action',
@@ -169,6 +169,7 @@ required_ctypes = [
                      'action',
                      'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
                      'action'], #Type 18 #CT5
+                    
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'action',
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
@@ -176,110 +177,110 @@ required_ctypes = [
                      'action', 'cclose1',
                      'action',
                      'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action' ],#Type 19 #CT5
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action', 'cclose1', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'], #Type 20 #CT5
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'cclose1',
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type 21 #CT5
+                     'action'],#Type 19 #CT5
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action', 'cclose1', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'], #Type 20 #CT5
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'cclose1',
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type 21 #CT5
                 
                 
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action'], #Type 22 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action'
-                     ], #Type 23 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'
-                     ], #Type 24 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'], #Type 25 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action'], #Type 22 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action'
+                     #], #Type 23 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'
+                     #], #Type 24 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'], #Type 25 #CT5
                     
                     
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action'], #Type 26 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action'], #Type 27 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'], #Type 28 #CT5
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'], #Type 29 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action'], #Type 26 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action'], #Type 27 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'], #Type 28 #CT5
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'], #Type 29 #CT5
                     
                     
                     ['action',
@@ -289,6 +290,7 @@ required_ctypes = [
                      'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
                      'action', 'cclose2', 
                      'action'], #Type 30 #CT6
+
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                      'action',
@@ -297,175 +299,175 @@ required_ctypes = [
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose2',
                      'action'],#Type 31 #CT6
-                    ['action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action', 'cclose1', 
-                     'action'], #Type 32 #CT6
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'cclose1',
-                     'action'],#Type 33 #CT6
+                    #['action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action', 'cclose1', 
+                     #'action'], #Type 32 #CT6
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'cclose1',
+                     #'action'],#Type 33 #CT6
                     
-                    ['action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 34 #CT6
-                    ['action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 35 #CT6
-                    ['action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 36 #CT6
-                    ['action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 37 #CT6
+                    #['action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 34 #CT6
+                    #['action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 35 #CT6
+                    #['action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 36 #CT6
+                    #['action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 37 #CT6
                     
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 38 #CT6
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 39 #CT6
-                    ['action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 40 #CT6
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 
-                     'action','c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_elseclose', 
-                     'action'], #Type 41 #CT6
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 38 #CT6
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 39 #CT6
+                    #['action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 40 #CT6
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 
+                     #'action','c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_elseclose', 
+                     #'action'], #Type 41 #CT6
                     
-                    ['action', 
+                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
                      'action', 
                      'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
                      'action',
                      'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
                      'action'],#Type42 #CT7
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type43 #CT7
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action'],#Type44 #CT7
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action'],#Type45 #CT7
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action'],#Type46 #CT7
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type47 #CT7
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type48 #CT7
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type43 #CT7
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action'],#Type44 #CT7
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action'],#Type45 #CT7
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action'],#Type46 #CT7
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type47 #CT7
+                    #['action', 
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type48 #CT7
                                    
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     'action'],#Type49 #CT7
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
+                     #'action'],#Type49 #CT7
                 
                     ['action', 
                      'ctrl1', 'cond1', 'copen1', 
@@ -502,85 +504,86 @@ required_ctypes = [
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
-                     'action'],#Type53 #CT8
+                     'action']#Type53 #CT8
                     
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type54 #CT8
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type55 #CT8
-                    ['action',
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type56 #CT8
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action'],#Type57 #CT8
                     
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action',
-                     'c_elseclose', 
-                     'action'],#Type58 #CT8
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action',
-                     'c_elseclose',
-                     'action'],#Type59 #CT8
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'c_elseclose',
-                     'action'],#Type60 #CT8
-                    ['action', 
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
-                     'action',
-                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     'action',
-                     'c_elseclose',
-                     'action']#Type61 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type54 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type55 #CT8
+                    #['action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type56 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action'],#Type57 #CT8
+                    
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     #'action',
+                     #'c_elseclose', 
+                     #'action'],#Type58 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action',
+                     #'c_elseclose',
+                     #'action'],#Type59 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     #'action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'c_elseclose',
+                     #'action'],#Type60 #CT8
+                    #['action', 
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
+                     #'action',
+                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     #'action',
+                     #'c_elseclose',
+                     #'action']#Type61 #CT8
                     
                     ]
 def add_args(parser):
@@ -790,6 +793,9 @@ if __name__ == '__main__':
     # clear the data in the info file
     with open(log_path,'w') as file:
         pass
+    
+    with open(text_path,'w') as file:
+        pass
         
     for code_type in required_ctypes: 
         print("code_type", required_ctypes.index(code_type))
@@ -821,9 +827,9 @@ if __name__ == '__main__':
                     best_score = -1.0
 
                     ##For generation
-                    print("Numb_Actions", nb_actions)
                     log = ""
                     log += "Numb_Actions: " + str(nb_actions)  + "\n"
+                    text = ""
                     start = time.time()
                     if(args.data_generator):
                         while(not quality_good):
@@ -835,9 +841,6 @@ if __name__ == '__main__':
                                 random_code_idces = translate(random_code, tgt_tkn2idx)
                                 parse_success, _,random_code_ast_json = simulator.get_prog_ast(random_code_idces)
                                 if(parse_success and (not(random_code in current_spec_codes))):
-                                    print("Attempt:", nb_attempts)
-                                    print("random_code", random_code)
-                                    print("random_code_ast_json", random_code_ast_json)
                                     current_spec_codes.append(random_code)   
                                     quality_score = checkQuality(simulator, random_code_ast_json, args.max_iterations)
                                     nb_attempts +=1
@@ -859,10 +862,10 @@ if __name__ == '__main__':
                     else:
                         while(not parse_success):
                             random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
-                            parse_success, _ = simulator.get_prog_ast(random_code)
+                            random_code_idces = translate(random_code, tgt_tkn2idx)
+                            parse_success, _, _ = simulator.get_prog_ast(random_code_idces)
                             
                     end = time.time()
-                    print(f"Time taken: {end - start}")
                             
                     log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
                 
@@ -872,6 +875,8 @@ if __name__ == '__main__':
                         f.write(log)
                         
                     text += str(random_code)  + "\n"
+                    with open(text_path, 'a+') as f:
+                        f.write(text)
                     
                     ##For evaluation
                     #random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
@@ -894,8 +899,7 @@ if __name__ == '__main__':
     numb_unique = len(set(map(tuple, final_codes)))   
     numb_feat = len(final_codes)
     total_generated = numb_feat_vectors
-    with open(text_path, 'w') as f:
-        f.write(text)
+
     print("numb_unique", numb_unique)
     print("numb_feat", numb_feat)
     print("total_generated", total_generated)

@@ -6,3 +6,7 @@ Baseline:
 python3 random_generator.py --data_dir data_temp/
 
 
+python3 random_generator.py --data_dir generated --data_generator --num_codes_per_spec 1 --quality_threshold 0.5 --max_iterations 20000
+
+python3 sampler.py --input_code_file ../Baseline/random_generator/baseline_14CT_810kcodes/baseline_14CT_810codes.txt --data_dir baseline_14CT_810kcodes
+
