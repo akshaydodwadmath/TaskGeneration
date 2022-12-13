@@ -237,7 +237,7 @@ optimizer = optimizer_cls(model.parameters(),
 #####################
 
 losses = []
-recent_losses = []
+recent_losses = [[]] * args.n_domains
 recent_losses_train = []
 recent_losses_entropy = []
 best_val_acc = np.NINF
@@ -251,77 +251,81 @@ for epoch_idx in range(0, args.nb_epochs):
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
     #for sp_idx in tqdm(range(0, 1, batch_size)):
 
+        for K in range(0,args.n_domains):
+            batch_idx = int(sp_idx/batch_size)
+            optimizer.zero_grad()
 
-        batch_idx = int(sp_idx/batch_size)
-        optimizer.zero_grad()
-
-        if signal == TrainSignal.SUPERVISED:
-            tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
-                                              tgt_start, tgt_end, tgt_pad)
-            #TODO
-            if args.use_cuda:
-                tgt_inp_sequences, in_src_seq, out_tgt_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda()
-            # if learn_syntax:
-                # minibatch_loss = do_syntax_weighted_minibatch(model,
-                                                              # inp_grids, out_grids,
-                                                              # in_tgt_seq, in_tgt_seq_list,
-                                                              # out_tgt_seq,
-                                                              # loss_criterion, beta)
-            # else:
-            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
-            
-            recent_losses.append(minibatch_loss)
-            recent_losses_train.append(minibatch_loss_train)
-            recent_losses_entropy.append(minibatch_loss_entropy)
-            
-        elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
-            _, in_src_seq, out_tgt_seq, srcs,_, srcs_fVector= get_minibatch(dataset, sp_idx, batch_size,
+            if signal == TrainSignal.SUPERVISED:
+                tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
                                                 tgt_start, tgt_end, tgt_pad)
-            if args.use_cuda:
-                in_src_seq = in_src_seq.cuda()
-                out_tgt_seq = out_tgt_seq.cuda()
+                #TODO
+                if args.use_cuda:
+                    tgt_inp_sequences, in_src_seq, out_tgt_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda()
+                # if learn_syntax:
+                    # minibatch_loss = do_syntax_weighted_minibatch(model,
+                                                                # inp_grids, out_grids,
+                                                                # in_tgt_seq, in_tgt_seq_list,
+                                                                # out_tgt_seq,
+                                                                # loss_criterion, beta)
+                # else:
+                minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
+                
+                recent_losses.append(minibatch_loss)
+                recent_losses_train.append(minibatch_loss_train)
+                recent_losses_entropy.append(minibatch_loss_entropy)
+                
+            elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
+                _, in_src_seq, out_tgt_seq, srcs,_, fVectors= get_minibatch(dataset, sp_idx, batch_size,
+                                                    tgt_start, tgt_end, tgt_pad)
+                if args.use_cuda:
+                    in_src_seq = in_src_seq.cuda()
+                    out_tgt_seq = out_tgt_seq.cuda()
 
-            # We use 1/nb_rollouts as the reward to normalize wrt the
-            # size of the rollouts
-            if signal == TrainSignal.RL:
-                reward_norm = 1 / float(args.nb_rollouts)
+                # We use 1/nb_rollouts as the reward to normalize wrt the
+                # size of the rollouts
+                if signal == TrainSignal.RL:
+                    reward_norm = 1 / float(args.nb_rollouts)
 
 
-            _,max_len = out_tgt_seq.size()
+                _,max_len = out_tgt_seq.size()
 
-            env_cls = EnvironmentClasses[env]
-            fVector = dataset["featureVectors"]
-            if "Consistency" in env:
-                envs = [env_cls(reward_norm, srcs_fVector[batch_idx], simulator, vocab, fVector)]
-            elif "Generalization" in env:
-                envs = [env_cls(reward_norm, srcs_fVector[batch_idx], simulator, vocab, fVector)]
+                env_cls = EnvironmentClasses[env]
+                all_fVector = dataset["featureVectors"]
+                print("batch_idx", batch_idx)
+                print("domain", K)
+                
+                
+                if "Consistency" in env:
+                    envs = [env_cls(reward_norm, tgt_fVector, simulator, vocab, all_fVector)
+                            for tgt_fVector in  fVectors]
+                elif "Generalization" in env:
+                    envs = [env_cls(reward_norm, tgt_fVector, simulator, vocab, all_fVector)
+                            for tgt_fVector in  fVectors]
+                else:
+                    raise NotImplementedError("Unknown environment type")
+                
+                if signal == TrainSignal.RL:
+                    minibatch_reward = do_rl_minibatch(model,in_src_seq, K,
+                                                        envs,tgt_start, tgt_end, max_len,
+                                                        args.n_domains,
+                                                        args.nb_rollouts)
+                recent_losses[K].append(minibatch_reward)
+
             else:
-                raise NotImplementedError("Unknown environment type")
+                raise NotImplementedError("Unknown Training method")    
+                
+            optimizer.step()
             
-            if signal == TrainSignal.RL:
-                minibatch_reward = do_rl_minibatch(model,in_src_seq,
-                                                    envs,tgt_start, tgt_end, max_len,
-                                                    args.n_domains,
-                                                    args.nb_rollouts)
-            recent_losses.append(minibatch_reward)
-
-        else:
-            raise NotImplementedError("Unknown Training method")    
-            
-        optimizer.step()
-        
-        if (batch_idx % args.log_frequency == args.log_frequency-1 and len(recent_losses) > 0) or \
-           (len(dataset["sources"]) - sp_idx ) < batch_size:
-            logging.info('Epoch : %d Minibatch : %d Loss : %.5f Loss_Train : %.5f Loss_Entropy : %.5f' % (
-                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses), sum(recent_losses_train)/len(recent_losses_train), sum(recent_losses_entropy)/len(recent_losses_entropy))
-            )
-            losses.extend(recent_losses)
-            recent_losses = []
-            recent_losses_train = []
-            recent_losses_entropy = []
-            # Dump the training losses
-            with open(str(train_loss_path), "w") as train_loss_file:
-                json.dump(losses, train_loss_file, indent=2)
+            if (batch_idx % args.log_frequency == args.log_frequency-1 and len(recent_losses[K]) > 0) or \
+            (len(dataset["sources"]) - sp_idx ) < batch_size:
+                logging.info('Epoch : %d Minibatch : %d Domain : %d Loss : %.5f' % (
+                    epoch_idx, batch_idx, K, sum(recent_losses[K])/len(recent_losses[K]))
+                )
+                losses.extend(recent_losses[K])
+                recent_losses[K] = []
+                # Dump the training losses
+                with open(str(train_loss_path), "w") as train_loss_file:
+                    json.dump(losses, train_loss_file, indent=2)
                 
     # Dump the weights at the end of the epoch
     if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
@@ -340,7 +344,7 @@ for epoch_idx in range(0, args.nb_epochs):
     logging.info("Done with epoch %d." % epoch_idx)
     
     
-    if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
+    if ((epoch_idx == args.nb_epochs-1)):
         # Evaluate the model on the validation set
         out_path = str(result_dir / ("eval/epoch_%d/epoch_" % epoch_idx))
         print("path_to_weight_dump", path_to_weight_dump)

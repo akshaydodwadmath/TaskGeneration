@@ -150,7 +150,7 @@ def evaluate_model(model_weights,
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
         
-        tgt_inp_sequences,in_src_seq, out_tgt_seq, srcs,targets,  = get_minibatch(dataset, sp_idx, batch_size,
+        tgt_inp_sequences,in_src_seq, out_tgt_seq, srcs,targets,_  = get_minibatch(dataset, sp_idx, batch_size,
                                                 tgt_start, tgt_end, tgt_pad)
         _,max_len = out_tgt_seq.size()
         if use_cuda:
@@ -204,7 +204,7 @@ def evaluate_model(model_weights,
                         failed_syntax = False
                         pred = dec[-1]
                         ll = dec[0]
-                        parse_success, cand_prog = simulator.get_prog_ast(pred)
+                        parse_success, cand_prog, cand_prog_json = simulator.get_prog_ast(pred)
                         if parse_success:
                             pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in pred]
                             pred_feat_vec, _ = getFeatureVector(pred_tkns)

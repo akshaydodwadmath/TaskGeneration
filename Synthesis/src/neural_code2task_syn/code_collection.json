@@ -1,0 +1,5920 @@
+[
+  {
+    "id": 0,
+    "common_name": "H1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 1,
+    "common_name": "H1.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 2,
+    "common_name": "H1.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 3,
+    "common_name": "H2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 6
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 4,
+    "common_name": "H2.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 6
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 5,
+    "common_name": "H2.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 6
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 6,
+    "common_name": "H3",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 7,
+    "common_name": "H3.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 8,
+    "common_name": "H3.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 9,
+    "common_name": "H3.3",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 10,
+    "common_name": "H4",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 11,
+    "common_name": "H4.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 12,
+    "common_name": "H4.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 13,
+    "common_name": "H5",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 14,
+    "common_name": "H5.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 15,
+    "common_name": "H5.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "leftIsClear",
+                "ifBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 16,
+    "common_name": "H6",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 17,
+    "common_name": "H6.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 18,
+    "common_name": "H6.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 19,
+    "common_name": "H7",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 20,
+    "common_name": "H7.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "rightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "if",
+                        "condition": "leftIsClear",
+                        "body": [
+                          {
+                            "type": "turnLeft"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "leftIsClear",
+                    "ifBody": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 21,
+    "common_name": "H7.2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 22,
+    "common_name": "H8",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "if",
+                    "condition": "leftIsClear",
+                    "body": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 23,
+    "common_name": "H8.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "if",
+                    "condition": "rightIsClear",
+                    "body": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 24,
+    "common_name": "H9",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 25,
+    "common_name": "H9.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 26,
+    "common_name": "H2.3",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 27,
+    "common_name": "H2.4",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 3
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 3
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 28,
+    "common_name": "H10",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "rightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 29,
+    "common_name": "H10.1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "rightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 30,
+    "common_name": "K7",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 1,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 31,
+    "common_name": "K7.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 32,
+    "common_name": "K7.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 33,
+    "common_name": "K8",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 34,
+    "common_name": "K8.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 35,
+    "common_name": "K8.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 36,
+    "common_name": "K8.3",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 37,
+    "common_name": "K8.4",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 5,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 38,
+    "common_name": "K9",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "times": 7,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "noMarkersPresent",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 39,
+    "common_name": "K9.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "times": 7,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "noMarkersPresent",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 40,
+    "common_name": "K9.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "noMarkersPresent",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "markersPresent",
+                "ifBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 41,
+    "common_name": "K9.3",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "rightIsClear",
+                "ifBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "markersPresent",
+                    "ifBody": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ]
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "markersPresent",
+                "ifBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 42,
+    "common_name": "K9.4",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "ifElse",
+                    "condition": "rightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "ifElse",
+                        "condition": "markersPresent",
+                        "ifBody": [
+                          {
+                            "type": "pickMarker"
+                          }
+                        ],
+                        "elseBody": [
+                          {
+                            "type": "turnRight"
+                          }
+                        ]
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 43,
+    "common_name": "K9.5",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "noMarkersPresent",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "ifElse",
+                    "condition": "rightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 44,
+    "common_name": "K10",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 45,
+    "common_name": "K10.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "rightIsClear",
+                "ifBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 46,
+    "common_name": "K10.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 47,
+    "common_name": "K10.3",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "rightIsClear",
+                "ifBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 48,
+    "common_name": "K10.4",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "leftIsClear",
+                "ifBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "markersPresent",
+                    "ifBody": [
+                      {
+                        "type": "pickMarker"
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 49,
+    "common_name": "K10.5",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "rightIsClear",
+                "ifBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "noMarkersPresent",
+                    "ifBody": [
+                      {
+                        "type": "putMarker"
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnRight"
+                      }
+                    ]
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "pickMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 50,
+    "common_name": "K11",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "times": 5,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 51,
+    "common_name": "K11.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "pickMarker"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 5,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 52,
+    "common_name": "K12",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "notFrontIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 53,
+    "common_name": "K12.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "notFrontIsClear",
+            "body": [
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 54,
+    "common_name": "K13",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "notFrontIsClear",
+                "ifBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "notRightIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "frontIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 55,
+    "common_name": "K13.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "notFrontIsClear",
+                "ifBody": [
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "notLeftIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "frontIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 56,
+    "common_name": "K14",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 57,
+    "common_name": "K14.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "while",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 58,
+    "common_name": "K14.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "while",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 59,
+    "common_name": "K15",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "leftIsClear",
+            "body": [
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "while",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "while",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 59,
+    "common_name": "K15",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "rightIsClear",
+            "body": [
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "if",
+                    "condition": "noMarkersPresent",
+                    "body": [
+                      {
+                        "type": "repeat",
+                        "times": 3,
+                        "body": [
+                          {
+                            "type": "putMarker"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "repeat",
+                    "times": 3,
+                    "body": [
+                      {
+                        "type": "putMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 59,
+    "common_name": "K15",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 5,
+            "body": [
+              {
+                "type": "while",
+                "condition": "notLeftIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 60,
+    "common_name": "K15.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "while",
+                "condition": "notRightIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 61,
+    "common_name": "K16",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 62,
+    "common_name": "K16.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "noMarkersPresent",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 63,
+    "common_name": "K16.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 64,
+    "common_name": "K17",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "rightIsClear",
+            "body": [
+              {
+                "type": "turnRight"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 65,
+    "common_name": "K17.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "leftIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "while",
+            "condition": "noMarkersPresent",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 66,
+    "common_name": "K17.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "leftIsClear",
+            "body": [
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 67,
+    "common_name": "K18",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 68,
+    "common_name": "K18.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 69,
+    "common_name": "K18.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "ifElse",
+                "condition": "markersPresent",
+                "ifBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 70,
+    "common_name": "K19",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 71,
+    "common_name": "K19.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "notLeftIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "putMarker"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 72,
+    "common_name": "K19.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "notLeftIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "putMarker"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 73,
+    "common_name": "K19.3",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "notLeftIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "putMarker"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 74,
+    "common_name": "K20",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 75,
+    "common_name": "K20.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 76,
+    "common_name": "K20.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 77,
+    "common_name": "K20.3",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 78,
+    "common_name": "K21",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "frontIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 79,
+    "common_name": "K21.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "rightIsClear",
+            "body": [
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "if",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      },
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "while",
+                        "condition": "frontIsClear",
+                        "body": [
+                          {
+                            "type": "move"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "putMarker"
+                      },
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 80,
+    "common_name": "K22",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "while",
+                "condition": "notLeftIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "repeat",
+                    "times": 3,
+                    "body": [
+                      {
+                        "type": "move"
+                      },
+                      {
+                        "type": "putMarker"
+                      },
+                      {
+                        "type": "turnRight"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 81,
+    "common_name": "K22.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "while",
+                "condition": "notRightIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "repeat",
+                    "times": 3,
+                    "body": [
+                      {
+                        "type": "move"
+                      },
+                      {
+                        "type": "pickMarker"
+                      },
+                      {
+                        "type": "turnLeft"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 82,
+    "common_name": "K22.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "while",
+                "condition": "notRightIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 83,
+    "common_name": "K23",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 2,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 4,
+                "body": [
+                  {
+                    "type": "ifElse",
+                    "condition": "frontIsClear",
+                    "ifBody": [
+                      {
+                        "type": "move"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "move"
+                      },
+                      {
+                        "type": "turnRight"
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 84,
+    "common_name": "K23.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 4,
+                "body": [
+                  {
+                    "type": "ifElse",
+                    "condition": "frontIsClear",
+                    "ifBody": [
+                      {
+                        "type": "move"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "move"
+                      },
+                      {
+                        "type": "turnRight"
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 85,
+    "common_name": "K23.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 2,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 4,
+                "body": [
+                  {
+                    "type": "ifElse",
+                    "condition": "frontIsClear",
+                    "ifBody": [
+                      {
+                        "type": "move"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "if",
+                        "condition": "markersPresent",
+                        "body": [
+                          {
+                            "type": "pickMarker"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "turnLeft"
+                      },
+                      {
+                        "type": "move"
+                      },
+                      {
+                        "type": "turnRight"
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 86,
+    "common_name": "K24",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "notLeftIsClear",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 87,
+    "common_name": "K24.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "notRightIsClear",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 88,
+    "common_name": "K24.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "notRightIsClear",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "while",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 89,
+    "common_name": "K25",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "notRightIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 90,
+    "common_name": "K25.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 91,
+    "common_name": "K25.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 92,
+    "common_name": "K26",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 92,
+    "common_name": "K26",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 93,
+    "common_name": "K26.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "noMarkersPresent",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "times": 3,
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 94,
+    "common_name": "K27",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "leftIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 95,
+    "common_name": "K27.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "notLeftIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "if",
+                "condition": "notRightIsClear",
+                "body": [
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 96,
+    "common_name": "K27.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "notLeftIsClear",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "ifElse",
+                    "condition": "notRightIsClear",
+                    "ifBody": [
+                      {
+                        "type": "putMarker"
+                      }
+                    ],
+                    "elseBody": [
+                      {
+                        "type": "if",
+                        "condition": "markersPresent",
+                        "body": [
+                          {
+                            "type": "pickMarker"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 97,
+    "common_name": "K28",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 4,
+                "body": [
+                  {
+                    "type": "if",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 98,
+    "common_name": "K28.1",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 3,
+                "body": [
+                  {
+                    "type": "if",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 99,
+    "common_name": "K28.2",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "repeat",
+                "times": 2,
+                "body": [
+                  {
+                    "type": "repeat",
+                    "times": 4,
+                    "body": [
+                      {
+                        "type": "if",
+                        "condition": "markersPresent",
+                        "body": [
+                          {
+                            "type": "pickMarker"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "turnRight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+      ],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  }
+]

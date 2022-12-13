@@ -93,7 +93,7 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
     We are going to group together samples that have a similar length, to speed up training
     batch_size is passed so that we can align the groups
     '''
-    pairs = list(zip(dataset["sources"], dataset["targets"]))
+    pairs = list(zip(dataset["sources"], dataset["targets"], dataset["featureVectors"]))
     bucket_fun = lambda x: len(x[1]) / 5
     pairs.sort(key=bucket_fun, reverse=True)
     grouped_pairs = [pairs[pos: pos + batch_size]
@@ -103,10 +103,11 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
         random.shuffle(to_shuffle)
         grouped_pairs[:-1] = to_shuffle
     pairs = chain.from_iterable(grouped_pairs)
-    in_seqs, out_seqs = zip(*pairs)
+    in_seqs, out_seqs, fVectors_seqs = zip(*pairs)
     return {
         "sources": in_seqs,
-        "targets": out_seqs
+        "targets": out_seqs,
+        "featureVectors": fVectors_seqs
     }
 
 def get_minibatch(dataset, sp_idx, batch_size,
@@ -120,7 +121,7 @@ def get_minibatch(dataset, sp_idx, batch_size,
     # Prepare the target sequences
     targets = dataset["targets"][sp_idx:sp_idx+batch_size]
     
-    srcs_fVector = dataset["featureVectors"][sp_idx:sp_idx+batch_size]
+    fVectors = dataset["featureVectors"][sp_idx:sp_idx+batch_size]
 
     lines = [
         [start_idx] + line for line in targets
@@ -145,4 +146,4 @@ def get_minibatch(dataset, sp_idx, batch_size,
     tgt_inp_sequences = Variable(torch.LongTensor(input_lines), volatile=volatile_vars)
     out_tgt_seq = Variable(torch.LongTensor(output_lines), volatile=volatile_vars)
 
-    return tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets,srcs_fVector
+    return tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets,fVectors
