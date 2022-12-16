@@ -166,17 +166,18 @@ class MultiIOGrid(Environment):
     -1 if the two programs lead to different outputs
     '''
 
-    def __init__(self, reward_norm, tgt_fVector, simulator, vocab, all_fVector):
+    def __init__(self, reward_norm, tgt_fVector, simulator, vocab, num_tasks_iter, all_fVector):
         '''
         reward_norm: float
         input_grids, output_grids: Reference IO for the synthesis
         '''
         super(MultiIOGrid, self).__init__(reward_norm,
-                                        (tgt_fVector, simulator, vocab, all_fVector))
+                                        (tgt_fVector, simulator, vocab, num_tasks_iter, all_fVector))
         self.tgt_fVector = tgt_fVector
  
         self.simulator = simulator
         self.vocab = vocab
+        self.num_tasks_iter = num_tasks_iter
         self.all_fVector = all_fVector
 
 
@@ -195,12 +196,12 @@ class MultiIOGrid(Environment):
         else:
             cand_prog_tkns = [self.vocab["idx2tkn"][tkn_idx] for tkn_idx in trace]
             cand_feat_vec, _ = getFeatureVector(cand_prog_tkns)
-            if((cand_feat_vec in self.fVector) and (self.fVector.index(self.tgt_fVector) == self.fVector.index(cand_feat_vec))):
+            if((cand_feat_vec in self.all_fVector) and (self.all_fVector.index(self.tgt_fVector) == self.all_fVector.index(cand_feat_vec))):
                 cand_prog_json_karelgym = iclr18_codejson_to_karelgym_codejson(cand_prog_json)
                 
                 code = Code('karel', cand_prog_json_karelgym)
                 scores = []
-                score = obtain_karel_saturation_score_for_code(code, 2000)
+                score = obtain_karel_saturation_score_for_code(code, self.num_tasks_iter)
                 scores.append(score)
                 rew = np.mean(scores) * self.reward_norm
             else:
