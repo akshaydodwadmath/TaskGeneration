@@ -302,8 +302,8 @@ for epoch_idx in range(0, args.nb_epochs):
         val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
                                  args.val_feature_file, args.train_file, args.nb_samples, 
                                  args.n_domains, use_grammar,
-                                 out_path, 10, 10, batch_size,
-                                 args.use_cuda, False)
+                                 out_path, 10, args.top_k, batch_size,
+                                 args.use_cuda, False, False)
         logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
         if val_acc > best_val_acc:
             logging.info("Epoch : %d ValidationBest : %f." % (epoch_idx, val_acc))
