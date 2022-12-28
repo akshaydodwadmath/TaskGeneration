@@ -13,6 +13,7 @@ from preprocessing.parser_code_to_codeType import getFeatureVector
 
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")
+    parser.add_argument('--extra_info', action="store_true")
     parser.add_argument("--nb_samples", type=int,
                         default=0,
                         help="How many samples to use to compute the accuracy."
@@ -52,7 +53,8 @@ def evaluate_model(model_weights,
                    top_k,
                    batch_size,
                    use_cuda,
-                   dump_programs):
+                   dump_programs,
+                   extra_info):
     
     all_semantic_output_path = []
     all_syntax_output_path = []
@@ -255,20 +257,24 @@ def evaluate_model(model_weights,
                 if(numb_unique> 89):
                     unique_count_90 += 1
                 
-                text += "TargetVectors: " + str(target_pred[i])  + "\n"
-                text += "Failed Syntax: " + str(syntax_failed_count[i])  + "\n"
-                text += "Feature Mismatch: " + str(feat_mismatch_count[i])  + "\n"
-                
-                
-                text += "Passed"  + "\n"
+                if(extra_info):
+                    text += "TargetVectors: " + str(target_pred[i])  + "\n"
+                    text += "Failed Syntax: " + str(syntax_failed_count[i])  + "\n"
+                    text += "Feature Mismatch: " + str(feat_mismatch_count[i])  + "\n"
+                    
+                    
+                    text += "Passed"  + "\n"
                 for unique_prog,k_value in zip(unique_pred[i],corsp_domain[i]):
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
-                    text += str(k_value) + "    " + str(pred_tkns)  + "\n"
-                
-                text += "Failed"  + "\n"
-                for failed_prog in failed_pred[i]:
-                    pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in failed_prog]
-                    text += str(pred_tkns)  + "\n"
+                    if(extra_info):
+                        text += str(k_value) + "    " + str(pred_tkns)  + "\n"
+                    else:
+                        text += str(pred_tkns)  + "\n"
+                if(extra_info):
+                    text += "Failed"  + "\n"
+                    for failed_prog in failed_pred[i]:
+                        pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in failed_prog]
+                        text += str(pred_tkns)  + "\n"
                 
                 stx_res_file.write("numb_unique : " + str(numb_unique)+ " , " )
                 stx_res_file.write(str(100*numb_unique/ (nb_samples )))

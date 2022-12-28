@@ -259,7 +259,6 @@ for epoch_idx in range(0, args.nb_epochs):
 
         
         batch_idx = int(sp_idx/batch_size)
-        
 
         if signal == TrainSignal.SUPERVISED:
             optimizer.zero_grad()
@@ -288,6 +287,8 @@ for epoch_idx in range(0, args.nb_epochs):
             if args.use_cuda:
                 in_src_seq = in_src_seq.cuda()
                 out_tgt_seq = out_tgt_seq.cuda()
+                
+            unseen_pred = [[] for i in range(batch_size)]
 
             # We use 1/nb_rollouts as the reward to normalize wrt the
             # size of the rollouts
@@ -301,11 +302,11 @@ for epoch_idx in range(0, args.nb_epochs):
             all_fVector = dataset["featureVectors"]
             
             if "Consistency" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, simulator, vocab, args.num_tasks_iter, all_fVector)
-                        for tgt_fVector in  fVectors]
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                        for tgt_fVector, upred in  zip(fVectors, unseen_pred)]
             elif "Generalization" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, simulator, vocab, args.num_tasks_iter, all_fVector)
-                        for tgt_fVector in  fVectors]
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                        for tgt_fVector, upred in zip(fVectors, unseen_pred)]
             else:
                 raise NotImplementedError("Unknown environment type")
             
@@ -327,8 +328,8 @@ for epoch_idx in range(0, args.nb_epochs):
         
         if (batch_idx % args.log_frequency == args.log_frequency-1 and len(recent_losses) > 0) or \
         (len(dataset["sources"]) - sp_idx ) < batch_size:
-            logging.info('Epoch : %d Minibatch : %d Domain : %d Loss : %.5f' % (
-                epoch_idx, batch_idx, K, sum(recent_losses)/len(recent_losses))
+            logging.info('Epoch : %d Minibatch : %d Loss : %.5f' % (
+                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses))
             )
             losses.extend(recent_losses)
             recent_losses = []
@@ -353,7 +354,7 @@ for epoch_idx in range(0, args.nb_epochs):
     logging.info("Done with epoch %d." % epoch_idx)
     
     
-    if ((epoch_idx == args.nb_epochs-1)):
+    if ((epoch_idx %  args.val_frequency == 0) or (epoch_idx == args.nb_epochs-1)):
         # Evaluate the model on the validation set
         out_path = str(result_dir / ("eval/epoch_%d/epoch_" % epoch_idx))
         print("path_to_weight_dump", path_to_weight_dump)
@@ -361,7 +362,7 @@ for epoch_idx in range(0, args.nb_epochs):
                                  args.val_feature_file, args.train_file, args.nb_samples, 
                                  args.n_domains, use_grammar,
                                  out_path, 10, args.top_k, batch_size,
-                                 args.use_cuda, False)
+                                 args.use_cuda, False, False)
         logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
         if val_acc > best_val_acc:
             logging.info("Epoch : %d ValidationBest : %f." % (epoch_idx, val_acc))
