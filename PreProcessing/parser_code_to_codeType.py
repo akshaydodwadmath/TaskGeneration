@@ -13,7 +13,7 @@ actions = [
 
 commands = ['REPEAT',
             'WHILE',
-            'IF',
+            #'IF',
             ]
 command_if_else = ['IFELSE',
             'ELSE',
@@ -39,78 +39,78 @@ required_ctypes = [
                     '()', #Type01 #CT1
                    
                    '(D_CTRL())', #Type02 #CT2
-                   '(D_IF()D_ELSE())', #Type03 #CT2
+                   #'(D_IF()D_ELSE())', #Type03 #CT2
                    
                    '(D_CTRL()D_CTRL())', #Type04 #CT3
-                   '(D_IF()D_ELSE()D_CTRL())', #Type05  #CT3
-                   '(D_CTRL()D_IF()D_ELSE())', #Type06 #CT3
-                   '(D_IF()D_ELSE()D_IF()D_ELSE())', #Type07 #CT3
+                   #'(D_IF()D_ELSE()D_CTRL())', #Type05  #CT3
+                   #'(D_CTRL()D_IF()D_ELSE())', #Type06 #CT3
+                   #'(D_IF()D_ELSE()D_IF()D_ELSE())', #Type07 #CT3
                    
                    '(D_CTRL(D_CTRL()))', #Type08 #CT4
                    '(D_CTRL(D_IF()D_ELSE()))', #Type09 #CT4
-                   '(D_IF(D_CTRL())D_ELSE())', #Type10 #CT4 
-                   '(D_IF(D_IF()D_ELSE())D_ELSE())', #Type11 #CT4
-                   '(D_IF()D_ELSE(D_CTRL()))', #Type12 #CT4
-                   '(D_IF()D_ELSE(D_IF()D_ELSE()))', #Type13 #CT4
+                   #'(D_IF(D_CTRL())D_ELSE())', #Type10 #CT4 
+                   #'(D_IF(D_IF()D_ELSE())D_ELSE())', #Type11 #CT4
+                   #'(D_IF()D_ELSE(D_CTRL()))', #Type12 #CT4
+                   #'(D_IF()D_ELSE(D_IF()D_ELSE()))', #Type13 #CT4
                    
-                   '(D_IF(D_CTRL())D_ELSE(D_CTRL()))', #Type14 #CT4
-                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_CTRL()))', #Type15 #CT4
-                   '(D_IF(D_CTRL())D_ELSE(D_IF()D_ELSE()))', #Type16 #CT4
-                   '(D_IF(D_IF()D_ELSE())D_ELSE(D_IF()D_ELSE()))',#Type17 #CT4
+                   #'(D_IF(D_CTRL())D_ELSE(D_CTRL()))', #Type14 #CT4
+                   #'(D_IF(D_IF()D_ELSE())D_ELSE(D_CTRL()))', #Type15 #CT4
+                   #'(D_IF(D_CTRL())D_ELSE(D_IF()D_ELSE()))', #Type16 #CT4
+                   #'(D_IF(D_IF()D_ELSE())D_ELSE(D_IF()D_ELSE()))',#Type17 #CT4
                    
                    '(D_CTRL(D_CTRL())D_CTRL())',#Type18 #CT5
                    '(D_CTRL(D_IF()D_ELSE())D_CTRL())',#Type19 #CT5
-                   '(D_CTRL(D_CTRL())D_IF()D_ELSE())',#Type20 #CT5
-                   '(D_CTRL(D_IF()D_ELSE())D_IF()D_ELSE())',#Type21 #CT5
+                   #'(D_CTRL(D_CTRL())D_IF()D_ELSE())',#Type20 #CT5
+                   #'(D_CTRL(D_IF()D_ELSE())D_IF()D_ELSE())',#Type21 #CT5
                    
-                   '(D_IF(D_CTRL())D_ELSE()D_CTRL())',#Type22 #CT5
-                   '(D_IF(D_IF()D_ELSE())D_ELSE()D_CTRL())',#Type23 #CT5
-                   '(D_IF(D_CTRL())D_ELSE()D_IF()D_ELSE())',#Type24 #CT5
-                   '(D_IF(D_IF()D_ELSE())D_ELSE()D_IF()D_ELSE())',#Type25 #CT5
+                   #'(D_IF(D_CTRL())D_ELSE()D_CTRL())',#Type22 #CT5
+                   #'(D_IF(D_IF()D_ELSE())D_ELSE()D_CTRL())',#Type23 #CT5
+                   #'(D_IF(D_CTRL())D_ELSE()D_IF()D_ELSE())',#Type24 #CT5
+                   #'(D_IF(D_IF()D_ELSE())D_ELSE()D_IF()D_ELSE())',#Type25 #CT5
                    
-                   '(D_IF()D_ELSE(D_CTRL())D_CTRL())',#Type26 #CT5
-                   '(D_IF()D_ELSE(D_IF()D_ELSE())D_CTRL())',#Type27 #CT5
-                   '(D_IF()D_ELSE(D_CTRL())D_IF()D_ELSE())',#Type28 #CT5
-                   '(D_IF()D_ELSE(D_IF()D_ELSE())D_IF()D_ELSE())',#Type29 #CT5
+                   #'(D_IF()D_ELSE(D_CTRL())D_CTRL())',#Type26 #CT5
+                   #'(D_IF()D_ELSE(D_IF()D_ELSE())D_CTRL())',#Type27 #CT5
+                   #'(D_IF()D_ELSE(D_CTRL())D_IF()D_ELSE())',#Type28 #CT5
+                   #'(D_IF()D_ELSE(D_IF()D_ELSE())D_IF()D_ELSE())',#Type29 #CT5
                    
                    '(D_CTRL()D_CTRL(D_CTRL()))',#Type30 #CT6
                    '(D_CTRL()D_CTRL(D_IF()D_ELSE()))',#Type31 #CT6
-                   '(D_IF()D_ELSE()D_CTRL(D_CTRL()))',#Type32 #CT6
-                   '(D_IF()D_ELSE()D_CTRL(D_IF()D_ELSE()))',#Type33 #CT6
+                   #'(D_IF()D_ELSE()D_CTRL(D_CTRL()))',#Type32 #CT6
+                   #'(D_IF()D_ELSE()D_CTRL(D_IF()D_ELSE()))',#Type33 #CT6
                    
-                   '(D_CTRL()D_IF(D_CTRL())D_ELSE())',#Type34 #CT6
-                   '(D_CTRL()D_IF(D_IF()D_ELSE())D_ELSE())',#Type35 #CT6
-                   '(D_IF()D_ELSE()D_IF(D_CTRL())D_ELSE())',#Type36 #CT6
-                   '(D_IF()D_ELSE()D_IF(D_IF()D_ELSE())D_ELSE())',#Type37 #CT6
+                   #'(D_CTRL()D_IF(D_CTRL())D_ELSE())',#Type34 #CT6
+                   #'(D_CTRL()D_IF(D_IF()D_ELSE())D_ELSE())',#Type35 #CT6
+                   #'(D_IF()D_ELSE()D_IF(D_CTRL())D_ELSE())',#Type36 #CT6
+                   #'(D_IF()D_ELSE()D_IF(D_IF()D_ELSE())D_ELSE())',#Type37 #CT6
                    
-                   '(D_CTRL()D_IF()D_ELSE(D_CTRL()))',#Type38 #CT6
-                   '(D_CTRL()D_IF()D_ELSE(D_IF()D_ELSE()))',#Type39 #CT6
-                   '(D_IF()D_ELSE()D_IF()D_ELSE(D_CTRL()))',#Type40 #CT6
-                   '(D_IF()D_ELSE()D_IF()D_ELSE(D_IF()D_ELSE()))',#Type41 #CT6
+                   #'(D_CTRL()D_IF()D_ELSE(D_CTRL()))',#Type38 #CT6
+                   #'(D_CTRL()D_IF()D_ELSE(D_IF()D_ELSE()))',#Type39 #CT6
+                   #'(D_IF()D_ELSE()D_IF()D_ELSE(D_CTRL()))',#Type40 #CT6
+                   #'(D_IF()D_ELSE()D_IF()D_ELSE(D_IF()D_ELSE()))',#Type41 #CT6
                    
                    '(D_CTRL()D_CTRL()D_CTRL())',#Type42 #CT7
-                   '(D_CTRL()D_CTRL()D_IF()D_ELSE())',#Type43 #CT7
-                   '(D_CTRL()D_IF()D_ELSE()D_CTRL())',#Type44 #CT7                  
-                   '(D_IF()D_ELSE()D_CTRL()D_CTRL())',#Type45 #CT7
-                   '(D_CTRL()D_IF()D_ELSE()D_IF()D_ELSE())',#Type46 #CT7
-                   '(D_IF()D_ELSE()D_IF()D_ELSE()D_CTRL())',#Type47 #CT7
-                   '(D_IF()D_ELSE()D_CTRL()D_IF()D_ELSE())',#Type48 #CT7
-                   '(D_IF()D_ELSE()D_IF()D_ELSE()D_IF()D_ELSE())',#Type49 #CT7
+                   #'(D_CTRL()D_CTRL()D_IF()D_ELSE())',#Type43 #CT7
+                   #'(D_CTRL()D_IF()D_ELSE()D_CTRL())',#Type44 #CT7                  
+                   #'(D_IF()D_ELSE()D_CTRL()D_CTRL())',#Type45 #CT7
+                   #'(D_CTRL()D_IF()D_ELSE()D_IF()D_ELSE())',#Type46 #CT7
+                   #'(D_IF()D_ELSE()D_IF()D_ELSE()D_CTRL())',#Type47 #CT7
+                   #'(D_IF()D_ELSE()D_CTRL()D_IF()D_ELSE())',#Type48 #CT7
+                   #'(D_IF()D_ELSE()D_IF()D_ELSE()D_IF()D_ELSE())',#Type49 #CT7
                    
                    '(D_CTRL(D_CTRL()D_CTRL()))', #Type50 #CT8
                    '(D_CTRL(D_IF()D_ELSE()D_CTRL()))', #Type51  #CT8
                    '(D_CTRL(D_CTRL()D_IF()D_ELSE()))', #Type52 #CT8
                    '(D_CTRL(D_IF()D_ELSE()D_IF()D_ELSE()))', #Type53 #CT8
                    
-                   '(D_IF(D_CTRL()D_CTRL())D_ELSE())', #Type54 #CT8
-                   '(D_IF(D_IF()D_ELSE()D_CTRL())D_ELSE())', #Type55  #CT8
-                   '(D_IF(D_CTRL()D_IF()D_ELSE())D_ELSE())', #Type56 #CT8
-                   '(D_IF(D_IF()D_ELSE()D_IF()D_ELSE())D_ELSE())', #Type57 #CT8
+                   #'(D_IF(D_CTRL()D_CTRL())D_ELSE())', #Type54 #CT8
+                   #'(D_IF(D_IF()D_ELSE()D_CTRL())D_ELSE())', #Type55  #CT8
+                   #'(D_IF(D_CTRL()D_IF()D_ELSE())D_ELSE())', #Type56 #CT8
+                   #'(D_IF(D_IF()D_ELSE()D_IF()D_ELSE())D_ELSE())', #Type57 #CT8
                    
-                   '(D_IF()D_ELSE(D_CTRL()D_CTRL()))', #Type58 #CT8
-                   '(D_IF()D_ELSE(D_IF()D_ELSE()D_CTRL()))', #Type59  #CT8
-                   '(D_IF()D_ELSE(D_CTRL()D_IF()D_ELSE()))', #Type60 #CT8
-                   '(D_IF()D_ELSE(D_IF()D_ELSE()D_IF()D_ELSE()))', #Type61 #CT8
+                   #'(D_IF()D_ELSE(D_CTRL()D_CTRL()))', #Type58 #CT8
+                   #'(D_IF()D_ELSE(D_IF()D_ELSE()D_CTRL()))', #Type59  #CT8
+                   #'(D_IF()D_ELSE(D_CTRL()D_IF()D_ELSE()))', #Type60 #CT8
+                   #'(D_IF()D_ELSE(D_IF()D_ELSE()D_IF()D_ELSE()))', #Type61 #CT8
                    ]
 
 
@@ -160,7 +160,7 @@ def getFeatureVector(prog):
     index = 0
     ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
     featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
-                      'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
+                        'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
     subVec_format = ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']
     featVec = [[0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],0,[[0,0,0,0,0],[0,0,0,0,0]],[[0,0,0,0,0],[0,0,0,0,0]]],
                [0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],0,[0,0,0,0,0],[0,0,0,0,0]],

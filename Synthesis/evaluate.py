@@ -261,8 +261,7 @@ def evaluate_model(model_weights,
                     text += "TargetVectors: " + str(target_pred[i])  + "\n"
                     text += "Failed Syntax: " + str(syntax_failed_count[i])  + "\n"
                     text += "Feature Mismatch: " + str(feat_mismatch_count[i])  + "\n"
-                    
-                    
+
                     text += "Passed"  + "\n"
                 for unique_prog,k_value in zip(unique_pred[i],corsp_domain[i]):
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
@@ -335,7 +334,7 @@ def evaluate_model(model_weights,
             stx_res_file.write(str(100*nb_featVec_match[k]/total_nb))
     with open(text_path, 'w') as f:
         f.write(text)
-    uniquenss_value = (100*numb_unseen) / ((len(dataset["sources"]))*nb_samples ) 
+    uniquenss_value = (100*numb_unique) / ((len(dataset["sources"]))*nb_samples ) 
     return uniquenss_value
     #return unseen_count_5
 
