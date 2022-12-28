@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in 16; do
+    for j in {70..79}; do
+        python src/neural_code2task_syn/task_synthesizer.py --task "$i" --run "$j" --num_worlds 1
+    done
+done

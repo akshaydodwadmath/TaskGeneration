@@ -25,4 +25,7 @@ python3 main.py --train_file=../PreProcessing/train_betterquality.json --val_fea
 python3 eval_cmd.py --model_weights exps_K100_0.5Q/Weights/best.model --vocabulary data/new_vocab.vocab --feature_file_path ../PreProcessing/featVectors_14CT_15D_0.5Q.json --eval_batch_size 8 --output_path exps_K100_0.5Q/Results/ValSet_ --n_domains 100 --top_k 1 --use_cuda --train_file_path ../PreProcessing/train_14CT_15D_0.5Q.json --beam 64 --nb_samples 100
 
 
+RL Training:
+python3 main.py  --signal rl --learning_rate 1e-5 --init_weights model_weights/SL_C14_q05.model --train_file ../PreProcessing/featVectors_14CT_15D_0.5Q.json --val_feature_file=../PreProcessing/featVectors_14CT_15D_0.5Q.json --result_folder exps_14CT_0.5Q/reinforce_finetune --batch_size 8 --nb_rollouts 5 --nb_epochs 1 --n_domains 100 --nb_samples 1 --top_k 1 --log_frequency 30 --num_tasks_iter 200 --val_frequency 1 --use_cuda
+
 

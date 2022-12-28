@@ -8,9 +8,11 @@ import time
 
 import argparse
 from dataloader import load_input_file,get_minibatch, shuffle_dataset
-from train_helper import do_supervised_minibatch
+from train_helper import do_supervised_minibatch,do_rl_minibatch
 from model import CodeType2Code
 from evaluate import evaluate_model
+from reinforce import EnvironmentClasses
+from karel.consistency import Simulator
 
 import torch
 import torch.autograd as autograd
@@ -74,6 +76,9 @@ def add_train_cli_args(parser):
     train_group.add_argument("--top_k", type=int,
                         default=5,
                         help="How many candidates to return. For evaluation. Default %(default)s")
+    train_group.add_argument("--num_tasks_iter", type=int,
+                        default=200,
+                        help="Number of iterations for task generation. Default %(default)s")
     train_group.add_argument("--result_folder", type=str,
                              default="exps/fake_run",
                              help="Where to store the results. "
@@ -102,11 +107,11 @@ def add_train_cli_args(parser):
                         "Default: %(default)s.")
 
     rl_group = parser.add_argument_group("RL-specific training options")
-    # rl_group.add_argument("--environment", type=str,
-                          # choices=EnvironmentClasses.keys(),
-                          # default="BlackBoxGeneralization",
-                          # help="What type of environment to get a reward from"
-                          # "Default: %(default)s.")
+    rl_group.add_argument("--environment", type=str,
+                          choices=EnvironmentClasses.keys(),
+                          default="BlackBoxGeneralization",
+                          help="What type of environment to get a reward from"
+                          "Default: %(default)s.")
     # rl_group.add_argument("--reward_comb", type=str,
                           # choices=RewardCombinationFun.keys(),
                           # default="RenormExpected",
@@ -182,15 +187,18 @@ nb_lstm_layers = 2
 learn_syntax = False
 
 #Need to setup paths
-model = CodeType2Code(kernel_size, conv_stack, fc_stack,
-                vocabulary_size, tgt_embedding_size,
-                lstm_hidden_size, nb_lstm_layers, args.n_domains ,
-                nfeaturevectors,learn_syntax)
+if args.init_weights is None:
+    model = CodeType2Code(kernel_size, conv_stack, fc_stack,
+                    vocabulary_size, tgt_embedding_size,
+                    lstm_hidden_size, nb_lstm_layers, args.n_domains ,
+                    nfeaturevectors,learn_syntax)
+else:
+    model = torch.load(args.init_weights,
+                    map_location=lambda storage, loc: storage)
 # Dump initial weights
 path_to_ini_weight_dump = models_dir / "ini_weights.model"
 with open(str(path_to_ini_weight_dump), "wb") as weight_file:
     torch.save(model, weight_file)                
-
 
 if use_grammar:
     model.set_syntax_checker(syntax_checker)    
@@ -208,6 +216,13 @@ if signal == TrainSignal.SUPERVISED:
     # Setup the criterion
     loss_criterion = nn.CrossEntropyLoss(weight=weight_mask)
     weight_lambda = 0.1
+    
+elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
+    simulator = Simulator(vocab["idx2tkn"])
+    if signal == TrainSignal.BEAM_RL:
+        reward_comb_fun = RewardCombinationFun[reward_comb]
+else:
+    raise Exception("Unknown TrainingSignal.")
     
 #TODO    
 if args.use_cuda:
@@ -233,6 +248,8 @@ recent_losses_train = []
 recent_losses_entropy = []
 best_val_acc = np.NINF
 batch_size = args.batch_size
+env = args.environment
+
 for epoch_idx in range(0, args.nb_epochs):
     # This is definitely not the most efficient way to do it but oh well
     if(args.shuffle_data):
@@ -240,40 +257,82 @@ for epoch_idx in range(0, args.nb_epochs):
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
     #for sp_idx in tqdm(range(0, 1, batch_size)):
 
-
+        
         batch_idx = int(sp_idx/batch_size)
-        optimizer.zero_grad()
 
         if signal == TrainSignal.SUPERVISED:
-            tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets = get_minibatch(dataset, sp_idx, batch_size,
-                                              tgt_start, tgt_end, tgt_pad)
+            optimizer.zero_grad()
+            tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets,_ = get_minibatch(dataset, sp_idx, batch_size,
+                                            tgt_start, tgt_end, tgt_pad)
             #TODO
             if args.use_cuda:
                 tgt_inp_sequences, in_src_seq, out_tgt_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda()
             # if learn_syntax:
                 # minibatch_loss = do_syntax_weighted_minibatch(model,
-                                                              # inp_grids, out_grids,
-                                                              # in_tgt_seq, in_tgt_seq_list,
-                                                              # out_tgt_seq,
-                                                              # loss_criterion, beta)
+                                                            # inp_grids, out_grids,
+                                                            # in_tgt_seq, in_tgt_seq_list,
+                                                            # out_tgt_seq,
+                                                            # loss_criterion, beta)
             # else:
             minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
             
+            optimizer.step()
             recent_losses.append(minibatch_loss)
             recent_losses_train.append(minibatch_loss_train)
             recent_losses_entropy.append(minibatch_loss_entropy)
             
-        optimizer.step()
+        elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
+            _, in_src_seq, out_tgt_seq, srcs,_, fVectors= get_minibatch(dataset, sp_idx, batch_size,
+                                                tgt_start, tgt_end, tgt_pad)
+            if args.use_cuda:
+                in_src_seq = in_src_seq.cuda()
+                out_tgt_seq = out_tgt_seq.cuda()
+                
+            unseen_pred = [[] for i in range(batch_size)]
+
+            # We use 1/nb_rollouts as the reward to normalize wrt the
+            # size of the rollouts
+            if signal == TrainSignal.RL:
+                reward_norm = 1 / float(args.nb_rollouts)
+
+
+            _,max_len = out_tgt_seq.size()
+
+            env_cls = EnvironmentClasses[env]
+            all_fVector = dataset["featureVectors"]
+            
+            if "Consistency" in env:
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                        for tgt_fVector, upred in  zip(fVectors, unseen_pred)]
+            elif "Generalization" in env:
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                        for tgt_fVector, upred in zip(fVectors, unseen_pred)]
+            else:
+                raise NotImplementedError("Unknown environment type")
+            
+            if signal == TrainSignal.RL:
+                for K in range(0,args.n_domains):
+                    optimizer.zero_grad()
+                    minibatch_reward = do_rl_minibatch(model,in_src_seq, K,
+                                                        envs,tgt_start, tgt_end, max_len,
+                                                        args.n_domains,
+                                                        args.nb_rollouts)
+                    optimizer.step()
+                    recent_losses.append(minibatch_reward)
+                    
+
+        else:
+            raise NotImplementedError("Unknown Training method")    
+            
+        
         
         if (batch_idx % args.log_frequency == args.log_frequency-1 and len(recent_losses) > 0) or \
-           (len(dataset["sources"]) - sp_idx ) < batch_size:
-            logging.info('Epoch : %d Minibatch : %d Loss : %.5f Loss_Train : %.5f Loss_Entropy : %.5f' % (
-                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses), sum(recent_losses_train)/len(recent_losses_train), sum(recent_losses_entropy)/len(recent_losses_entropy))
+        (len(dataset["sources"]) - sp_idx ) < batch_size:
+            logging.info('Epoch : %d Minibatch : %d Loss : %.5f' % (
+                epoch_idx, batch_idx, sum(recent_losses)/len(recent_losses))
             )
             losses.extend(recent_losses)
             recent_losses = []
-            recent_losses_train = []
-            recent_losses_entropy = []
             # Dump the training losses
             with open(str(train_loss_path), "w") as train_loss_file:
                 json.dump(losses, train_loss_file, indent=2)

@@ -1,0 +1,1314 @@
+[
+  {
+    "id": 1,
+    "common_name": "K10",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "",
+            "blocked": "",
+            "hero": "0:0:east"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "0:0:1 1:1:1 2:2:1 3:3:1 4:4:1 5:5:1 6:6:1 7:7:1 8:8:1 9:9:1",
+            "blocked": "",
+            "hero": "0:0:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,putMarker,pickMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 2,
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "8:2 8:3 8:4 8:5 8:6 8:7 6:1 5:1 4:1 3:1 2:1 1:2 1:3 1:4 1:5 1:6 1:7",
+            "hero": "4:5:west"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "8:2 8:3 8:4 8:5 8:6 8:7 6:1 5:1 4:1 3:1 2:1 1:2 1:3 1:4 1:5 1:6 1:7",
+            "hero": "7:7:west"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 3,
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "body": [
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ],
+            "condition": "boolGoal",
+            "type": "repeatUntil"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ],
+                "condition": "notRightIsClear",
+                "type": "if"
+              },
+              {
+                "type": "turnRight"
+              }
+            ],
+            "times": 5,
+            "type": "repeat"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "8:2 8:3 8:4 8:5 8:6 8:7 6:1 5:1 4:1 3:1 2:1 1:2 1:3 1:4 1:5 1:6 1:7",
+            "hero": "4:5:west"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "8:2 8:3 8:4 8:5 8:6 8:7 6:1 5:1 4:1 3:1 2:1 1:2 1:3 1:4 1:5 1:6 1:7",
+            "hero": "7:7:west"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 4,
+    "common_name": "H5",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "if",
+                "condition": "rightIsClear",
+                "body": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:8 2:9 3:0 3:1 3:3 3:4 3:5 3:6 3:8 3:9 4:0 4:1 4:3 4:4 4:8 4:9 5:0 5:1 5:3 5:4 5:5 5:6 5:7 5:8 5:9 6:0 6:1 6:3 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "4:5:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:5:1",
+            "blocked": "0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:8 2:9 3:0 3:1 3:3 3:4 3:5 3:6 3:8 3:9 4:0 4:1 4:3 4:4 4:8 4:9 5:0 5:1 5:3 5:4 5:5 5:6 5:7 5:8 5:9 6:0 6:1 6:3 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "7:7:west"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 5,
+    "common_name": "H1",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "5:5:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:5 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:5 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:5 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:6 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "5:5:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "5:5:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:5 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:5 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:5 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:6 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "4:3:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 6,
+    "common_name": "H2",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 6
+          }
+        ],
+        "num_examples": 1,
+        "task_type": "hoc",
+        "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+        "num_blocks_allowed": -1
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "1:5:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:3 4:4 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:6 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "1:5:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "1:5:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:3 4:4 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:6 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "6:5:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 7,
+    "common_name": "H3",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "repeat",
+            "body": [
+              {
+                "type": "move"
+              }
+            ],
+            "times": 5
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "7:7:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:5 3:6 3:8 3:9 4:0 4:1 4:2 4:3 4:4 4:5 4:6 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:5 5:6 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:6 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "7:7:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "7:7:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:8 2:9 3:0 3:1 3:2 3:3 3:4 3:5 3:6 3:8 3:9 4:0 4:1 4:2 4:3 4:4 4:5 4:6 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:5 5:6 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:6 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "2:3:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 8,
+    "common_name": "H4",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnRight"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ],
+        "num_examples": 1,
+        "task_type": "hoc",
+        "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+        "num_blocks_allowed": -1
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "7:7:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:4 2:5 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:5 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:3 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "7:7:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "7:7:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:4 2:5 2:6 2:7 2:8 2:9 3:0 3:1 3:2 3:5 3:6 3:7 3:8 3:9 4:0 4:1 4:2 4:3 4:6 4:7 4:8 4:9 5:0 5:1 5:2 5:3 5:4 5:7 5:8 5:9 6:0 6:1 6:2 6:3 6:4 6:5 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "1:1:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 9,
+    "common_name": "H6",
+    "code": {
+      "program_type": "hoc",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeatUntil",
+            "condition": "boolGoal",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnRight"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "num_examples": 1,
+        "task_type": "hoc",
+        "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+        "num_blocks_allowed": -1
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "5:1:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:5 2:8 2:9 3:0 3:1 3:2 3:3 3:5 3:6 3:8 3:9 4:0 4:1 4:2 4:3 4:5 4:6 4:8 4:9 5:0 5:8 5:9 6:0 6:1 6:2 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "5:1:any"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "2:6:1",
+            "blocked": "0:0 0:1 0:2 0:3 0:4 0:5 0:6 0:7 0:8 0:9 1:0 1:1 1:2 1:3 1:4 1:5 1:6 1:7 1:8 1:9 2:0 2:1 2:2 2:3 2:4 2:5 2:8 2:9 3:0 3:1 3:2 3:3 3:5 3:6 3:8 3:9 4:0 4:1 4:2 4:3 4:5 4:6 4:8 4:9 5:0 5:8 5:9 6:0 6:1 6:2 6:4 6:5 6:6 6:7 6:8 6:9 7:0 7:1 7:2 7:3 7:4 7:5 7:6 7:7 7:8 7:9 8:0 8:1 8:2 8:3 8:4 8:5 8:6 8:7 8:8 8:9 9:0 9:1 9:2 9:3 9:4 9:5 9:6 9:7 9:8 9:9",
+            "hero": "2:6:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "hoc",
+      "type_blocks_allowed": "move,turnLeft,turnRight,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 10,
+    "common_name": "K7",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "putMarker"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "pickMarker"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "",
+            "blocked": "",
+            "hero": "4:6:east"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "4:4:1",
+            "blocked": "",
+            "hero": "4:2:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 12,
+    "common_name": "K8",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "move"
+              },
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "1:1:1 2:1:1 2:2:1 1:2:1",
+            "blocked": "",
+            "hero": "1:1:east"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "",
+            "blocked": "",
+            "hero": "1:1:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 14,
+    "common_name": "K9",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnRight"
+          },
+          {
+            "type": "repeat",
+            "times": 7,
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "noMarkersPresent",
+                "ifBody": [
+                  {
+                    "type": "putMarker"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [
+        {
+          "outgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "1:2:1 1:4:1 1:5:1",
+            "blocked": "",
+            "hero": "1:1:east"
+          },
+          "inpgrid_json": {
+            "rows": 10,
+            "cols": 10,
+            "markers": "1:1:1 1:3:1 1:6:1 1:7:1 1:8:1",
+            "blocked": "",
+            "hero": "1:9:east"
+          }
+        }
+      ],
+      "num_examples": 1,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 15,
+    "common_name": "copy",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 16,
+    "common_name": "multiply",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "while",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "while",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "putMarker"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "move"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              }
+            ]
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "move"
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "turnLeft"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 17,
+    "common_name": "target",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "noMarkersPresent",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "frontIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "repeat",
+            "times": 4,
+            "body": [
+              {
+                "type": "while",
+                "condition": "frontIsClear",
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "putMarker"
+                  },
+                  {
+                    "type": "putMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "pickMarker"
+              },
+              {
+                "type": "while",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "turnLeft"
+              },
+              {
+                "type": "putMarker"
+              }
+            ]
+          },
+          {
+            "type": "turnRight"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  },
+  {
+    "id": 18,
+    "common_name": "cleanup",
+    "code": {
+      "program_type": "karel",
+      "program_json": {
+        "type": "run",
+        "body": [
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "rightIsClear",
+            "body": [
+              {
+                "type": "ifElse",
+                "condition": "frontIsClear",
+                "ifBody": [
+                  {
+                    "type": "if",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "move"
+                  }
+                ],
+                "elseBody": [
+                  {
+                    "type": "if",
+                    "condition": "markersPresent",
+                    "body": [
+                      {
+                        "type": "pickMarker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "while",
+                    "condition": "frontIsClear",
+                    "body": [
+                      {
+                        "type": "move"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "turnLeft"
+                  },
+                  {
+                    "type": "move"
+                  },
+                  {
+                    "type": "turnLeft"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "if",
+                "condition": "markersPresent",
+                "body": [
+                  {
+                    "type": "pickMarker"
+                  }
+                ]
+              },
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "if",
+            "condition": "markersPresent",
+            "body": [
+              {
+                "type": "pickMarker"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          },
+          {
+            "type": "while",
+            "condition": "frontIsClear",
+            "body": [
+              {
+                "type": "move"
+              }
+            ]
+          },
+          {
+            "type": "turnLeft"
+          }
+        ]
+      }
+    },
+    "ref_task": {
+      "examples": [],
+      "num_examples": 0,
+      "task_type": "karel",
+      "type_blocks_allowed": "move,turnLeft,turnRight,pickMarker,putMarker,repeat,while,if,ifElse,repeatUntil",
+      "num_blocks_allowed": -1
+    }
+  }
+]
