@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from dataloader import IMG_SIZE
 from misc.beam import Beam
-
+from reinforce import Rolls
 
 import math
 from typing import Tuple
@@ -328,6 +328,199 @@ class MultiIOProgramDecoder(nn.Module):
         for i, beamState in enumerate(beams):
             sampled.append(beamState.get_sampled())
         return sampled
+    
+    def sample_model(self,  in_src_seq, tgt_encoder_vector,
+                        tgt_start, tgt_end, max_len,
+                        nb_rollouts):
+        '''
+        io_embeddings: batch_size x nb_ios x io_emb_size
+        tgt_start: int -> Character indicating the start of the decoding
+        tgt_end: int -> Character indicating the end of the decoding
+        max_len: int -> How many tokens to sample from this rollout of the batch
+        nb_rollouts: int -> How many rollouts to collect for each of the samples
+                           of the batch
+        '''
+        # I will attempt to `detach` or create with `requires_grad=False` all
+        # of the variables that won't need backpropagating through to ensure
+        # that no spurious computation is done.
+        if in_src_seq.is_cuda:
+            use_cuda = True
+            tt = torch.cuda
+        else:
+            use_cuda = False
+            tt = torch
+
+        # batch_size is going to be a changing thing, it correspond to how many
+        # inputs we are passing through the decoder at once. Here, at
+        # initialization, it is just the actual batch_size.
+        batch_size = len(in_src_seq)
+
+        # rolls holds the sample output that we are going to collect for each
+        # of the outputs
+
+        # Initial proba for what is certainly sampled
+        full_proba = Variable(tt.FloatTensor([1]), requires_grad=False)
+        rolls = [Rolls(-1, full_proba, nb_rollouts, -1) for _ in range(batch_size)]
+
+        sm = nn.Softmax(dim=1)
+
+        ## Initialising the elements for the decoder
+        curr_batch_size = batch_size  # Will vary as we go along in the decoder
+
+        batch_inputs = Variable(tt.LongTensor(batch_size, 1).fill_(tgt_start))
+
+        batch_list_inputs = [[tgt_start]]*batch_size
+        # batch_inputs: (curr_batch, ) -> inputs for the decoder step
+        batch_state = None  # First one is the learned default state
+        batch_grammar_state = None
+
+        # Info that we will maintain at each timestep, for all of the traces
+        # that we are currently expanding. All these list/tensors should have
+        # same sizes.
+        trajectories = [[] for _ in range(curr_batch_size)]
+        # trajectories: List[ List[idx] ] -> trajectory for each trace that we
+        #                                    are currently expanding
+        multiplicity = [nb_rollouts for _ in range(curr_batch_size)]
+        # multiplicity: List[ int ] -> How many of this trace have we sampled
+        roll_idx_for_batchInput = [roll_idx for roll_idx in range(curr_batch_size)]
+        # roll_idx_for_batchInput: List[ idx ] -> Which roll/sample is it a trace for
+
+        #for stp in range(max_len):
+        for stp in range(max_len):
+            # Do the forward of one time step, for all our traces to expand
+            dec_outs, dec_state, \
+            batch_grammar_state, _ = self.forward(batch_inputs,
+                                                  in_src_seq,
+                                                  tgt_encoder_vector,
+                                                  1,
+                                                  batch_state,
+                                                  batch_grammar_state)
+            # dec_outs: curr_batch x 1 x nb_out_word
+            # -> the unnormalized/pre-softmax proba for each word
+            # dec_state: 2-tuple of nb_layers x curr_batch x nb_ios x dim
+
+            dec_outs = dec_outs.squeeze(1)  # curr_batch x nb_out_word
+            dec_out_probs = sm(dec_outs)           # curr_batch x nb_out_word
+
+            ##TODEBUG
+            #print("dec_out_probs", dec_out_probs.data[0])
+
+            # Prepare the container for what will need to be given to the next
+            # steps
+            new_trajectories = []
+            new_multiplicity = []
+            new_roll_idx_for_batchInput = []
+            new_batch_list_inputs = []
+            new_batch_checker = []
+
+            # This needs to be collected for each of the samples we do
+            parent = []      # -> idx of the trace of this sampled output
+            next_input = []  # -> sampled output
+            sp_proba = []    # -> proba of the sampled output
+
+            for trace_idx in range(curr_batch_size):
+                new_batch_list_inputs.append([])
+                # Iterate over the current trace prefixes that we have
+                idx_per_sample = {}  # -> to group the samples that are same
+
+                # We have sampled `multiplicity[trace_idx]` this prefix trace,
+                # we try to continue it `multiplicity[trace_idx]` times.
+                # This sample is done with replacement.
+                choices = torch.multinomial(dec_out_probs.data[trace_idx],
+                                            multiplicity[trace_idx],
+                                            True)
+
+                ##TODEBUG
+                #print("choices", choices)
+                # choices: (multiplicity, ) -> sampled output
+
+                # We will now join the samples that are identical, to not
+                # duplicate their computation
+                for sampled in choices:
+                    if sampled in idx_per_sample:
+                        # We already have this one, just increase its
+                        # multiplicity
+
+                        new_multiplicity[idx_per_sample[sampled]] += 1
+                    else:
+                        # Bookkeeping so that the future ones similar can be
+                        # grouped to this one.
+                        idx_per_sample[sampled] = len(new_trajectories)
+
+                        # The trajectory that this now creates:prefix + new elt
+                        new_traj = trajectories[trace_idx] + [sampled] ###########
+                        new_trajectories.append(new_traj)
+
+                        sp_proba.append(dec_out_probs[trace_idx, sampled])
+
+                        # It belongs to the same samples that his prefix
+                        # belonged to
+                        new_roll_idx_for_batchInput.append(roll_idx_for_batchInput[trace_idx])
+
+                        # The prefix for this one was trace_idx in the previous
+                        # batch
+                        parent.append(trace_idx)
+
+                        # What will need to be fed in the decoder to continue
+                        # this new trace created
+                        next_input.append(sampled)
+
+                        # This is the first one that we see so it will have a
+                        # multiplicity of 1 for now
+                        new_multiplicity.append(1)
+
+
+            # Add these new samples to our book-keeping of all samples
+            for traj, multiplicity, cur_roll_idx, sp_pb in zip(new_trajectories,
+                                                     new_multiplicity,
+                                                     new_roll_idx_for_batchInput,
+                                                     sp_proba):
+
+                rolls[cur_roll_idx].expand_samples(traj, multiplicity, sp_pb)
+
+
+            to_continue_mask = [inp != tgt_end for inp in next_input]
+            # For the next step, drop everything that we don't need to pursue
+            # because they reached the end symbol
+            curr_batch_size = sum(to_continue_mask)
+            if curr_batch_size == 0:
+                # There is nothing left to sample from
+                break
+            # Extract the ones we need to continue
+            next_batch_inputs = [inp for inp in next_input if inp != tgt_end]
+            batch_inputs = Variable(tt.LongTensor(next_batch_inputs).view(-1, 1),
+                                    requires_grad=False)
+            batch_list_inputs = [[inp] for inp in next_batch_inputs]
+
+            # Which are the parents that we need to get the state for
+            # (potentially multiple times the same parent)
+            parents_to_continue = [parent_idx for (parent_idx, to_cont)
+                                   in zip(parent, to_continue_mask) if to_cont]
+            parent = Variable(tt.LongTensor(parents_to_continue), requires_grad=False)
+
+
+            tgt_encoder_vector = tgt_encoder_vector.index_select(0, parent)
+            in_src_seq = in_src_seq.index_select(0, parent)
+            ## Gather the output for the next step of the decoder
+            # parent: curr_batch_size
+            batch_state = (
+                dec_state[0].index_select(1, parent),
+                dec_state[1].index_select(1, parent)
+            )
+
+            # For all the maintained list, keep only the elt to expand
+            joint = [(mul, traj, cr) for mul, traj, cr, to_cont
+                     in zip(new_multiplicity,
+                            new_trajectories,
+                            new_roll_idx_for_batchInput,
+                            to_continue_mask)
+                     if to_cont]
+            ##TODEBUG
+            #print('joint', joint)
+            multiplicity, trajectories, roll_idx_for_batchInput = zip(*joint)
+
+
+        return rolls
 
 class GridEncoder(nn.Module):
     def __init__(self, kernel_size, conv_stack, fc_stack):
@@ -631,3 +824,14 @@ class CodeType2Code(nn.Module):
         sampled = self.decoder.beam_sample(in_src_seq,tgt_encoder_vector, tgt_start, tgt_end, seq_len,
                                            beam_size, top_k, vol)
         return sampled
+
+    def sample_model(self, in_src_seq,tgt_encoder_vector,
+                     tgt_start, tgt_end, max_len,
+                     nb_rollouts, vol=True):
+        # Do the encoding of the source_sequence.
+      #  io_embedding = self.encoder(input_grids, output_grids)
+
+        rolls = self.decoder.sample_model(in_src_seq,tgt_encoder_vector,
+                                          tgt_start, tgt_end, max_len,
+                                          nb_rollouts)
+        return rolls
