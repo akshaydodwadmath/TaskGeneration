@@ -26,7 +26,7 @@ actions = [
 commands = [
             ['REPEAT','r(','r)', 0],
             ['WHILE','w(','w)', 1],
-            #['IF','i(','i)', 1]
+            ['IF','i(','i)', 1]
             ]
 command_if_else = [
             ['IFELSE','i(','i)', 1],
@@ -43,6 +43,13 @@ cond = [
     ['c(','not','c(','rightIsClear','c)','c)'],
     ['c(','not','c(','frontIsClear','c)','c)'],
     ['R=']# repeat options 2 to 10
+    ]
+
+control_close = ['m)',
+         'r)',
+         'w)',
+         'i)',
+         'e)',
     ]
 
 required_ctypes =   [ 
@@ -594,6 +601,12 @@ def add_args(parser):
     parse_group.add_argument("--num_codes_per_spec", type=int,
                              default=15,
                              help="Number of codes to generate per input specification")
+    parse_group.add_argument("--min_index", type=int,
+                             default=0,
+                             help="required code types min index")
+    parse_group.add_argument("--max_index", type=int,
+                             default=0,
+                             help="required code types max index")
     
     parse_group.add_argument('--quality_threshold', type=float,
                              default=0.5,
@@ -744,7 +757,48 @@ def checkfor_putM_pickM(gen_code):
         index+=1
     return False
 
-
+def checkNextCtrl(subprog, index):
+    ifelse_started = False
+    for token in subprog:
+        if(token == 'REPEAT'):
+            return 0,index
+        elif(token == 'WHILE'):
+            return 0,index
+        elif(token == 'IF'):
+            return 0,index
+        elif(token == 'IFELSE'):
+            ifelse_started = True
+        elif(token == 'ELSE'):
+            return 0,index
+        elif ((token in control_close) and (ifelse_started ==False)):
+            return 1,index
+        index+=1
+        
+def checkForOuterIf(prog):
+    index = 0
+    outer_if = False
+    ctrl_index = 0
+    
+    while(index < len(prog)):
+        token = prog[index]
+        
+        if((token == 'REPEAT') or (token == 'WHILE') or (token == 'IF') or (token == 'IFELSE') or (token == 'ELSE')):
+            if(ctrl_index > 2):
+                return outer_if
+            
+            
+            if(token == 'IF'):
+                outer_if = True
+            value, index = checkNextCtrl(prog[index+1:], index+1)
+            if(ctrl_index == 0):
+                if(value != 1):
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+                    value, index = checkNextCtrl(prog[index+1:], index+1)
+            if(not(token == 'IFELSE')):
+                ctrl_index+=1
+        index+=1
+    return outer_if
+    
 def checkQuality(simulator, prg_ast_json, max_iterations):
   
         code_json = iclr18_codejson_to_karelgym_codejson(prg_ast_json)
@@ -797,7 +851,8 @@ if __name__ == '__main__':
     with open(text_path,'w') as file:
         pass
         
-    for code_type in required_ctypes: 
+    ctypes_to_parse = required_ctypes[args.min_index: args.max_index]
+    for code_type in ctypes_to_parse: 
         print("code_type", required_ctypes.index(code_type))
         log = "code_type " + str(required_ctypes.index(code_type))  + "\n"
         with open(log_path, 'a+') as f:
@@ -816,11 +871,14 @@ if __name__ == '__main__':
             all_perm = ([p for p in product(commands, repeat=ctrl_count)])
             for selected_ctrl in all_perm:
                 numb_for_code_type = 0
+                #if(commands[2] in selected_ctrl): ##only if ctrl types
+                    
                 current_spec_codes = []
                 
                 for i in range(0, (args.num_codes_per_spec)):
                     numb_feat_vectors +=1
                     parse_success = False
+                    outer_if = False
                     quality_good = False
                     qual_bad = True
                     nb_attempts = 0
@@ -834,6 +892,9 @@ if __name__ == '__main__':
                     if(args.data_generator):
                         while(not quality_good):
                             random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
+                            outer_if= checkForOuterIf(random_code)
+                            if(outer_if):
+                                break
                             qual_bad_1 = checkfor_tL_tR(random_code)
                             qual_bad_2 = checkfor_putM_pickM(random_code)
                             qual_bad = qual_bad_1 or qual_bad_2
@@ -858,25 +919,28 @@ if __name__ == '__main__':
                                             
                                     if(nb_attempts == 50):
                                         quality_good = True
-                                        random_code = best_code
+                                    #   random_code = best_code
                     else:
                         while(not parse_success):
                             random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
+                            outer_if= checkForOuterIf(random_code)
+                            
                             random_code_idces = translate(random_code, tgt_tkn2idx)
                             parse_success, _, _ = simulator.get_prog_ast(random_code_idces)
                             
                     end = time.time()
+                    
+                    if(not(nb_attempts == 50) and (not outer_if)):
+                        log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
+                    
+                        final_codes.append(random_code)
+                        log += "Code " + str(random_code)  + "\n"
+                        with open(log_path, 'a+') as f:
+                            f.write(log)
                             
-                    log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
-                
-                    final_codes.append(random_code)
-                    log += "Code " + str(random_code)  + "\n"
-                    with open(log_path, 'a+') as f:
-                        f.write(log)
-                        
-                    text += str(random_code)  + "\n"
-                    with open(text_path, 'a+') as f:
-                        f.write(text)
+                        text += str(random_code)  + "\n"
+                        with open(text_path, 'a+') as f:
+                            f.write(text)
                     
                     ##For evaluation
                     #random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)

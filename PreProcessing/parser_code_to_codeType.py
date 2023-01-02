@@ -13,7 +13,7 @@ actions = [
 
 commands = ['REPEAT',
             'WHILE',
-            #'IF',
+            'IF',
             ]
 command_if_else = ['IFELSE',
             'ELSE',
@@ -158,6 +158,7 @@ def getNumberOfActions(prog):
 
 def getFeatureVector(prog):
     index = 0
+    outer_if = False
     ########[No_Const, Repeat, [],While,[],If,[],IFELSE,[],[]]
     featVec_format = ['REPEAT', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'WHILE',['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],
                         'IF',  ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],'IFELSE', ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE'],['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']]
@@ -208,6 +209,7 @@ def getFeatureVector(prog):
                 featVec[ctrl_index][featVec_format.index('WHILE')+1][value] = 1
             ctrl_index+=1
         elif(token == 'IF'):
+            outer_if = True
             featVec[ctrl_index][featVec_format.index('IF')] = 1
             value, index = checkNextCtrl(prog[index+1:], index+1)
             if(ctrl_index == 0):
@@ -249,7 +251,7 @@ def getFeatureVector(prog):
             ctrl_index+=1
         index+=1
     featVec[3][numb_actions] = 1
-    return featVec, numb_actions
+    return featVec, numb_actions, outer_if
 
 def add_args(parser):
     
@@ -344,37 +346,38 @@ if __name__ == '__main__':
 
         if(code_type in required_ctypes):
             
-            feat_vect,numb_actions = getFeatureVector(prog_updated)
+            feat_vect,numb_actions,outer_if = getFeatureVector(prog_updated)
             action_temp[numb_actions] +=1
-            if(feat_vect not in feat_vect_elements):
-                feat_vect_elements.append(feat_vect)
-                no_of_vect_elements.append(0)
-                code_list.append([0] * args.ndomains)
+            if(not(outer_if)):
+                if(feat_vect not in feat_vect_elements):
+                    feat_vect_elements.append(feat_vect)
+                    no_of_vect_elements.append(0)
+                    code_list.append([0] * args.ndomains)
                 
-            no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
+                no_of_vect_elements[feat_vect_elements.index(feat_vect)] +=1
             
-            if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= args.ndomains):
-                if(prog_updated in code_list[feat_vect_elements.index(feat_vect)][:]):
-                    no_of_vect_elements[feat_vect_elements.index(feat_vect)] -=1
-                else:
-                    code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
-            
-            if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
-                featVec_evaluation.append({
-                                "CodeTypeIndex": required_ctypes.index(code_type),
-                                "FeatureVector":feat_vect,
-                                "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                                "Code": code_list[feat_vect_elements.index(feat_vect)][0]
-                                })
+                if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] <= args.ndomains):
+                    if(prog_updated in code_list[feat_vect_elements.index(feat_vect)][:]):
+                        no_of_vect_elements[feat_vect_elements.index(feat_vect)] -=1
+                    else:
+                        code_list[feat_vect_elements.index(feat_vect)][no_of_vect_elements[feat_vect_elements.index(feat_vect)] - 1] = prog_updated 
                 
-                for i in range(0,args.ndomains):
-                    list_obj.append({"CodeTypeIndex": required_ctypes.index(code_type),
+                if( no_of_vect_elements[feat_vect_elements.index(feat_vect)] == args.ndomains):
+                    featVec_evaluation.append({
+                                    "CodeTypeIndex": required_ctypes.index(code_type),
                                     "FeatureVector":feat_vect,
                                     "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
-                                    "Code": code_list[feat_vect_elements.index(feat_vect)][i]})
+                                    "Code": code_list[feat_vect_elements.index(feat_vect)][0]
+                                    })
+                    
+                    for i in range(0,args.ndomains):
+                        list_obj.append({"CodeTypeIndex": required_ctypes.index(code_type),
+                                        "FeatureVector":feat_vect,
+                                        "FeatureVectorIndex":feat_vect_elements.index(feat_vect),
+                                        "Code": code_list[feat_vect_elements.index(feat_vect)][i]})
+                    
                 
-            
-                    line_count+=1
+                        line_count+=1
     #  if(line_count>1):
     #      break
         
