@@ -166,19 +166,20 @@ class MultiIOGrid(Environment):
     -1 if the two programs lead to different outputs
     '''
 
-    def __init__(self, reward_norm, tgt_fVector,  upred, simulator, vocab, num_tasks_iter, all_fVector):
+    def __init__(self, reward_norm, tgt_fVector,  upred, simulator, vocab, num_tasks_iter, all_fVector, all_train_codes):
         '''
         reward_norm: float
         input_grids, output_grids: Reference IO for the synthesis
         '''
         super(MultiIOGrid, self).__init__(reward_norm,
-                                        (tgt_fVector, upred, simulator, vocab, num_tasks_iter, all_fVector))
+                                        (tgt_fVector, upred, simulator, vocab, num_tasks_iter, all_fVector, all_train_codes))
         self.tgt_fVector = tgt_fVector
         self.upred = upred
         self.simulator = simulator
         self.vocab = vocab
         self.num_tasks_iter = num_tasks_iter
         self.all_fVector = all_fVector
+        self.all_train_codes = all_train_codes
 
 
     def should_skip_reward(self, trace, is_final):
@@ -199,7 +200,8 @@ class MultiIOGrid(Environment):
             cand_prog_tkns = [self.vocab["idx2tkn"][tkn_idx] for tkn_idx in trace]
             cand_feat_vec, _ = getFeatureVector(cand_prog_tkns)
             if((cand_feat_vec in self.all_fVector) and (self.all_fVector.index(self.tgt_fVector) == self.all_fVector.index(cand_feat_vec))):
-                if(not(cand_prog_tkns in self.upred)):
+                if(not(cand_prog_tkns in self.upred) and 
+                   not(trace in self.all_train_codes)):
                     self.upred.append(cand_prog_tkns)
             
                     cand_prog_json_karelgym = iclr18_codejson_to_karelgym_codejson(cand_prog_json)

@@ -69,10 +69,6 @@ def add_train_cli_args(parser):
                              default="data/new_vocab.vocab",
                              help="Path to the output vocabulary."
                              " Default: %(default)s")
-    train_group.add_argument("--nb_samples", type=int,
-                             default=5,
-                             help="Max number of samples to look at."
-                             "If 0, look at the whole dataset.")
     train_group.add_argument("--top_k", type=int,
                         default=5,
                         help="How many candidates to return. For evaluation. Default %(default)s")
@@ -288,6 +284,7 @@ for epoch_idx in range(0, args.nb_epochs):
                 in_src_seq = in_src_seq.cuda()
                 out_tgt_seq = out_tgt_seq.cuda()
                 
+            all_train_codes = dataset["targets"]    
             unseen_pred = [[] for i in range(batch_size)]
 
             # We use 1/nb_rollouts as the reward to normalize wrt the
@@ -302,10 +299,12 @@ for epoch_idx in range(0, args.nb_epochs):
             all_fVector = dataset["featureVectors"]
             
             if "Consistency" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector,
+                                all_train_codes)
                         for tgt_fVector, upred in  zip(fVectors, unseen_pred)]
             elif "Generalization" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector)
+                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector,
+                                all_train_codes)
                         for tgt_fVector, upred in zip(fVectors, unseen_pred)]
             else:
                 raise NotImplementedError("Unknown environment type")
@@ -359,7 +358,7 @@ for epoch_idx in range(0, args.nb_epochs):
         out_path = str(result_dir / ("eval/epoch_%d/epoch_" % epoch_idx))
         print("path_to_weight_dump", path_to_weight_dump)
         val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
-                                 args.val_feature_file, args.train_file, args.nb_samples, 
+                                 args.val_feature_file, args.train_file, 
                                  args.n_domains, use_grammar,
                                  out_path, 10, args.top_k, batch_size,
                                  args.use_cuda, False, False)

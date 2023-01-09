@@ -14,10 +14,6 @@ from preprocessing.parser_code_to_codeType import getFeatureVector
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")
     parser.add_argument('--extra_info', action="store_true")
-    parser.add_argument("--nb_samples", type=int,
-                        default=0,
-                        help="How many samples to use to compute the accuracy."
-                        "Default: %(default)s, for all the dataset")
     parser.add_argument('--n_domains', type=int,
                         default=20,
                         help="Number of domains for target encoder. "
@@ -45,7 +41,6 @@ def evaluate_model(model_weights,
                    vocabulary_path,
                    feature_file_path,
                    train_file_path,
-                   nb_samples,
                    n_domains,
                    use_grammar,
                    output_path,
@@ -64,6 +59,10 @@ def evaluate_model(model_weights,
     
     text = ""
     text_path = os.path.join(res_dir, "{}.txt".format('model_generated'))
+    
+    all_text = ""
+    all_text_path = os.path.join(res_dir, "{}.txt".format('model_all_generated'))
+    
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
     for k in range(top_k):
@@ -158,16 +157,18 @@ def evaluate_model(model_weights,
         if use_cuda:
             in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
         
-        sample_count = [0 for i in range(batch_size)]
         syntax_failed_count = [0 for i in range(batch_size)]
         feat_mismatch_count = [0 for i in range(batch_size)]
         
         
         unique_pred = [[] for i in range(batch_size)]
+        quality_pred = [[] for i in range(batch_size)]
         corsp_domain = [[] for i in range(batch_size)]
         target_pred = [[] for i in range(batch_size)]
         failed_pred = [[] for i in range(batch_size)]
         unseen_pred = [[] for i in range(batch_size)]
+        
+        quality_zero_code = [3, 4, 20, 16, 17, 21]
         for K in range(0,n_domains):
             
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), n_domains).fill_(0)
@@ -201,48 +202,52 @@ def evaluate_model(model_weights,
                 # Correct syntaxes
                 for rank, dec in enumerate(sp_decoded):
                     model_failed = True
-                    if(sample_count[batch_idx]< nb_samples):
-                        sample_count[batch_idx] += 1
-                        failed_syntax = False
-                        pred = dec[-1]
-                        ll = dec[0]
-                        parse_success, cand_prog, cand_prog_json = simulator.get_prog_ast(pred)
-                        if parse_success:
-                            pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in pred]
-                            pred_feat_vec, _ = getFeatureVector(pred_tkns)
-                            ## Feature present in train set
-                            if(pred_feat_vec in fVector):
-                                # Feature matches with target
-                                if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
-                                    model_failed = False
-                                    saved_pred_all.append(pred)
-                                    if(not(pred in unique_pred[batch_idx])):
-                                        unique_pred[batch_idx].append(pred)
-                                        corsp_domain[batch_idx].append(K)
-                                        unique_pred_all.append(pred)
-                                        
-                                        if(not(pred in train_codes)):
-                                            unseen_pred[batch_idx].append(pred)
-                                            unseen_pred_all.append(pred)
-                                        if dump_programs:
-                                            file_name = str(K)+ " - " + str(rank) + " - " + str(ll) 
-                                            write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
-                                    if(not ranked_entered):
-                                        for top_idx in range(rank, top_k):
-                                            nb_featVec_match[top_idx] += 1
-                                        ranked_entered = True
+                    model_quality_failed = True
+                    failed_syntax = False
+                    pred = dec[-1]
+                    ll = dec[0]
+                    parse_success, cand_prog, cand_prog_json = simulator.get_prog_ast(pred)
+                    
+                    if parse_success:
+                        pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in pred]
+                        pred_feat_vec, _ = getFeatureVector(pred_tkns)
+                        ## Feature present in train set
+                        if(pred_feat_vec in fVector):
+                            # Feature matches with target
+                            if(fVector.index(trgt_feat_vec) == fVector.index(pred_feat_vec)):
+                                model_failed = False
+                                saved_pred_all.append(pred)
+                                if(not(pred in unique_pred[batch_idx])):
+                                    unique_pred[batch_idx].append(pred)
+                                    corsp_domain[batch_idx].append(K)
+                                    unique_pred_all.append(pred)
+                                    
+                                    if(not(pred in train_codes)):
+                                        model_quality_failed = False
+                                        quality_pred[batch_idx].append(pred)
+                                        unseen_pred[batch_idx].append(pred)
+                                        unseen_pred_all.append(pred)
+                                    if dump_programs:
+                                        file_name = str(K)+ " - " + str(rank) + " - " + str(ll) 
+                                        write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
+                                if(not ranked_entered):
+                                    for top_idx in range(rank, top_k):
+                                        nb_featVec_match[top_idx] += 1
+                                    ranked_entered = True
+                    else:
+                        failed_syntax = True
+                        
+                    if(model_failed):
+                        failed_pred[batch_idx].append(pred)
+                        if(failed_syntax):
+                            syntax_failed_count[batch_idx] += 1
+                            failed_syntax_all += 1
                         else:
-                            failed_syntax = True
-                            
-                        if(model_failed):
-                            failed_pred[batch_idx].append(pred)
-                            if(failed_syntax):
-                                syntax_failed_count[batch_idx] += 1
-                                failed_syntax_all += 1
-                            else:
-                                feat_mismatch_count[batch_idx] += 1
-                                feature_mismatch_all += 1
-                            
+                            feat_mismatch_count[batch_idx] += 1
+                            feature_mismatch_all += 1
+                    if(model_quality_failed):
+                        quality_pred[batch_idx].append(quality_zero_code)
+                        
         for i in range(0,batch_size):
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\nFeatureVector " + str((sp_idx+1) + i) + " -> ")
@@ -261,7 +266,7 @@ def evaluate_model(model_weights,
                     text += "TargetVectors: " + str(target_pred[i])  + "\n"
                     text += "Failed Syntax: " + str(syntax_failed_count[i])  + "\n"
                     text += "Feature Mismatch: " + str(feat_mismatch_count[i])  + "\n"
-
+            
                     text += "Passed"  + "\n"
                 for unique_prog,k_value in zip(unique_pred[i],corsp_domain[i]):
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
@@ -274,9 +279,13 @@ def evaluate_model(model_weights,
                     for failed_prog in failed_pred[i]:
                         pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in failed_prog]
                         text += str(pred_tkns)  + "\n"
+                        
+                for quality_prog in quality_pred[i]:
+                    pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in quality_prog]
+                    all_text += str(pred_tkns)  + "\n"
                 
                 stx_res_file.write("numb_unique : " + str(numb_unique)+ " , " )
-                stx_res_file.write(str(100*numb_unique/ (nb_samples )))
+                stx_res_file.write(str(100*numb_unique/ (n_domains )))
                 
                 numb_unseen = (len(set(map(tuple, unseen_pred[i]))))
                 
@@ -290,7 +299,7 @@ def evaluate_model(model_weights,
                     unseen_count_90 += 1
                 
                 stx_res_file.write(";    numb_unseen : " + str(numb_unseen)+ " , " )
-                stx_res_file.write(str(100*numb_unseen/ (nb_samples )))
+                stx_res_file.write(str(100*numb_unseen/ (n_domains )))
                 
                
             
@@ -306,15 +315,15 @@ def evaluate_model(model_weights,
         stx_res_file.write("\n" + "total unique : ")
         numb_unique = len(set(map(tuple, unique_pred_all)))
         stx_res_file.write(str(numb_unique)+ " , " )
-        stx_res_file.write(str( (100*numb_unique) / ((len(dataset["sources"]))*nb_samples ) ))
+        stx_res_file.write(str( (100*numb_unique) / ((len(dataset["sources"]))*n_domains ) ))
         
         numb_unseen = len(set(map(tuple, unseen_pred_all)))
         stx_res_file.write(";    total unseen : " + str(numb_unseen)+ " , " )
-        stx_res_file.write(str( (100*numb_unseen) / ((len(dataset["sources"]))*nb_samples ) ))
+        stx_res_file.write(str( (100*numb_unseen) / ((len(dataset["sources"]))*n_domains ) ))
         
         numb_feat = len(saved_pred_all)
         stx_res_file.write("\n" + "total matching feat vector : " + str(numb_feat)+ " , " )
-        stx_res_file.write(str( (100*numb_feat) / ((len(dataset["sources"]))*nb_samples ) ))
+        stx_res_file.write(str( (100*numb_feat) / ((len(dataset["sources"]))*n_domains ) ))
         
         stx_res_file.write("\n" + "Unique 5 : " + str(unique_count_5)+ " , " )
         stx_res_file.write("\n" + "Unique 10 : " + str(unique_count_10)+ " , " )
@@ -334,7 +343,9 @@ def evaluate_model(model_weights,
             stx_res_file.write(str(100*nb_featVec_match[k]/total_nb))
     with open(text_path, 'w') as f:
         f.write(text)
-    uniquenss_value = (100*numb_unique) / ((len(dataset["sources"]))*nb_samples ) 
+    with open(all_text_path, 'w') as f:
+        f.write(all_text)
+    uniquenss_value = (100*numb_unique) / ((len(dataset["sources"]))*n_domains ) 
     return uniquenss_value
     #return unseen_count_5
 
