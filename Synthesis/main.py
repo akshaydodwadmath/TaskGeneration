@@ -5,13 +5,15 @@ import os
 import random
 import time
 
-
 import argparse
 from dataloader import load_input_file,get_minibatch, shuffle_dataset
 from train_helper import do_supervised_minibatch,do_rl_minibatch
 from model import CodeType2Code
 from evaluate import evaluate_model
 from reinforce import EnvironmentClasses
+import pyximport
+pyximport.install()
+from syntax.checker import PySyntaxChecker
 from karel.consistency import Simulator
 
 import torch
@@ -22,7 +24,6 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 signals = ["supervised", "rl", "beam_rl"]
-use_grammar = False
 
 
 class TrainSignal(object):
@@ -168,7 +169,7 @@ if not models_dir.exists():
 dataset, vocab, nfeaturevectors = load_input_file(args.train_file, args.vocab)
 
 #TODO
-if use_grammar:
+if args.use_grammar:
     syntax_checker = PySyntaxChecker(vocab["tkn2idx"], args.use_cuda)
     
 vocabulary_size = len(vocab["tkn2idx"])
@@ -191,12 +192,16 @@ if args.init_weights is None:
 else:
     model = torch.load(args.init_weights,
                     map_location=lambda storage, loc: storage)
+    
+if args.use_grammar:
+        model.set_syntax_checker(syntax_checker)
+        
 # Dump initial weights
 path_to_ini_weight_dump = models_dir / "ini_weights.model"
 with open(str(path_to_ini_weight_dump), "wb") as weight_file:
     torch.save(model, weight_file)                
 
-if use_grammar:
+if args.use_grammar:
     model.set_syntax_checker(syntax_checker)    
     
 tgt_start = vocab["tkn2idx"]["<s>"]
@@ -258,7 +263,7 @@ for epoch_idx in range(0, args.nb_epochs):
 
         if signal == TrainSignal.SUPERVISED:
             optimizer.zero_grad()
-            tgt_inp_sequences, in_src_seq, out_tgt_seq, srcs,targets,_ = get_minibatch(dataset, sp_idx, batch_size,
+            tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,targets,_ = get_minibatch(dataset, sp_idx, batch_size,
                                             tgt_start, tgt_end, tgt_pad)
             #TODO
             if args.use_cuda:
@@ -270,7 +275,7 @@ for epoch_idx in range(0, args.nb_epochs):
                                                             # out_tgt_seq,
                                                             # loss_criterion, beta)
             # else:
-            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, out_tgt_seq, loss_criterion, weight_lambda)
+            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, loss_criterion, weight_lambda)
             
             optimizer.step()
             recent_losses.append(minibatch_loss)
@@ -359,8 +364,8 @@ for epoch_idx in range(0, args.nb_epochs):
         print("path_to_weight_dump", path_to_weight_dump)
         val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
                                  args.val_feature_file, args.train_file, 
-                                 args.n_domains, use_grammar,
-                                 out_path, 10, args.top_k, batch_size,
+                                 args.n_domains, args.use_grammar,
+                                 out_path, 64, args.top_k, batch_size,
                                  args.use_cuda, False, False)
         logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
         if val_acc > best_val_acc:

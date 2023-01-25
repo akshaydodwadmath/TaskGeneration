@@ -1,4 +1,7 @@
 
+import pyximport
+pyximport.install()
+
 # External imports
 import copy
 import time
@@ -114,7 +117,17 @@ class MultiIOProgramDecoder(nn.Module):
                                                      self.lstm_hidden_size, self.nb_layers)
 
         self.init_weights()
-        
+  
+    def set_syntax_checker(self, syntax_checker):
+        assert(self.learned_syntax_checker is None)
+        self.syntax_checker = syntax_checker
+
+    def __getstate__(self):
+        # Don't dump the syntax checker
+        obj_dict = self.__dict__.copy()
+        obj_dict["syntax_checker"] = None
+        return obj_dict
+    
     def init_weights(self):
         initrange = 0.1
         self.embedding.weight.data.uniform_(-initrange, initrange)
@@ -124,7 +137,7 @@ class MultiIOProgramDecoder(nn.Module):
         self.initial_h.data.uniform_(-initrange, initrange)
         self.initial_c.data.uniform_(-initrange, initrange)
         
-    def forward(self, tgt_inp_sequences, in_src_seq, tgt_encoder_vector,seq_len,
+    def forward(self, tgt_inp_sequences, in_src_seq, tgt_seq_list, tgt_encoder_vector,seq_len,
                 initial_state=None,
                 grammar_state=None):
         '''
@@ -198,7 +211,29 @@ class MultiIOProgramDecoder(nn.Module):
         )
         syntax_mask = None
         
-        #TODO if self.syntax_checker is not None:
+        if self.syntax_checker is not None:
+            if grammar_state is None:
+                grammar_state = [self.syntax_checker.get_initial_checker_state()
+                                 for _ in range(batch_size)]
+            tt = torch.cuda if decoder_logit.is_cuda else torch
+            out_of_syntax_mask = tt.ByteTensor(decoder_logit.size())
+            out_of_syntax_list = []
+            for batch_idx, inp_seq in enumerate(tgt_seq_list):
+                out_of_syntax_list.append(self.syntax_checker.get_sequence_mask(grammar_state[batch_idx],
+                                                                                inp_seq))
+            torch.cat(out_of_syntax_list, 0, out=out_of_syntax_mask)
+            if decoder_logit.is_cuda:
+                syntax_err_pos = out_of_syntax_mask.cuda()
+            else:
+                syntax_err_pos = out_of_syntax_mask
+
+            syntax_mask = decoder_logit.data.new(decoder_logit.size()).fill_(0)
+            syntax_mask.masked_fill_(syntax_err_pos, -float('inf'))
+            syntax_mask = Variable(syntax_mask, requires_grad=False)
+            decoder_logit = decoder_logit + syntax_mask
+        elif self.learned_syntax_checker is not None:
+            syntax_mask, grammar_state = self.learned_syntax_checker(seq_emb, grammar_state)
+            decoder_logit = decoder_logit + syntax_mask
         
         return decoder_logit, dec_lstm_state, grammar_state, syntax_mask
     
@@ -224,6 +259,7 @@ class MultiIOProgramDecoder(nn.Module):
         batch_state = None  # First one is the learned default state
         batch_grammar_state = None
         batch_inputs = Variable(tt.LongTensor(batch_size, 1).fill_(tgt_start), volatile=vol)
+        batch_list_inputs = [[tgt_start]]*batch_size
         batch_idx = Variable(torch.arange(0, batch_size, 1).long(), volatile=vol)
         if use_cuda:
             batch_idx = batch_idx.cuda()
@@ -240,6 +276,7 @@ class MultiIOProgramDecoder(nn.Module):
             dec_outs, dec_state, \
             batch_grammar_state, _ = self.forward(batch_inputs,
                                                   in_src_seq,
+                                                  batch_list_inputs,
                                                   tgt_encoder_vector,
                                                   1,
                                                   batch_state,
@@ -391,6 +428,7 @@ class MultiIOProgramDecoder(nn.Module):
             dec_outs, dec_state, \
             batch_grammar_state, _ = self.forward(batch_inputs,
                                                   in_src_seq,
+                                                  batch_list_inputs,
                                                   tgt_encoder_vector,
                                                   1,
                                                   batch_state,
@@ -460,6 +498,8 @@ class MultiIOProgramDecoder(nn.Module):
                         # The prefix for this one was trace_idx in the previous
                         # batch
                         parent.append(trace_idx)
+                        if self.syntax_checker is not None:
+                            new_batch_checker.append(copy.copy(batch_grammar_state[trace_idx]))
 
                         # What will need to be fed in the decoder to continue
                         # this new trace created
@@ -507,7 +547,15 @@ class MultiIOProgramDecoder(nn.Module):
                 dec_state[0].index_select(1, parent),
                 dec_state[1].index_select(1, parent)
             )
-
+            if self.syntax_checker is not None:
+                batch_grammar_state = [grammar_state for grammar_state, to_cont
+                                       in zip(new_batch_checker, to_continue_mask)
+                                       if to_cont]
+            elif self.learned_syntax_checker is not None:
+                batch_grammar_state = (
+                    batch_grammar_state[0].index_select(1, parent),
+                    batch_grammar_state[1].index_select(1, parent)
+                )
             # For all the maintained list, keep only the elt to expand
             joint = [(mul, traj, cr) for mul, traj, cr, to_cont
                      in zip(new_multiplicity,
@@ -674,7 +722,9 @@ class IOs2Seq(nn.Module):
                                              decoder_nb_lstm_layers,
                                              learn_syntax)
                                              
-                                             
+    def set_syntax_checker(self, grammar_cls):
+        self.decoder.set_syntax_checker(grammar_cls)
+        
     def forward(self, input_grids, output_grids, tgt_inp_sequences, list_inp_sequences):
 
         io_embedding = self.encoder(input_grids, output_grids)
@@ -801,9 +851,11 @@ class CodeType2Code(nn.Module):
                                              n_domains,
                                              nfeaturevectors,
                                              learn_syntax)
+    
+    def set_syntax_checker(self, grammar_cls):
+        self.decoder.set_syntax_checker(grammar_cls)
                                              
-                                             
-    def forward(self, tgt_inp_sequences, in_src_seq, out_tgt_seq):
+    def forward(self, tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq):
 
        # io_embedding = self.encoder(input_grids, output_grids)
         tgt_encoder_vector = self.trnsfrmrEncoder(out_tgt_seq, self.tmprture)
@@ -813,6 +865,7 @@ class CodeType2Code(nn.Module):
       #  print("out_tgt_seq.size()", out_tgt_seq.size())
         _, seq_len  = out_tgt_seq.size()
         dec_outs, _, _, syntax_mask = self.decoder(tgt_inp_sequences, in_src_seq,
+                                                   tgt_seq_list, 
                                                    tgt_encoder_vector, seq_len)
         return dec_outs, tgt_encoder_vector, syntax_mask
     
