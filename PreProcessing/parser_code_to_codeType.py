@@ -220,7 +220,7 @@ def getBitmapVector(prog):
         token = prog[index]
         if((token in commands) or (token in command_if_else)):
             if(ctrl_index > 2):
-                return bitmapVec_undefined, numb_actions
+                return bitmapVec_undefined, numb_actions, False
             
         if(token == 'REPEAT'):
             bitmapVec[ctrl_index][bitmapVec_format.index('REPEAT')] = 1
