@@ -62,7 +62,7 @@ def add_train_cli_args(parser):
                              default="data/1m_6ex_karel/train.json",
                              help="Path to the training data. "
                              " Default: %(default)s")
-    train_group.add_argument("--val_feature_file", type=str,
+    train_group.add_argument("--val_bitmap_file", type=str,
                              default="data/1m_6ex_karel/val.json",
                              help="Path to the validation data. "
                              " Default: %(default)s")
@@ -166,7 +166,7 @@ if not models_dir.exists():
     time.sleep(1)  # Let some time for the dir to be created
             
 # Load-up the dataset TODO
-dataset, vocab, nfeaturevectors = load_input_file(args.train_file, args.vocab)
+dataset, vocab, n_bmpvectors = load_input_file(args.train_file, args.vocab)
 
 #TODO
 if args.use_grammar:
@@ -188,7 +188,7 @@ if args.init_weights is None:
     model = CodeType2Code(kernel_size, conv_stack, fc_stack,
                     vocabulary_size, tgt_embedding_size,
                     lstm_hidden_size, nb_lstm_layers, args.n_domains ,
-                    nfeaturevectors,learn_syntax)
+                    n_bmpvectors,learn_syntax)
 else:
     model = torch.load(args.init_weights,
                     map_location=lambda storage, loc: storage)
@@ -301,7 +301,7 @@ for epoch_idx in range(0, args.nb_epochs):
             _,max_len = out_tgt_seq.size()
 
             env_cls = EnvironmentClasses[env]
-            all_fVector = dataset["featureVectors"]
+            all_fVector = dataset["bitmapVectors"]
             
             if "Consistency" in env:
                 envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector,
@@ -363,9 +363,9 @@ for epoch_idx in range(0, args.nb_epochs):
         out_path = str(result_dir / ("eval/epoch_%d/epoch_" % epoch_idx))
         print("path_to_weight_dump", path_to_weight_dump)
         val_acc = evaluate_model(str(path_to_weight_dump), args.vocab,
-                                 args.val_feature_file, args.train_file, 
+                                 args.val_bitmap_file, args.train_file, 
                                  args.n_domains, args.use_grammar,
-                                 out_path, 64, args.top_k, batch_size,
+                                 out_path, 64, args.top_k, 1,
                                  args.use_cuda, False, False)
         logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
         if val_acc > best_val_acc:

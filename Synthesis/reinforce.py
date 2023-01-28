@@ -6,7 +6,7 @@ import torch.nn.functional as F
 
 from torch.autograd import Variable
 
-from preprocessing.parser_code_to_codeType import getFeatureVector
+from preprocessing.parser_code_to_codeType import getBitmapVector
 from src.neural_code2task_syn.task_synthesizer import obtain_karel_saturation_score_for_code
 from src.karel_data_converters.converter_format_iclr18_to_karelgym import \
     iclr18_codejson_to_karelgym_codejson

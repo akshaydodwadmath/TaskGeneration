@@ -37,6 +37,8 @@ beg_end_tokens = [ 'DEF',
               'run',
               ]
 
+#BitmapVector format: [C1_D1_WHILE, C1_D1_REPEAT, C1_D1_IF, [C1_D1_IFELSE, C1_D1_ELSE] ,C1_D2_WHILE, C1_D2_REPEAT, C1_D2_IF, [C1_D2_IFELSE, C1_D2_ELSE] , 
+#                       C2_D1_WHILE ,C2_D1_REPEAT, C2_D1_IF, [C2_D1_IFELSE, C2_D1_ELSE] ,C2_D2_WHILE ,C2_D2_REPEAT, C2_D2_IF, [C2_D2_IFELSE, C2_D2_ELSE]]
 required_ctypes = [
                     '()', #Type01 #CT1
                    
@@ -220,7 +222,7 @@ def getBitmapVector(prog):
         token = prog[index]
         if((token in commands) or (token in command_if_else)):
             if(ctrl_index > 2):
-                return bitmapVec_undefined, numb_actions
+                return bitmapVec_undefined, numb_actions, False
             
         if(token == 'REPEAT'):
             bitmapVec[ctrl_index][bitmapVec_format.index('REPEAT')] = 1

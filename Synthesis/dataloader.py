@@ -66,7 +66,8 @@ def load_input_file(path_to_dataset, path_to_vocab):
         with open(path_to_dataset, 'r') as dataset_file:
             srcs = []
             tgts = []
-            fVectors = []
+            bmpVectors = []
+            codeSketches = []
             for sample_str in tqdm(dataset_file.readlines()):
                 sample_data = json.loads(sample_str)
 
@@ -75,15 +76,17 @@ def load_input_file(path_to_dataset, path_to_vocab):
 
                 tgt_program_idces = translate(tgt_program_tkn, tgt_tkn2idx)
                 
-                src_feature_index = sample_data['FeatureVectorIndex']
+                src_bmp_index = sample_data['BitmapVectorIndex']
 
-                srcs.append(src_feature_index)
+                srcs.append(src_bmp_index)
                 tgts.append(tgt_program_idces)
-                fVectors.append(sample_data['FeatureVector'])
+                bmpVectors.append(sample_data['BitmapVector'])
+                codeSketches.append(sample_data['CodeSketch'])
         
         dataset = {"sources": srcs,
                    "targets": tgts,
-                   "featureVectors": fVectors}
+                   "bitmapVectors": bmpVectors,
+                   "codeSketches": codeSketches}
         torch.save(dataset, path_to_ds_cache)
     return dataset, vocab, max(dataset["sources"])+1    
 
@@ -93,7 +96,7 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
     We are going to group together samples that have a similar length, to speed up training
     batch_size is passed so that we can align the groups
     '''
-    pairs = list(zip(dataset["sources"], dataset["targets"], dataset["featureVectors"]))
+    pairs = list(zip(dataset["sources"], dataset["targets"], dataset["bitmapVectors"]))
     bucket_fun = lambda x: len(x[1]) / 5
     pairs.sort(key=bucket_fun, reverse=True)
     grouped_pairs = [pairs[pos: pos + batch_size]
@@ -103,11 +106,11 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
         random.shuffle(to_shuffle)
         grouped_pairs[:-1] = to_shuffle
     pairs = chain.from_iterable(grouped_pairs)
-    in_seqs, out_seqs, fVectors_seqs = zip(*pairs)
+    in_seqs, out_seqs, bmpVectors_seqs = zip(*pairs)
     return {
         "sources": in_seqs,
         "targets": out_seqs,
-        "featureVectors": fVectors_seqs
+        "bitmapVectors": bmpVectors_seqs
     }
 
 def get_minibatch(dataset, sp_idx, batch_size,
@@ -121,7 +124,7 @@ def get_minibatch(dataset, sp_idx, batch_size,
     # Prepare the target sequences
     targets = dataset["targets"][sp_idx:sp_idx+batch_size]
     
-    fVectors = dataset["featureVectors"][sp_idx:sp_idx+batch_size]
+    bmpVectors = dataset["bitmapVectors"][sp_idx:sp_idx+batch_size]
 
     lines = [
         [start_idx] + line for line in targets
@@ -146,4 +149,4 @@ def get_minibatch(dataset, sp_idx, batch_size,
     tgt_inp_sequences = Variable(torch.LongTensor(input_lines), volatile=volatile_vars)
     out_tgt_seq = Variable(torch.LongTensor(output_lines), volatile=volatile_vars)
 
-    return tgt_inp_sequences, in_src_seq, input_lines, out_tgt_seq, srcs,targets,fVectors
+    return tgt_inp_sequences, in_src_seq, input_lines, out_tgt_seq, srcs,targets,bmpVectors

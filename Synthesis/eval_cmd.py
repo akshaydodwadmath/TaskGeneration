@@ -12,7 +12,7 @@ parser.add_argument("--model_weights", type=str,
 parser.add_argument("--vocabulary", type=str,
                     default="data/1m_6ex_karel/new_vocab.vocab",
                     help="Vocabulary of the trained model")
-parser.add_argument("--feature_file_path", type=str,
+parser.add_argument("--bitmap_file_path", type=str,
                     default="data/1m_6ex_karel/val.json",
                     help="Dataset to evaluate against")
 parser.add_argument("--train_file_path", type=str,
@@ -31,7 +31,7 @@ args = parser.parse_args()
 
 evaluate_model(args.model_weights,
                args.vocabulary,
-               args.feature_file_path,
+               args.bitmap_file_path,
                args.train_file_path,
                args.n_domains,
                args.use_grammar,

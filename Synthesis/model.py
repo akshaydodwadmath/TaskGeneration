@@ -74,7 +74,7 @@ class MultiIOProgramDecoder(nn.Module):
     '''
     def __init__(self, vocab_size, embedding_dim,
                  io_emb_size, lstm_hidden_size, nb_layers,
-                 n_domains, nfeaturevectors, learn_syntax):
+                 n_domains, n_bmpvectors, learn_syntax):
         super(MultiIOProgramDecoder, self).__init__()
 
         self.vocab_size = vocab_size
@@ -93,7 +93,7 @@ class MultiIOProgramDecoder(nn.Module):
         )
         
         self.embedding_input = nn.Embedding(
-            nfeaturevectors,
+            n_bmpvectors,
             self.embedding_dim
         )
 
@@ -829,7 +829,7 @@ class CodeType2Code(nn.Module):
                  decoder_lstm_hidden_size,
                  decoder_nb_lstm_layers,
                  n_domains,
-                 nfeaturevectors,
+                 n_bmpvectors,
                  learn_syntax):
         super(CodeType2Code, self).__init__()
         
@@ -849,7 +849,7 @@ class CodeType2Code(nn.Module):
                                              decoder_lstm_hidden_size,
                                              decoder_nb_lstm_layers,
                                              n_domains,
-                                             nfeaturevectors,
+                                             n_bmpvectors,
                                              learn_syntax)
     
     def set_syntax_checker(self, grammar_cls):
