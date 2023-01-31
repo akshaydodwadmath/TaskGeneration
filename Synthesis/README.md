@@ -20,12 +20,12 @@ python3 main.py --train_file=../PreProcessing/train_withactions_fixed16_2.json -
 
 python3 eval_cmd.py --model_weights exps_batch8_better_quality/Weights/best.model --vocabulary data/new_vocab.vocab --feature_file_path ../PreProcessing/featVectors_betterquality.json --eval_batch_size 8 --output_path exps_batch8_better_quality/Results/ValSet_ --n_domains 8 --top_k 13 --use_cuda --train_file_path ../PreProcessing/train_betterquality.json --beam 64 --nb_samples 100
 
-python3 main.py --train_file=../PreProcessing/temp/N_10/train_14CT_15D_0.5Q_full.json --val_feature_file=../PreProcessing/temp/N_10/featVectors_14CT_15D_0.5Q_full.json --batch_size=8  --nb_epochs=200 --n_domains 10 --shuffle_data --result_folder exps_14CT_K10_0.5Q_withSyntax --top_k 1 --use_grammar --use_cuda
+python3 main.py --train_file=../PreProcessing/temp/N_10_2/train.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --batch_size=8  --nb_epochs=200 --n_domains 10 --shuffle_data --result_folder exps_14CT_K10_0.5Q_evalwithQuality --top_k 10 --use_grammar --use_cuda
 
-python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax/Weights/best.model --vocabulary data/new_vocab.vocab --feature_file_path ../PreProcessing/temp/N_10/featVectors_14CT_15D_0.5Q_full.json --eval_batch_size 8 --output_path exps_14CT_K10_0.5Q_withSyntax/Results/ValSet_ --n_domains 10 --top_k 1  --train_file_path ../PreProcessing/temp/N_10/train_14CT_15D_0.5Q_full.json --beam 64 --use_grammar --use_cuda
+python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax_withEval/Weights/best.model --vocabulary data/new_vocab.vocab --bitmap_file_path ../PreProcessing/temp/N_10_2/bitmap.json --eval_batch_size 1 --output_path exps_14CT_K10_0.5Q_withSyntax_withEval/Results_new_eval/ValSet_ --n_domains 10 --top_k 10 --train_file_path ../PreProcessing/temp/N_10_2/train.json --beam 64 --use_grammar --use_cuda
 
 
 RL Training:
-python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_14CT_K10_0.5Q_full/Weights/best.model --train_file ../PreProcessing/temp/N_10/featVectors_14CT_15D_0.5Q_full.json --val_feature_file=../PreProcessing/temp/N_10/featVectors_14CT_15D_0.5Q_full.json --result_folder exps_14CT_K10_0.5Q_full/reinforce_finetune --batch_size 8 --nb_rollouts 1 --nb_epochs 20 --n_domains 10 --top_k 1 --log_frequency 30 --num_tasks_iter 200 --val_frequency 5 --use_cuda
+python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_14CT_K10_0.5Q_evalwithQuality/Weights/weights_85.model --train_file ../PreProcessing/temp/N_10_2/bitmap.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --result_folder exps_14CT_K10_0.5Q_evalwithQuality/reinforce_finetune_model85 --batch_size 8 --nb_rollouts 1 --nb_epochs 20 --n_domains 10 --top_k 10 --log_frequency 30 --num_tasks_iter 200 --val_frequency 5 --use_grammar --use_cuda
 
 

@@ -283,14 +283,11 @@ for epoch_idx in range(0, args.nb_epochs):
             recent_losses_entropy.append(minibatch_loss_entropy)
             
         elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
-            _, in_src_seq, out_tgt_seq, srcs,_, fVectors= get_minibatch(dataset, sp_idx, batch_size,
+            _, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,_, bmpVectors= get_minibatch(dataset, sp_idx, batch_size,
                                                 tgt_start, tgt_end, tgt_pad)
             if args.use_cuda:
                 in_src_seq = in_src_seq.cuda()
                 out_tgt_seq = out_tgt_seq.cuda()
-                
-            all_train_codes = dataset["targets"]    
-            unseen_pred = [[] for i in range(batch_size)]
 
             # We use 1/nb_rollouts as the reward to normalize wrt the
             # size of the rollouts
@@ -301,16 +298,14 @@ for epoch_idx in range(0, args.nb_epochs):
             _,max_len = out_tgt_seq.size()
 
             env_cls = EnvironmentClasses[env]
-            all_fVector = dataset["bitmapVectors"]
+            all_bmpVector = dataset["bitmapVectors"]
             
             if "Consistency" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector,
-                                all_train_codes)
-                        for tgt_fVector, upred in  zip(fVectors, unseen_pred)]
+                envs = [env_cls(reward_norm, tgt_bmpVector, simulator, vocab, args.num_tasks_iter, all_bmpVector)
+                        for tgt_bmpVector in  (bmpVectors)]
             elif "Generalization" in env:
-                envs = [env_cls(reward_norm, tgt_fVector, upred, simulator, vocab, args.num_tasks_iter, all_fVector,
-                                all_train_codes)
-                        for tgt_fVector, upred in zip(fVectors, unseen_pred)]
+                envs = [env_cls(reward_norm, tgt_bmpVector, simulator, vocab, args.num_tasks_iter, all_bmpVector)
+                        for tgt_bmpVector in (bmpVectors)]
             else:
                 raise NotImplementedError("Unknown environment type")
             

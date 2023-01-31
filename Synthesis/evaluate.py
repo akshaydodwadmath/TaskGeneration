@@ -131,6 +131,7 @@ def evaluate_model(model_weights,
     bitmap_mismatch_all = 0
     
     total_score = []
+    total_unseen_score = []
     
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
@@ -147,7 +148,7 @@ def evaluate_model(model_weights,
         
         unique_pred = [[] for i in range(batch_size)]
         #quality_pred = [[] for i in range(batch_size)]
-        #corsp_domain = [[] for i in range(batch_size)]
+        unseen_flag = [[] for i in range(batch_size)]
         target_pred = [[] for i in range(batch_size)]
         #failed_pred = [[] for i in range(batch_size)]
         unseen_pred = [[] for i in range(batch_size)]
@@ -211,14 +212,17 @@ def evaluate_model(model_weights,
                             #saved_pred_all.append(pred)
                             if(not(pred in unique_pred[batch_idx])):
                                 unique_pred[batch_idx].append(pred)
-                                #corsp_domain[batch_idx].append(K)
+                                
                                 unique_pred_all.append(pred)
                                 selected_codes_count+=1
                                 if(not(pred in train_codes)):
                                     #model_quality_failed = False
                                     #quality_pred[batch_idx].append(pred)
+                                    unseen_flag[batch_idx].append(True)
                                     unseen_pred[batch_idx].append(pred)
                                     unseen_pred_all.append(pred)
+                                else:
+                                    unseen_flag[batch_idx].append(False)
                                 if dump_programs:
                                     file_name = str(K)+ " - " + str(rank) + " - " + str(ll) 
                                     write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
@@ -242,10 +246,12 @@ def evaluate_model(model_weights,
             
             while(len(unique_pred[batch_idx]) < top_k):
                 unique_pred[batch_idx].append(quality_zero_code)
+                unseen_flag[batch_idx].append(False)
                 total_failure += 1
                         
         for i in range(0,batch_size):
             indv_scores = []
+            unseen_scores = []
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\nBitmapVector " + str((sp_idx+1) + i) + " -> ")
                 #numb_unique = (len(set(map(tuple, unique_pred[i]))))
@@ -265,8 +271,8 @@ def evaluate_model(model_weights,
                     text += "Bitmap Mismatch: " + str(bitmap_mismatch_count[i])  + "\n"
             
                     text += "Passed"  + "\n"
-                #for unique_prog,k_value in zip(unique_pred[i],corsp_domain[i]):
-                for unique_prog in unique_pred[i] :
+                for unique_prog, unseen_value in zip(unique_pred[i],unseen_flag[i]):
+                #for unique_prog in unique_pred[i] :
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
                     
                     _, _,prg_ast_json = simulator.get_prog_ast(unique_prog)
@@ -279,6 +285,9 @@ def evaluate_model(model_weights,
                     score = obtain_karel_saturation_score_for_code(code, 200)
                     
                     indv_scores.append(score)
+                    if(unseen_value == True):
+                        unseen_scores.append(score)
+                        total_unseen_score.append(score)
                     total_score.append(score)
                     #  scores.append(score)
                  #   print("Score for code :: %.5f.", score)
@@ -315,7 +324,7 @@ def evaluate_model(model_weights,
                 stx_res_file.write(str(100*numb_unseen/ (n_domains )))
                 
                 stx_res_file.write(";    quality score : " + str(np.mean(indv_scores)))
-                
+                stx_res_file.write(";    quality unseen: " + str(np.mean(unseen_scores)))
     with open(str(uniqueness_file_name), "a") as stx_res_file:
         stx_res_file.write("\n" + "total unique : ")
         numb_unique = len(set(map(tuple, unique_pred_all)))
@@ -330,7 +339,7 @@ def evaluate_model(model_weights,
         stx_res_file.write(";    total unseen : " + str(numb_unseen)+ " , " )
         stx_res_file.write(str( (100*numb_unseen) / ((len(dataset["sources"]))*n_domains ) ))
         stx_res_file.write(";    total score : " + str(np.mean(total_score))+ " , " )
-        
+        stx_res_file.write(";    total unseen score : " + str(np.mean(total_unseen_score))+ " , " )
         #numb_bmp = len(saved_pred_all)
         #stx_res_file.write("\n" + "total matching bmp vector : " + str(numb_bmp)+ " , " )
         #stx_res_file.write(str( (100*numb_bmp) / ((len(dataset["sources"]))*n_domains ) ))

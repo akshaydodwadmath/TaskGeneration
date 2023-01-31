@@ -1,6 +1,6 @@
 # TaskGeneration
 Preprocessing: 
-python3 parser_code_to_codeType.py --input_code_file train_61CT.txt --code_type_file train_code_types.txt --json_data_file train_61CT_12D.json --ndomains 12 --json_featVectors_file featVectors_61CT_12D.json
+python3 parser_code_to_codeType.py --input_code_file final_quality_0.5_withIF.txt --code_type_file train_code_types.txt --json_data_file temp/N_10_2/train.json --ndomains 10 --json_bitmapVectors_file temp/N_10_2/bitmap.json
 
 Baseline:
 python3 random_generator.py --num_codes_per_spec 10 --data_dir baseline_K10_1120F/ --min_index 0 --max_index 14
