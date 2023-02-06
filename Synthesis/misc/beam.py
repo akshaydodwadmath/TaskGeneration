@@ -33,7 +33,7 @@ class Beam(object):
       flag is set.
     - The results of the beam search can be obtained by calling `get_sampled`
     '''
-    def __init__(self, nb_beams, k_best,
+    def __init__(self, nb_beams, k_best, domain_K,
                  out_start, out_end,
                  use_cuda):
         '''
@@ -46,6 +46,7 @@ class Beam(object):
         '''
         self.nb_beams = nb_beams
         self.k_best = k_best
+        self.domain_K = domain_K
         self.out_start = out_start
         self.out_end = out_end
         self.done = False
@@ -107,7 +108,7 @@ class Beam(object):
                     parent_step_idx -= 1
                     prev_input = self.ts_input_for_beam[parent_step_idx][beam_idx]
                 seq.reverse()
-                seq_rep = (beam_lp, seq)
+                seq_rep = (beam_lp, seq, self.domain_K)
                 
                 if (len(self.done_seq) < self.k_best):
                     # The heap is not yet full, just append

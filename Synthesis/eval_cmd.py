@@ -41,4 +41,5 @@ evaluate_model(args.model_weights,
                args.eval_batch_size,
                args.use_cuda,
                args.dump_programs,
+               args.eval_quality,
                args.extra_info)

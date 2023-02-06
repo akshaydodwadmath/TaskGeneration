@@ -361,7 +361,7 @@ for epoch_idx in range(0, args.nb_epochs):
                                  args.val_bitmap_file, args.train_file, 
                                  args.n_domains, args.use_grammar,
                                  out_path, 64, args.top_k, 1,
-                                 args.use_cuda, False, False)
+                                 args.use_cuda, False, True, False)
         logging.info("Epoch : %d ValidationAccuracy : %f." % (epoch_idx, val_acc))
         if val_acc > best_val_acc:
             logging.info("Epoch : %d ValidationBest : %f." % (epoch_idx, val_acc))

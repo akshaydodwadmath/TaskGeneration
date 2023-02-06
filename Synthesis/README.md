@@ -20,9 +20,9 @@ python3 main.py --train_file=../PreProcessing/train_withactions_fixed16_2.json -
 
 python3 eval_cmd.py --model_weights exps_batch8_better_quality/Weights/best.model --vocabulary data/new_vocab.vocab --feature_file_path ../PreProcessing/featVectors_betterquality.json --eval_batch_size 8 --output_path exps_batch8_better_quality/Results/ValSet_ --n_domains 8 --top_k 13 --use_cuda --train_file_path ../PreProcessing/train_betterquality.json --beam 64 --nb_samples 100
 
-python3 main.py --train_file=../PreProcessing/temp/N_10_2/train.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --batch_size=8  --nb_epochs=200 --n_domains 10 --shuffle_data --result_folder exps_14CT_K10_0.5Q_evalwithQuality --top_k 10 --use_grammar --use_cuda
+python3 main.py --train_file=../PreProcessing/temp/N_10_2/train.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --batch_size=8  --nb_epochs=200 --n_domains 10 --shuffle_data --result_folder exps_14CT_K10_0.5Q_evalwithQuality --top_k 10 --val_frequency 10 --use_grammar --use_cuda
 
-python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax_withEval/Weights/best.model --vocabulary data/new_vocab.vocab --bitmap_file_path ../PreProcessing/temp/N_10_2/bitmap.json --eval_batch_size 1 --output_path exps_14CT_K10_0.5Q_withSyntax_withEval/Results_new_eval/ValSet_ --n_domains 10 --top_k 10 --train_file_path ../PreProcessing/temp/N_10_2/train.json --beam 64 --use_grammar --use_cuda
+python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax_withEval/Weights/best.model --vocabulary data/new_vocab.vocab --bitmap_file_path ../PreProcessing/temp/N_10_2/bitmap.json --eval_batch_size 1 --output_path exps_14CT_K10_0.5Q_withSyntax_withEval/Results_new_eval/ValSet_ --n_domains 10 --top_k 10 --train_file_path ../PreProcessing/temp/N_10_2/train.json --beam 64 --eval_quality --use_grammar --use_cuda
 
 
 RL Training:

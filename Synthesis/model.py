@@ -238,7 +238,7 @@ class MultiIOProgramDecoder(nn.Module):
         return decoder_logit, dec_lstm_state, grammar_state, syntax_mask
     
     def beam_sample(self, in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, max_len,
-                    beam_size, top_k, vol):
+                    beam_size, top_k, domain_K, vol):
 
         '''
         io_embeddings: batch_size x nb_ios x io_emb_size
@@ -250,7 +250,7 @@ class MultiIOProgramDecoder(nn.Module):
         tt = torch.cuda if use_cuda else torch
         force_beamcpu = True
 
-        beams = [Beam(beam_size, top_k, tgt_start, tgt_end, use_cuda and not force_beamcpu)
+        beams = [Beam(beam_size, top_k,  domain_K, tgt_start, tgt_end, use_cuda and not force_beamcpu)
                  for _ in range(batch_size)]
 
         lsm = nn.LogSoftmax(dim=1)
@@ -871,11 +871,11 @@ class CodeType2Code(nn.Module):
     
     
     def beam_sample(self, in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, seq_len,
-                    beam_size, top_k, vol=True):
+                    beam_size, top_k, domain_K, vol=True):
       #  io_embedding = self.encoder(input_grids, output_grids)
 
         sampled = self.decoder.beam_sample(in_src_seq,tgt_encoder_vector, tgt_start, tgt_end, seq_len,
-                                           beam_size, top_k, vol)
+                                           beam_size, top_k, domain_K, vol)
         return sampled
 
     def sample_model(self, in_src_seq,tgt_encoder_vector,

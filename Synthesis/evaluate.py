@@ -23,6 +23,7 @@ import numpy as np
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")
     parser.add_argument('--extra_info', action="store_true")
+    parser.add_argument('--eval_quality', action="store_true")
     parser.add_argument('--n_domains', type=int,
                         default=20,
                         help="Number of domains for target encoder. "
@@ -58,6 +59,7 @@ def evaluate_model(model_weights,
                    batch_size,
                    use_cuda,
                    dump_programs,
+                   eval_quality,
                    extra_info):
     
     res_dir = os.path.dirname(output_path)
@@ -148,6 +150,7 @@ def evaluate_model(model_weights,
         
         unique_pred = [[] for i in range(batch_size)]
         #quality_pred = [[] for i in range(batch_size)]
+        corsp_domain = [[] for i in range(batch_size)]
         unseen_flag = [[] for i in range(batch_size)]
         target_pred = [[] for i in range(batch_size)]
         #failed_pred = [[] for i in range(batch_size)]
@@ -155,18 +158,18 @@ def evaluate_model(model_weights,
         
         quality_zero_code = [3, 4, 20, 16, 17, 21]
         decoded = []
-        for K in range(0,n_domains):
+        for domain_K in range(0,n_domains):
             
             tgt_encoder_vector = torch.Tensor(len(in_src_seq), n_domains).fill_(0)
             
             
-            index = torch.tensor(K)
+            index = torch.tensor(domain_K)
             if use_cuda:
                 tgt_encoder_vector, index = tgt_encoder_vector.cuda(), index.cuda()
             
             tgt_encoder_vector.index_fill_(1, index, 1)
             decoded.append( model.beam_sample(in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, 
-                                        max_len,beam_size, top_k)[0])
+                                        max_len,beam_size, top_k, domain_K)[0])
             
         temp = []
         for elem in decoded:
@@ -175,7 +178,7 @@ def evaluate_model(model_weights,
         listOfTuples = list(temp)
         listOfTuples.sort(reverse=True)
         decoded = [[(ele) for ele in listOfTuples[:]]]
-        
+
         for batch_idx, (target, sp_decoded) in \
             enumerate(zip(out_tgt_seq.chunk(out_tgt_seq.size(0)), decoded)):
             total_nb += 1 #should be batch size * number of IOs
@@ -183,7 +186,7 @@ def evaluate_model(model_weights,
             target = [tkn_idx for tkn_idx in target if tkn_idx != tgt_pad]
             trgt_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in target]
             trgt_bmp_vec, _, _ = getBitmapVector(trgt_tkns)
-            target_pred[batch_idx].append([bmpVector.index(trgt_bmp_vec), K])
+            target_pred[batch_idx].append([bmpVector.index(trgt_bmp_vec), domain_K])
             
             if dump_programs:
                 decoded_dump_dir = os.path.join(program_dump_path, str(str(sp_idx + batch_idx)))
@@ -197,8 +200,10 @@ def evaluate_model(model_weights,
                 #model_failed = True
                 #model_quality_failed = True
                 failed_syntax = False
-                pred = dec[-1]
+                pred = dec[-2]
                 ll = dec[0]
+                domain_K = dec[-1]
+                
                 parse_success, cand_prog, cand_prog_json = simulator.get_prog_ast(pred)
                 
                 if parse_success:
@@ -212,7 +217,7 @@ def evaluate_model(model_weights,
                             #saved_pred_all.append(pred)
                             if(not(pred in unique_pred[batch_idx])):
                                 unique_pred[batch_idx].append(pred)
-                                
+                                corsp_domain[batch_idx].append(domain_K)
                                 unique_pred_all.append(pred)
                                 selected_codes_count+=1
                                 if(not(pred in train_codes)):
@@ -224,7 +229,7 @@ def evaluate_model(model_weights,
                                 else:
                                     unseen_flag[batch_idx].append(False)
                                 if dump_programs:
-                                    file_name = str(K)+ " - " + str(rank) + " - " + str(ll) 
+                                    file_name = str(domain_K)+ " - " + str(rank) + " - " + str(ll) 
                                     write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
                 else:
                     failed_syntax = True
@@ -247,6 +252,7 @@ def evaluate_model(model_weights,
             while(len(unique_pred[batch_idx]) < top_k):
                 unique_pred[batch_idx].append(quality_zero_code)
                 unseen_flag[batch_idx].append(False)
+                corsp_domain[batch_idx].append(-1)
                 total_failure += 1
                         
         for i in range(0,batch_size):
@@ -271,26 +277,23 @@ def evaluate_model(model_weights,
                     text += "Bitmap Mismatch: " + str(bitmap_mismatch_count[i])  + "\n"
             
                     text += "Passed"  + "\n"
-                for unique_prog, unseen_value in zip(unique_pred[i],unseen_flag[i]):
+                for unique_prog, unseen_value, k_value in zip(unique_pred[i],unseen_flag[i],corsp_domain[i]):
                 #for unique_prog in unique_pred[i] :
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
                     
-                    _, _,prg_ast_json = simulator.get_prog_ast(unique_prog)
-                    code_json = iclr18_codejson_to_karelgym_codejson(prg_ast_json)
-                    
-                    
-                    code = Code('karel', code_json)
-                    #scores = []
-                    #for _ in range(1):
-                    score = obtain_karel_saturation_score_for_code(code, 200)
-                    
-                    indv_scores.append(score)
-                    if(unseen_value == True):
-                        unseen_scores.append(score)
-                        total_unseen_score.append(score)
-                    total_score.append(score)
-                    #  scores.append(score)
-                 #   print("Score for code :: %.5f.", score)
+                    if(eval_quality):
+                        _, _,prg_ast_json = simulator.get_prog_ast(unique_prog)
+                        code_json = iclr18_codejson_to_karelgym_codejson(prg_ast_json)
+                        
+                        
+                        code = Code('karel', code_json)
+                        score = obtain_karel_saturation_score_for_code(code, 200)
+                        
+                        indv_scores.append(score)
+                        if(unseen_value == True):
+                            unseen_scores.append(score)
+                            total_unseen_score.append(score)
+                        total_score.append(score)
                 
                     if(extra_info):
                         text += str(k_value) + "    " + str(pred_tkns)  + "\n"
