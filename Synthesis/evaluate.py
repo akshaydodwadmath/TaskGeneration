@@ -64,8 +64,11 @@ def evaluate_model(model_weights,
     
     res_dir = os.path.dirname(output_path)
     
-    text = ""
-    text_path = os.path.join(res_dir, "{}.txt".format('model_generated'))
+    text = [""] * n_domains
+    text_path = [""] * n_domains
+    for domain_K in range(0, n_domains):
+        text[domain_K] = ""
+        text_path[domain_K] = os.path.join(res_dir, "{}.txt".format('model_generated_' + str(domain_K)))
     
     all_text = ""
     all_text_path = os.path.join(res_dir, "{}.txt".format('model_all_generated'))
@@ -298,7 +301,8 @@ def evaluate_model(model_weights,
                     if(extra_info):
                         text += str(k_value) + "    " + str(pred_tkns)  + "\n"
                     else:
-                        text += str(pred_tkns)  + "\n"
+                        text[k_value] += str(pred_tkns)  + "\n"
+                        all_text += str(pred_tkns)  + "\n"
                 #if(extra_info):
                     #text += "Failed"  + "\n"
                     #for failed_prog in failed_pred[i]:
@@ -360,10 +364,11 @@ def evaluate_model(model_weights,
         #stx_res_file.write("\n" + " failed syntax : " + str(failed_syntax_all)+ " , " )
         #stx_res_file.write("\n" + " bitmap mismatch : " + str(bitmap_mismatch_all)+ " , " )
     
-    with open(text_path, 'w') as f:
-        f.write(text)
-    #with open(all_text_path, 'w') as f:
-        #f.write(all_text)
+    for domain_K in range(0, n_domains):
+        with open(text_path[domain_K], 'w') as f:
+            f.write(text[domain_K])
+    with open(all_text_path, 'w') as f:
+        f.write(all_text)
     #uniquenss_value = (100*numb_unique) / ((len(dataset["sources"]))*n_domains ) 
     return np.mean(total_score)
     #return unseen_count_5

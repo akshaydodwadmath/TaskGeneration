@@ -216,6 +216,8 @@ def getBitmapVector(prog):
     #for token in prog[index:]:
     ctrl_index = 0
     numb_actions = getNumberOfActions(prog)
+    if(numb_actions > 29):
+        return bitmapVec_undefined, numb_actions, False
     while(index < len(prog)):
         token = prog[index]
         if((token in commands) or (token in command_if_else)):
