@@ -2,7 +2,7 @@ import itertools
 import torch
 import torch.autograd as autograd
 from torch.autograd import Variable
-
+import random
 
 def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, criterion, weight_lambda):
 
@@ -36,25 +36,25 @@ def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, tgt_seq_list, 
 
 def do_rl_minibatch(model,
                     # Source
-                    in_src_seq, K,
+                    in_src_seq,
                     # Target
                     envs,
                     # Config
                     tgt_start_idx, tgt_end_idx, max_len,
                     n_domains,
-                    nb_rollouts):
+                    nb_rollouts,
+                    entropy_weight):
 
     if in_src_seq.is_cuda:
         use_cuda = True
             
     tgt_encoder_vector = torch.Tensor(len(in_src_seq), n_domains).fill_(0)
+    index = torch.tensor(random.sample(range(n_domains), len(in_src_seq)))
     
-    
-    index = torch.tensor(K)
     if use_cuda:
         tgt_encoder_vector, index = tgt_encoder_vector.cuda(), index.cuda()
-    
-    tgt_encoder_vector.index_fill_(1, index, 1)
+    for i, ind in enumerate(index):
+        tgt_encoder_vector[i].index_fill_(0, ind, 1)
     
     # Samples `nb_rollouts` samples from the decoding model.
     rolls = model.sample_model(in_src_seq,tgt_encoder_vector,
@@ -62,7 +62,7 @@ def do_rl_minibatch(model,
                             nb_rollouts)
     for roll, env in zip(rolls, envs):
         # Assign the rewards for each sample
-        roll.assign_rewards(env, [])
+        roll.assign_rewards(env, [], entropy_weight)
 
     # Evaluate the performance on the minibatch
     batch_reward = sum(roll.dep_reward for roll in rolls)

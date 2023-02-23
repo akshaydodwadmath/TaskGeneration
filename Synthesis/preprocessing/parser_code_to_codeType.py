@@ -172,6 +172,15 @@ def getCodeSketch(prog):
     sketch.append(getNumberOfActions(prog))
     return sketch 
 
+def checkForConsecutiveNots(prog):
+    index = 0
+    while(index < len(prog)):
+        if(prog[index] == 'not'):
+            if(prog[index+2] == 'not'):
+               return True
+        index+=1
+    return False
+    
 def checkNextCtrl(subprog, index):
     ifelse_started = False
     subVec_format = ['NO_CTRL', 'REPEAT','WHILE','IF','IFELSE']
@@ -218,6 +227,10 @@ def getBitmapVector(prog):
     numb_actions = getNumberOfActions(prog)
     if(numb_actions > 29):
         return bitmapVec_undefined, numb_actions, False
+    
+    if(checkForConsecutiveNots(prog) == True):
+        return bitmapVec_undefined, numb_actions, False
+     
     while(index < len(prog)):
         token = prog[index]
         if((token in commands) or (token in command_if_else)):

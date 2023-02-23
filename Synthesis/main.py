@@ -127,6 +127,10 @@ def add_train_cli_args(parser):
                           default=2,
                           help="Size of the batch on expanded candidates")
     rl_group.add_argument('--rl_use_ref', action="store_true")
+    rl_group.add_argument('--entropy_weight', type=float,
+                             default=0.01,
+                             help="Entropy rate for RL training. "
+                             "Default: %(default)s")
     
 parser = argparse.ArgumentParser(
     description='Train a simple program synthesis model.')
@@ -310,14 +314,14 @@ for epoch_idx in range(0, args.nb_epochs):
                 raise NotImplementedError("Unknown environment type")
             
             if signal == TrainSignal.RL:
-                for K in range(0,args.n_domains):
-                    optimizer.zero_grad()
-                    minibatch_reward = do_rl_minibatch(model,in_src_seq, K,
-                                                        envs,tgt_start, tgt_end, max_len,
-                                                        args.n_domains,
-                                                        args.nb_rollouts)
-                    optimizer.step()
-                    recent_losses.append(minibatch_reward)
+                optimizer.zero_grad()
+                minibatch_reward = do_rl_minibatch(model,in_src_seq,
+                                                    envs,tgt_start, tgt_end, max_len,
+                                                    args.n_domains,
+                                                    args.nb_rollouts,
+                                                    args.entropy_weight)
+                optimizer.step()
+                recent_losses.append(minibatch_reward)
                     
 
         else:

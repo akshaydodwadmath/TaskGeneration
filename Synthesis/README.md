@@ -26,6 +26,4 @@ python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax_withEval/Weigh
 
 
 RL Training:
-python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_14CT_K10_0.5Q_evalwithQuality/Weights/weights_85.model --train_file ../PreProcessing/temp/N_10_2/bitmap.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --result_folder exps_14CT_K10_0.5Q_evalwithQuality/reinforce_finetune_model85 --batch_size 8 --nb_rollouts 1 --nb_epochs 20 --n_domains 10 --top_k 10 --log_frequency 30 --num_tasks_iter 200 --val_frequency 5 --use_grammar --use_cuda
-
-
+python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_14CT_K10_0.5Q_evalwithQuality/Weights/weights_85.model  --train_file ../PreProcessing/temp/N_10_2/bitmap.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --result_folder exps_14CT_K10_0.5Q_evalwithQuality/reinforce_entropySPG_model85_full0.05 --batch_size 8 --nb_rollouts 1 --entropy_weight 0.05 --nb_epochs 50 --n_domains 10 --top_k 10 --log_frequency 30 --num_tasks_iter 200 --val_frequency 5 --use_grammar --use_cuda

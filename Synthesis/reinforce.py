@@ -3,6 +3,7 @@
 import torch
 import numpy as np
 import torch.nn.functional as F
+import math
 
 from torch.autograd import Variable
 
@@ -75,7 +76,7 @@ class Rolls(object):
                 yield var, grad
         yield self.proba, self.reinforce_gradient()
 
-    def assign_rewards(self, reward_assigner, trace):
+    def assign_rewards(self, reward_assigner, trace, entropy_weight):
         '''
         Using the `reward_assigner` scorer, go depth first to assign the
         reward at each timestep, and then collect back all the "depending
@@ -88,6 +89,8 @@ class Rolls(object):
             # Assign to this step its own reward
             self.own_reward = reward_assigner.step_reward(trace,
                                                           self.is_final)
+            self.own_reward = self.own_reward - (entropy_weight * math.log(self.proba.data))
+            
 
         # Assign their own score to each of the successor
         for next_step, succ in self.successor.items():
@@ -95,7 +98,7 @@ class Rolls(object):
 
             ##TODEBUG
             #print('new_trace',new_trace) 
-            succ.assign_rewards(reward_assigner, new_trace)
+            succ.assign_rewards(reward_assigner, new_trace, entropy_weight)
 
         # If this is a final node, there is no successor, so I can already
         # compute the dep-reward.
@@ -184,7 +187,7 @@ class MultiIOGrid(Environment):
         return (not is_final)
 
     def reward_value(self, trace, is_final):
-
+        
         rew = 0
         
         parse_success, cand_prog, cand_prog_json = self.simulator.get_prog_ast(trace)
