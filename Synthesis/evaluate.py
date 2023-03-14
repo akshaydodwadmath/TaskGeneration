@@ -20,6 +20,8 @@ from src.karel_data_converters.converter_format_iclr18_to_karelgym import \
 from src.karel_emulator.code import Code
 
 import numpy as np
+from torchtext.data.metrics import bleu_score
+
 def add_eval_args(parser):
     parser.add_argument('--use_grammar', action="store_true")
     parser.add_argument('--extra_info', action="store_true")
@@ -61,7 +63,7 @@ def evaluate_model(model_weights,
                    dump_programs,
                    eval_quality,
                    extra_info):
-    
+    eval_diversity = False
     res_dir = os.path.dirname(output_path)
     
     text = [""] * n_domains
@@ -136,6 +138,7 @@ def evaluate_model(model_weights,
     bitmap_mismatch_all = 0
     
     total_score = []
+    total_div_score = []
     total_unseen_score = []
     
     
@@ -260,6 +263,7 @@ def evaluate_model(model_weights,
                         
         for i in range(0,batch_size):
             indv_scores = []
+            indv_div_scores = []
             unseen_scores = []
             with open(str(uniqueness_file_name), "a") as stx_res_file:
                 stx_res_file.write("\nBitmapVector " + str((sp_idx+1) + i) + " -> ")
@@ -283,6 +287,17 @@ def evaluate_model(model_weights,
                 for unique_prog, unseen_value, k_value in zip(unique_pred[i],unseen_flag[i],corsp_domain[i]):
                 #for unique_prog in unique_pred[i] :
                     pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in unique_prog]
+                    if(eval_diversity):
+                        candidate_corpus = []
+                        references_corpus = []
+                        ref_temp = []
+                        candidate_corpus.append(pred_tkns)
+                        for prog in unique_pred[i]: 
+                            if prog != unique_prog:
+                                ref_temp.append([vocab["idx2tkn"][tkn_idx] for tkn_idx in prog ])
+                        references_corpus.append(ref_temp)
+                        indv_div_scores.append(1 - bleu_score(candidate_corpus, references_corpus))
+                        total_div_score.append(1 - bleu_score(candidate_corpus, references_corpus))
                     
                     if(eval_quality):
                         _, _,prg_ast_json = simulator.get_prog_ast(unique_prog)
@@ -312,7 +327,6 @@ def evaluate_model(model_weights,
                 #for quality_prog in quality_pred[i]:
                     #pred_tkns = [vocab["idx2tkn"][tkn_idx] for tkn_idx in quality_prog]
                     #all_text += str(pred_tkns)  + "\n"
-                
                 stx_res_file.write("numb_unique : " + str(numb_unique)+ " , " )
                 stx_res_file.write(str(100*numb_unique/ (n_domains )))
                 
@@ -331,6 +345,8 @@ def evaluate_model(model_weights,
                 stx_res_file.write(str(100*numb_unseen/ (n_domains )))
                 
                 stx_res_file.write(";    quality score : " + str(np.mean(indv_scores)))
+                if(eval_diversity):
+                    stx_res_file.write(";    diversity score : " + str(np.mean(indv_div_scores)))
                 stx_res_file.write(";    quality unseen: " + str(np.mean(unseen_scores)))
     with open(str(uniqueness_file_name), "a") as stx_res_file:
         stx_res_file.write("\n" + "total unique : ")
@@ -346,6 +362,8 @@ def evaluate_model(model_weights,
         stx_res_file.write(";    total unseen : " + str(numb_unseen)+ " , " )
         stx_res_file.write(str( (100*numb_unseen) / ((len(dataset["sources"]))*n_domains ) ))
         stx_res_file.write(";    total score : " + str(np.mean(total_score))+ " , " )
+        if(eval_diversity):
+            stx_res_file.write(";    total diversity score : " + str(np.mean(total_div_score))+ " , " )
         stx_res_file.write(";    total unseen score : " + str(np.mean(total_unseen_score))+ " , " )
         #numb_bmp = len(saved_pred_all)
         #stx_res_file.write("\n" + "total matching bmp vector : " + str(numb_bmp)+ " , " )
