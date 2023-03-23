@@ -27,3 +27,8 @@ python3 eval_cmd.py --model_weights exps_14CT_K10_0.5Q_withSyntax_withEval/Weigh
 
 RL Training:
 python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_14CT_K10_0.5Q_evalwithQuality/Weights/weights_85.model  --train_file ../PreProcessing/temp/N_10_2/bitmap.json --val_bitmap_file=../PreProcessing/temp/N_10_2/bitmap.json --result_folder exps_14CT_K10_0.5Q_evalwithQuality/reinforce_entropySPG_model85_full0.05 --batch_size 8 --nb_rollouts 1 --entropy_weight 0.05 --nb_epochs 50 --n_domains 10 --top_k 10 --log_frequency 30 --num_tasks_iter 200 --val_frequency 5 --use_grammar --use_cuda
+
+python3 eval_cmd.py --model_weights exps_temp_2/Weights/weights_199.model --vocabulary data/new_vocab.vocab --bitmap_file_path ../PreProcessing/temp/N_15_2/bitmap.json --eval_batch_size 1 --output_path exps_temp_2/train/ --n_domains 10  --top_k 10 --train_file_path ../PreProcessing/temp/N_15_2/train_1k_sampled.json --beam 64 --use_grammar --use_cuda --extra_info
+
+python3 main.py  --signal rl --learning_rate 1e-5 --init_weights exps_temp_2_withDoubleDec_r2/Weights/weights_60.model  --train_file ../PreProcessing/temp/N_15_2/train_only.json --val_bitmap_file=../PreProcessing/temp/N_15_2/val.json --result_folder exps_temp_2_withDoubleDec_r2/reinforce60/ --batch_size 8 --nb_rollouts 1 --entropy_weight 0.00 --nb_epochs 30 --n_domains 10 --top_k 10 --log_frequency 30 --num_tasks_iter 200 --val_frequency 3 --use_grammar --use_cuda
+

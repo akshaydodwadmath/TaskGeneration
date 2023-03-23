@@ -144,11 +144,11 @@ def evaluate_model(model_weights,
     
     for sp_idx in tqdm(range(0, len(dataset["sources"]), batch_size)):
         
-        tgt_inp_sequences,in_src_seq, tgt_seq_list, out_tgt_seq, srcs,targets,_  = get_minibatch(dataset, sp_idx, batch_size,
+        tgt_inp_sequences,in_src_seq, tgt_seq_list, out_tgt_seq, srcs,targets,_, nb_actions_seq  = get_minibatch(dataset, sp_idx, batch_size,
                                                 tgt_start, tgt_end, tgt_pad)
         _,max_len = out_tgt_seq.size()
         if use_cuda:
-            in_src_seq, out_tgt_seq = in_src_seq.cuda(), out_tgt_seq.cuda()
+            in_src_seq, out_tgt_seq, nb_actions_seq = in_src_seq.cuda(), out_tgt_seq.cuda(), nb_actions_seq.cuda()
         
         syntax_failed_count = [0 for i in range(batch_size)]
         bitmap_mismatch_count = [0 for i in range(batch_size)]
@@ -174,7 +174,7 @@ def evaluate_model(model_weights,
                 tgt_encoder_vector, index = tgt_encoder_vector.cuda(), index.cuda()
             
             tgt_encoder_vector.index_fill_(1, index, 1)
-            decoded.append( model.beam_sample(in_src_seq, tgt_encoder_vector, tgt_start, tgt_end, 
+            decoded.append( model.beam_sample(in_src_seq, tgt_encoder_vector, nb_actions_seq, tgt_start, tgt_end, 
                                         max_len,beam_size, top_k, domain_K)[0])
             
         temp = []
@@ -204,7 +204,7 @@ def evaluate_model(model_weights,
             # Correct syntaxes
             for rank, dec in enumerate(sp_decoded):
                 #model_failed = True
-                #model_quality_failed = True
+                model_bmp_failed = True
                 failed_syntax = False
                 pred = dec[-2]
                 ll = dec[0]
@@ -219,7 +219,7 @@ def evaluate_model(model_weights,
                     if(pred_bmp_vec in bmpVector):
                         # Bitmap matches with target
                         if(bmpVector.index(trgt_bmp_vec) == bmpVector.index(pred_bmp_vec)):
-                            #model_failed = False
+                            model_bmp_failed = False
                             #saved_pred_all.append(pred)
                             if(not(pred in unique_pred[batch_idx])):
                                 unique_pred[batch_idx].append(pred)
@@ -239,12 +239,17 @@ def evaluate_model(model_weights,
                                     write_program(os.path.join(decoded_dump_dir, file_name), pred, vocab["idx2tkn"])
                 else:
                     failed_syntax = True
-                    
+                    syntax_failed_count[batch_idx] += 1
+                    failed_syntax_all += 1
+                 
+                if(model_bmp_failed):
+                    bitmap_mismatch_count[batch_idx] += 1
+                    bitmap_mismatch_all += 1
+                     
                 #if(model_failed):
                     #failed_pred[batch_idx].append(pred)
                     #if(failed_syntax):
-                        #syntax_failed_count[batch_idx] += 1
-                        #failed_syntax_all += 1
+                        
                     #else:
                         #bitmap_mismatch_count[batch_idx] += 1
                         #bitmap_mismatch_all += 1
@@ -295,9 +300,11 @@ def evaluate_model(model_weights,
                         for prog in unique_pred[i]: 
                             if prog != unique_prog:
                                 ref_temp.append([vocab["idx2tkn"][tkn_idx] for tkn_idx in prog ])
+                        if(len(ref_temp) == 0):
+                            ref_temp.append([vocab["idx2tkn"][tkn_idx] for tkn_idx in quality_zero_code ])
                         references_corpus.append(ref_temp)
-                        indv_div_scores.append(1 - bleu_score(candidate_corpus, references_corpus))
-                        total_div_score.append(1 - bleu_score(candidate_corpus, references_corpus))
+                        indv_div_scores.append(1 - bleu_score(candidate_corpus, references_corpus))#, max_n=5, weights=[0.15, 0.15, 0.15, 0.25, 0.3]))
+                        total_div_score.append(1 - bleu_score(candidate_corpus, references_corpus))#, max_n=5, weights=[0.15, 0.15, 0.15, 0.25, 0.3]))
                     
                     if(eval_quality):
                         _, _,prg_ast_json = simulator.get_prog_ast(unique_prog)
@@ -379,8 +386,8 @@ def evaluate_model(model_weights,
         #stx_res_file.write("\n" + "Unseen 50 : " + str(unseen_count_50)+ " , " )
         #stx_res_file.write("\n" + "Unseen 90 : " + str(unseen_count_90)+ " , " )
         
-        #stx_res_file.write("\n" + " failed syntax : " + str(failed_syntax_all)+ " , " )
-        #stx_res_file.write("\n" + " bitmap mismatch : " + str(bitmap_mismatch_all)+ " , " )
+        stx_res_file.write("\n" + " failed syntax : " + str(failed_syntax_all)+ " , " )
+        stx_res_file.write("\n" + " bitmap mismatch : " + str(bitmap_mismatch_all)+ " , " )
     
     for domain_K in range(0, n_domains):
         with open(text_path[domain_K], 'w') as f:

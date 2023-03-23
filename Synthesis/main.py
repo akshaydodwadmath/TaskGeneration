@@ -170,7 +170,7 @@ if not models_dir.exists():
     time.sleep(1)  # Let some time for the dir to be created
             
 # Load-up the dataset TODO
-dataset, vocab, n_bmpvectors = load_input_file(args.train_file, args.vocab)
+dataset, vocab, max_nb_actions = load_input_file(args.train_file, args.vocab)
 
 #TODO
 if args.use_grammar:
@@ -192,7 +192,7 @@ if args.init_weights is None:
     model = CodeType2Code(kernel_size, conv_stack, fc_stack,
                     vocabulary_size, tgt_embedding_size,
                     lstm_hidden_size, nb_lstm_layers, args.n_domains ,
-                    n_bmpvectors,learn_syntax)
+                    max_nb_actions,learn_syntax)
 else:
     model = torch.load(args.init_weights,
                     map_location=lambda storage, loc: storage)
@@ -267,11 +267,11 @@ for epoch_idx in range(0, args.nb_epochs):
 
         if signal == TrainSignal.SUPERVISED:
             optimizer.zero_grad()
-            tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,targets,_ = get_minibatch(dataset, sp_idx, batch_size,
+            tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,targets,_, nb_actions_seq = get_minibatch(dataset, sp_idx, batch_size,
                                             tgt_start, tgt_end, tgt_pad)
             #TODO
             if args.use_cuda:
-                tgt_inp_sequences, in_src_seq, out_tgt_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda()
+                tgt_inp_sequences, in_src_seq, out_tgt_seq, nb_actions_seq = tgt_inp_sequences.cuda(), in_src_seq.cuda(), out_tgt_seq.cuda(), nb_actions_seq.cuda()
             # if learn_syntax:
                 # minibatch_loss = do_syntax_weighted_minibatch(model,
                                                             # inp_grids, out_grids,
@@ -279,7 +279,7 @@ for epoch_idx in range(0, args.nb_epochs):
                                                             # out_tgt_seq,
                                                             # loss_criterion, beta)
             # else:
-            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, loss_criterion, weight_lambda)
+            minibatch_loss, minibatch_loss_train, minibatch_loss_entropy = do_supervised_minibatch(model,tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, nb_actions_seq, loss_criterion, weight_lambda)
             
             optimizer.step()
             recent_losses.append(minibatch_loss)
@@ -287,11 +287,12 @@ for epoch_idx in range(0, args.nb_epochs):
             recent_losses_entropy.append(minibatch_loss_entropy)
             
         elif signal == TrainSignal.RL or signal == TrainSignal.BEAM_RL:
-            _, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,_, bmpVectors= get_minibatch(dataset, sp_idx, batch_size,
+            _, in_src_seq, tgt_seq_list, out_tgt_seq, srcs,_, bmpVectors, nb_actions_seq = get_minibatch(dataset, sp_idx, batch_size,
                                                 tgt_start, tgt_end, tgt_pad)
             if args.use_cuda:
                 in_src_seq = in_src_seq.cuda()
                 out_tgt_seq = out_tgt_seq.cuda()
+                nb_actions_seq = nb_actions_seq.cuda()
 
             # We use 1/nb_rollouts as the reward to normalize wrt the
             # size of the rollouts
@@ -315,7 +316,7 @@ for epoch_idx in range(0, args.nb_epochs):
             
             if signal == TrainSignal.RL:
                 optimizer.zero_grad()
-                minibatch_reward = do_rl_minibatch(model,in_src_seq,
+                minibatch_reward = do_rl_minibatch(model,in_src_seq, nb_actions_seq, 
                                                     envs,tgt_start, tgt_end, max_len,
                                                     args.n_domains,
                                                     args.nb_rollouts,

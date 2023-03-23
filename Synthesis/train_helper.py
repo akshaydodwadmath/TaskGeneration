@@ -4,11 +4,11 @@ import torch.autograd as autograd
 from torch.autograd import Variable
 import random
 
-def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, criterion, weight_lambda):
+def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, nb_actions_seq, criterion, weight_lambda):
 
     # Get the log probability of each token in the ground truth sequence of tokens.
     
-    decoder_logit, probs, _ = model(tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq)
+    decoder_logit, probs, _ = model(tgt_inp_sequences, in_src_seq, tgt_seq_list, out_tgt_seq, nb_actions_seq)
    
     probs_avg = torch.mean(torch.add(probs,1e-6), 0, True)
     loss_entropy = -torch.matmul(probs_avg, torch.log(probs_avg).reshape(-1,1))
@@ -23,7 +23,8 @@ def do_supervised_minibatch(model, tgt_inp_sequences, in_src_seq, tgt_seq_list, 
         decoder_logit.contiguous().view(nb_predictions, decoder_logit.size(2)),
         out_tgt_seq.view(nb_predictions)
     )
-    #print("decoder_logit", torch.argmax(decoder_logit, dim=2))
+   #print("decoder_logit", torch.argmax(decoder_logit, dim=2))
+
     loss = loss_train - weight_lambda * loss_entropy
     # Do the backward pass over the loss
     loss.backward()
@@ -38,6 +39,7 @@ def do_rl_minibatch(model,
                     # Source
                     in_src_seq,
                     # Target
+                    nb_actions_seq,
                     envs,
                     # Config
                     tgt_start_idx, tgt_end_idx, max_len,
@@ -58,6 +60,7 @@ def do_rl_minibatch(model,
     
     # Samples `nb_rollouts` samples from the decoding model.
     rolls = model.sample_model(in_src_seq,tgt_encoder_vector,
+                               nb_actions_seq,
                             tgt_start_idx, tgt_end_idx, max_len,
                             nb_rollouts)
     for roll, env in zip(rolls, envs):

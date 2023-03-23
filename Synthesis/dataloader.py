@@ -13,6 +13,7 @@ from itertools import chain
 IMG_FEAT = 5184
 IMG_DIM = 18
 IMG_SIZE = torch.Size((16, IMG_DIM, IMG_DIM))
+MAX_SKETCH_LENGTH = 37
 
 actions = [
     'move',
@@ -65,6 +66,7 @@ def load_input_file(path_to_dataset, path_to_vocab):
     else:
         with open(path_to_dataset, 'r') as dataset_file:
             srcs = []
+            srcs_numb_actions = []
             tgts = []
             bmpVectors = []
             codeSketches = []
@@ -76,19 +78,21 @@ def load_input_file(path_to_dataset, path_to_vocab):
 
                 tgt_program_idces = translate(tgt_program_tkn, tgt_tkn2idx)
                 
-                src_bmp_index = sample_data['BitmapVectorIndex']
-
-                srcs.append(src_bmp_index)
+                nb_actions = sample_data['CodeSketch'][-1]
+                srcs_numb_actions.append(nb_actions)
+                
                 tgts.append(tgt_program_idces)
                 bmpVectors.append(sample_data['BitmapVector'])
-                codeSketches.append(sample_data['CodeSketch'])
+                codeSketches = sample_data['CodeSketch'][:-1]
+                sketch_program_idces = translate(codeSketches, tgt_tkn2idx)
+                srcs.append(sketch_program_idces)
         
         dataset = {"sources": srcs,
                    "targets": tgts,
                    "bitmapVectors": bmpVectors,
-                   "codeSketches": codeSketches}
+                   "srcs_nb_actions": srcs_numb_actions}
         torch.save(dataset, path_to_ds_cache)
-    return dataset, vocab, max(dataset["sources"])+1    
+    return dataset, vocab, max(dataset["srcs_nb_actions"])+1    
 
 #TODO: undestand this
 def shuffle_dataset(dataset, batch_size, randomize=True):
@@ -96,7 +100,7 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
     We are going to group together samples that have a similar length, to speed up training
     batch_size is passed so that we can align the groups
     '''
-    pairs = list(zip(dataset["sources"], dataset["targets"], dataset["bitmapVectors"]))
+    pairs = list(zip(dataset["sources"], dataset["targets"], dataset["bitmapVectors"], dataset["srcs_nb_actions"]))
     bucket_fun = lambda x: len(x[1]) / 5
     pairs.sort(key=bucket_fun, reverse=True)
     grouped_pairs = [pairs[pos: pos + batch_size]
@@ -106,11 +110,12 @@ def shuffle_dataset(dataset, batch_size, randomize=True):
         random.shuffle(to_shuffle)
         grouped_pairs[:-1] = to_shuffle
     pairs = chain.from_iterable(grouped_pairs)
-    in_seqs, out_seqs, bmpVectors_seqs = zip(*pairs)
+    in_seqs, out_seqs, bmpVectors_seqs, nb_actions = zip(*pairs)
     return {
         "sources": in_seqs,
         "targets": out_seqs,
-        "bitmapVectors": bmpVectors_seqs
+        "bitmapVectors": bmpVectors_seqs,
+        "srcs_nb_actions" :nb_actions
     }
 
 def get_minibatch(dataset, sp_idx, batch_size,
@@ -125,6 +130,8 @@ def get_minibatch(dataset, sp_idx, batch_size,
     targets = dataset["targets"][sp_idx:sp_idx+batch_size]
     
     bmpVectors = dataset["bitmapVectors"][sp_idx:sp_idx+batch_size]
+    
+    nb_actions = dataset["srcs_nb_actions"][sp_idx:sp_idx+batch_size]
 
     lines = [
         [start_idx] + line for line in targets
@@ -132,6 +139,7 @@ def get_minibatch(dataset, sp_idx, batch_size,
     lens = [len(line) for line in lines]
     max_len = max(lens)
     
+  
     
     # Drop the last element, it should be the <end> symbol for all of them
     # padding for all of them
@@ -144,9 +152,21 @@ def get_minibatch(dataset, sp_idx, batch_size,
     output_lines = [
         line[1:] + [pad_idx] * (max_len - len(line)) for line in lines
     ]
-
-    in_src_seq = Variable(torch.LongTensor(srcs), volatile=volatile_vars)
+    
+    code_sketches = [
+        line for line in srcs
+    ]
+    lens = [len(line) for line in code_sketches]
+    max_len = MAX_SKETCH_LENGTH
+    code_sketches_lines = [
+        line[:] + [pad_idx] * (max_len - len(line)) for line in code_sketches
+    ]
+      
+    in_src_seq = Variable(torch.FloatTensor(code_sketches_lines), volatile=volatile_vars)
+    
     tgt_inp_sequences = Variable(torch.LongTensor(input_lines), volatile=volatile_vars)
     out_tgt_seq = Variable(torch.LongTensor(output_lines), volatile=volatile_vars)
+    
+    nb_actions_seq = Variable(torch.LongTensor(nb_actions), volatile=volatile_vars)
 
-    return tgt_inp_sequences, in_src_seq, input_lines, out_tgt_seq, srcs,targets,bmpVectors
+    return tgt_inp_sequences, in_src_seq, input_lines, out_tgt_seq, srcs,targets,bmpVectors, nb_actions_seq
