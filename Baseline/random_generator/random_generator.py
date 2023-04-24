@@ -52,458 +52,334 @@ control_close = ['m)',
          'e)',
     ]
 
+n_action_C1 = [2,11, 12]
+
+n_action_C2_R = [5,10,15]
+
+n_action_C3_RR = [4,9,14]
+n_action_C3_RW = [6,11]
+
+n_action_C4_RRR = [3,6,11]
+n_action_C4_RWR = [7,12]
+n_action_C4_RRW = [3,8,13]
+n_action_C4_RWW = [4,9,14]
+
+n_action_C5_RW = [2,7,12]
+n_action_C5_RR = [5,10,15]
+n_action_C5_RIE = [6,11]
+n_action_C5_RI = [2,7,12]
+
+n_action_C6_RRR = [3,8,13]
+n_action_C6_RWR = [4,9,14]
+n_action_C6_RRW = [5,10,15]
+n_action_C6_RWW = [6,11]
+n_action_C6_RIEW = [5,10,15]
+n_action_C6_RIER = [7,8,13]
+n_action_C6_RIW = [3,8,13]
+n_action_C6_RIR = [6,11]
+
+n_action_C7_RRR = [4,9,14]
+n_action_C7_RWR = [5,10,15]
+n_action_C7_RRW = [6,11]
+n_action_C7_RWW = [7,12]
+n_action_C7_RRIE = [5,10,15]
+n_action_C7_RWIE = [7,12]
+n_action_C7_RWI = [5,10,15]
+n_action_C7_RRI = [3,3,8,8,13]
+n_action_C7_WWR = [5]
+
+n_action_C8_RRR = [5,10,15]
+n_action_C8_RWR = [6,11] 
+n_action_C8_RRW = [7,12]
+n_action_C8_RWW = [3,8,13]
+n_action_C8_RIEW = [4,9,14]
+n_action_C8_RIER = [7,12,13]
+n_action_C8_RRIE = [5,10,15]
+n_action_C8_RWIE = [7,12]
+n_action_C8_RIEIE = [8,13]
+n_action_C8_RII = [3,4,5,6,7,8,11,12,13,14,15]
+n_action_C8_RIEI = [8,13]
+n_action_C8_RIIE = [6,11]
+n_action_C8_WIR = [12]
+
+n_action_list = [n_action_C1, n_action_C2_R, n_action_C3_RR, n_action_C3_RW,
+                n_action_C4_RRR, n_action_C4_RWR, n_action_C4_RRW, n_action_C4_RWW,
+                n_action_C5_RW, n_action_C5_RR, n_action_C5_RIE, n_action_C5_RI,
+                
+                n_action_C6_RRR, n_action_C6_RWR, n_action_C6_RRW, n_action_C6_RWW, 
+                n_action_C6_RIEW,  n_action_C6_RIER, n_action_C6_RIW, n_action_C6_RIR,
+                
+                n_action_C7_RRR, n_action_C7_RWR, n_action_C7_RRW, n_action_C7_RWW,
+                n_action_C7_RRIE, n_action_C7_RWIE, n_action_C7_RWI, n_action_C7_RRI, n_action_C7_WWR,
+                
+                n_action_C8_RRR, n_action_C8_RWR, n_action_C8_RRW, n_action_C8_RWW,
+                n_action_C8_RIEW, n_action_C8_RIER, n_action_C8_RRIE, n_action_C8_RWIE,
+                n_action_C8_RIEIE, n_action_C8_RII, n_action_C8_RIEI, n_action_C8_RIIE, n_action_C8_WIR
+    ]
 required_ctypes =   [ 
                     ['action'], #Type01 CT1
                    
                     ['action', 
-                        'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                        'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                         'action' ], #Type02 #CT2
-                   
-                    #['action', 
-                        #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                        #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                        #'action'], #Type03 #CT2
+                
                     ['action', 
-                        'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                        'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
                         'action', 
-                        'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                        'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
                         'action'],#Type04 #CT3
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    #'action',
-                    #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                    #'action'],#Type05 #CT3
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    #'action'],#Type06 #CT3
-                    #['action', 
-                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                    #'action',
-                    #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                    #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                    #'action'],#Type07 #CT3
+                    ['action', 
+                        'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                        'action', 
+                        'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                        'action'],#Type04 #CT3
+                    
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     'action', 
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'],#Type42 #CT4
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     'action', 
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'],#Type42 #CT4
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     'action', 
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'],#Type42 #CT4
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1',
+                     'action', 
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'],#Type42 #CT4
                    
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
                      'action', 'cclose1', 
-                     'action'], #Type 08 #CT4
+                     'action'], #Type 08 #CT5
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action'], #Type 08 #CT5
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
-                     'action'],#Type 09 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 10 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 11 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 12 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 13 #CT4
-                    
-                    
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 14 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 15 #CT4
-                   
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 16 #CT4
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 17 #CT4
+                     'action'],#Type 09 #CT5
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action'], #Type 08 #CT5
                     
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
                      'action', 'cclose1', 
                      'action',
-                     'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
-                     'action'], #Type 18 #CT5
-                    
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'action',
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
                      'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     'action'],#Type 19 #CT5
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action', 'cclose1', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'], #Type 20 #CT5
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'cclose1',
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type 21 #CT5
-                
-                
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action'], #Type 22 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action'
-                     #], #Type 23 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'
-                     #], #Type 24 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'], #Type 25 #CT5
-                    
-                    
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action'], #Type 26 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action'], #Type 27 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'], #Type 28 #CT5
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'], #Type 29 #CT5
-                    
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action'],#Type 19 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action', 'cclose1',
+                     'action',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action'],#Type 19 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'action',
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action', 'cclose1', 
+                     'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action'], #Type 18 #CT6
                     
                     ['action',
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                      'action',
-                     'ctrl2', 'cond2', 'copen2', 'action',
-                     'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'REPEAT', 'cond2', 'copen2', 'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
                      'action', 'cclose2', 
-                     'action'], #Type 30 #CT6
-
-                    ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action'], #Type 30 #CT7
+                    ['action',
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                      'action',
-                     'ctrl2', 'cond2', 'copen2', 'action',
+                     'WHILE', 'cond2', 'copen2', 'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
+                    ['action',
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'REPEAT', 'cond2', 'copen2', 'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
+                    ['action',
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond2', 'copen2', 'action',
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'REPEAT', 'cond2', 'copen2', 'action',
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose2',
-                     'action'],#Type 31 #CT6
-                    #['action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action', 'cclose1', 
-                     #'action'], #Type 32 #CT6
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'cclose1',
-                     #'action'],#Type 33 #CT6
-                    
-                    #['action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 34 #CT6
-                    #['action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 35 #CT6
-                    #['action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 36 #CT6
-                    #['action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 37 #CT6
-                    
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 38 #CT6
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 39 #CT6
-                    #['action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 40 #CT6
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 
-                     #'action','c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_elseclose', 
-                     #'action'], #Type 41 #CT6
-                    
-                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
+                     'action'],#Type 31 #CT7
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
                      'action',
-                     'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
-                     'action'],#Type42 #CT7
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type43 #CT7
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action'],#Type44 #CT7
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action'],#Type45 #CT7
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action'],#Type46 #CT7
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type47 #CT7
-                    #['action', 
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type48 #CT7
-                                   
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
-                     #'action'],#Type49 #CT7
+                     'WHILE', 'cond2', 'copen2', 'action',
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action', 'cclose2',
+                     'action'],#Type 31 #CT7
+                    ['action',
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond2', 'copen2', 'action',
+                     'IF', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
+                    ['action',
+                     'REPEAT', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'REPEAT', 'cond2', 'copen2', 'action',
+                     'IF', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
+                    ['action',
+                     'WHILE', 'cond1', 'copen1', 'mandate_action', 'cclose1', 
+                     'action',
+                     'WHILE', 'cond2', 'copen2', 'action',
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose2', 
+                     'action'], #Type 30 #CT7
                 
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 
+                     'REPEAT', 'cond1', 'copen1', 
                      'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2',
                      'action', 
-                     'ctrl3', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
                      'action', 'cclose1',
                      'action'],#Type50 #CT8
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'WHILE', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
                      'action', 
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action',
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2',
                      'action', 'cclose1',
                      'action'],#Type51 #CT8
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 
+                     'REPEAT', 'cond1', 'copen1', 
                      'action', 
-                     'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action',
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 'cclose1',
+                     'action'],#Type51 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'REPEAT', 'cond2', 'copen2', 'mandate_action', 'cclose2',
                      'action', 
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
                      'action'],#Type52 #CT8
                     ['action', 
-                     'ctrl1', 'cond1', 'copen1', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'WHILE', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action', 'cclose1',
+                     'action'],#Type52 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
                      'action', 
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',  
@@ -511,86 +387,41 @@ required_ctypes =   [
                      'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
                      'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
                      'action', 'cclose1',
-                     'action']#Type53 #CT8
-                    
-                    
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type54 #CT8
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type55 #CT8
-                    #['action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type56 #CT8
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action'],#Type57 #CT8
-                    
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'ctrl2', 'cond2', 'copen2', 'mandate_action', 'cclose2', 
-                     #'action',
-                     #'c_elseclose', 
-                     #'action'],#Type58 #CT8
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action',
-                     #'c_elseclose',
-                     #'action'],#Type59 #CT8
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'ctrl1', 'cond1', 'copen1', 'mandate_action', 'cclose1',
-                     #'action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'c_elseclose',
-                     #'action'],#Type60 #CT8
-                    #['action', 
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose',
-                     #'action',
-                     #'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
-                     #'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
-                     #'action',
-                     #'c_elseclose',
-                     #'action']#Type61 #CT8
+                     'action'],#Type53 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'IF', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action',
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 'cclose1',
+                     'action'],#Type51 #CT8
+                    ['action', 
+                     'REPEAT', 'cond1', 'copen1', 
+                     'action', 
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'cif', 'c_cndif', 'c_ifopen', 'mandate_action', 'c_ifclose',
+                     'celse', 'c_elseopen', 'mandate_action', 'c_elseclose', 
+                     'action', 'cclose1',
+                     'action'],#Type52 #CT8
+                    ['action', 
+                     'WHILE', 'cond1', 'copen1', 
+                     'action', 
+                     'IF', 'cond2', 'copen2', 'mandate_action', 'cclose2',
+                     'action', 
+                     'REPEAT', 'cond3', 'copen3', 'mandate_action', 'cclose3', 
+                     'action', 'cclose1',
+                     'action'],#Type50 #CT8
                     
                     ]
 def add_args(parser):
@@ -685,8 +516,23 @@ def generateCodes(code_type, selected_ctrl, max_nb_actions):
     cond_set = []
     index = 0
     for token in code:
-        if('ctrl' in token):
-            current_ctrl_set = selected_ctrl.pop()
+        if('REPEAT' in token):
+            #current_ctrl_set = selected_ctrl.pop()
+            current_ctrl_set = commands[0]
+            code[index] = current_ctrl_set[0]
+            open_set.append(current_ctrl_set[1])
+            close_set.append(current_ctrl_set[2])
+            cond_set.append(current_ctrl_set[3])
+        elif('WHILE' in token):
+            #current_ctrl_set = selected_ctrl.pop()
+            current_ctrl_set = commands[1]
+            code[index] = current_ctrl_set[0]
+            open_set.append(current_ctrl_set[1])
+            close_set.append(current_ctrl_set[2])
+            cond_set.append(current_ctrl_set[3])
+        elif('IF' in token):
+            #current_ctrl_set = selected_ctrl.pop()
+            current_ctrl_set = commands[2]
             code[index] = current_ctrl_set[0]
             open_set.append(current_ctrl_set[1])
             close_set.append(current_ctrl_set[2])
@@ -738,6 +584,142 @@ def generateCodes(code_type, selected_ctrl, max_nb_actions):
     ret_code = list(filter(None, ret_code))
     return ret_code
 
+def checkfor_pre_REPEAT_1(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'REPEAT') and (gen_code[index+4]== 'r)')):
+            if(gen_code[index-1] == gen_code[index+3]):
+                return True
+        index+=1
+    return False
+
+def checkfor_pre_REPEAT_2(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'REPEAT')and (gen_code[index+5]== 'r)')):
+            if((gen_code[index-2] == gen_code[index+3]) and 
+                (gen_code[index-1] == gen_code[index+4])):
+                return True
+        index+=1
+    return False
+
+#def checkfor_pre_REPEAT_3(gen_code):
+    #index = 1
+  ##  print("gen_code", gen_code)
+    #for token in gen_code[1:-1]:
+        #if((token == 'REPEAT')and (gen_code[index+6]== 'r)')):
+            #if((gen_code[index-3] == gen_code[index+3]) and 
+                #(gen_code[index-2] == gen_code[index+4]) and 
+                #(gen_code[index-1] == gen_code[index+5]) ):
+                #return True
+        #index+=1
+    #return False
+
+def checkfor_post_REPEAT_1(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'r)') and (gen_code[index-2] == 'r(')):
+            if(gen_code[index-1] == gen_code[index+1]):
+                return True
+        index+=1
+    return False
+
+def checkfor_post_REPEAT_2(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'r)') and (gen_code[index-3] == 'r(')):
+            if((gen_code[index-2] == gen_code[index+1]) and 
+                (gen_code[index-1] == gen_code[index+2])):
+                return True
+        index+=1
+    return False
+
+#def checkfor_post_REPEAT_3(gen_code):
+    #index = 1
+  ##  print("gen_code", gen_code)
+    #for token in gen_code[1:-1]:
+        #if((token == 'r)')and (gen_code[index-4] == 'r(')):
+            #if((gen_code[index-3] == gen_code[index+1]) and 
+                #(gen_code[index-2] == gen_code[index+2]) and 
+                #(gen_code[index-1] == gen_code[index+3]) ):
+                #return True
+        #index+=1
+    #return False
+
+def checkfor_notfrontIsClear_move(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'not') and (gen_code[index+2] == 'frontIsClear')):
+            if((gen_code[index+6] == 'move')):
+                return True
+        index+=1
+    return False
+
+def checkfor_notrightIsClear_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'not') and (gen_code[index+2] == 'rightIsClear')):
+            if((gen_code[index+6] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_notleftIsClear_tL(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if((token == 'not') and (gen_code[index+2] == 'leftIsClear')):
+            if((gen_code[index+6] == 'turnLeft')):
+                return True
+        index+=1
+    return False
+
+def checkfor_frontIsClear_tL_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'frontIsClear'):
+            if((gen_code[index+3] == 'turnLeft') or (gen_code[index+3] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_rightIsClear_tL(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'rightIsClear'):
+            if((gen_code[index+3] == 'turnLeft')):
+                return True
+        index+=1
+    return False
+
+def checkfor_leftIsClear_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'leftIsClear'):
+            if((gen_code[index+3] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_nomarkerPresent_pickMarker(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'noMarkersPresent'):
+            if((gen_code[index+3] == 'pickMarker')):
+                return True
+        index+=1
+    return False
+
 def checkfor_tL_tR(gen_code):
     index = 1
   #  print("gen_code", gen_code)
@@ -748,6 +730,106 @@ def checkfor_tL_tR(gen_code):
         index+=1
     return False
         
+def checkfor_tL_tL_tL(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnLeft'):
+            if((gen_code[index-1] == 'turnLeft') and (gen_code[index+1] == 'turnLeft')):
+                return True
+        index+=1
+    return False
+
+def checkfor_tR_tR_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnRight'):
+            if((gen_code[index-1] == 'turnRight') and (gen_code[index+1] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_tL_pickM_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'pickMarker'):
+            if((gen_code[index-1] == 'turnLeft') and (gen_code[index+1] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_tR_pickM_tL(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'pickMarker'):
+            if((gen_code[index-1] == 'turnRight') and (gen_code[index+1] == 'turnLeft')):
+                return True
+        index+=1
+    return False
+
+def checkfor_tL_putM_tR(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'putMarker'):
+            if((gen_code[index-1] == 'turnLeft') and (gen_code[index+1] == 'turnRight')):
+                return True
+        index+=1
+    return False
+
+def checkfor_tR_putM_tL(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'putMarker'):
+            if((gen_code[index-1] == 'turnRight') and (gen_code[index+1] == 'turnLeft')):
+                return True
+        index+=1
+    return False
+
+def checkfor_pickM_tL_putM(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnLeft'):
+            if((gen_code[index-1] == 'pickMarker') and (gen_code[index+1] == 'putMarker')):
+                return True
+        index+=1
+    return False
+
+def checkfor_pickM_tR_putM(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnRight'):
+            if((gen_code[index-1] == 'pickMarker') and (gen_code[index+1] == 'putMarker')):
+                return True
+        index+=1
+    return False
+
+def checkfor_putM_tL_pickM(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnLeft'):
+            if((gen_code[index-1] == 'putMarker') and (gen_code[index+1] == 'pickMarker')):
+                return True
+        index+=1
+    return False
+
+def checkfor_putM_tR_pickM(gen_code):
+    index = 1
+  #  print("gen_code", gen_code)
+    for token in gen_code[1:-1]:
+        if(token == 'turnRight'):
+            if((gen_code[index-1] == 'putMarker') and (gen_code[index+1] == 'pickMarker')):
+                return True
+        index+=1
+    return False
+
 def checkfor_putM_pickM(gen_code):
     index = 1
     for token in gen_code[1:-1]:
@@ -852,6 +934,7 @@ if __name__ == '__main__':
         pass
         
     ctypes_to_parse = required_ctypes[args.min_index: args.max_index]
+    nb_action_index = args.min_index
     for code_type in ctypes_to_parse: 
         print("code_type", required_ctypes.index(code_type))
         log = "code_type " + str(required_ctypes.index(code_type))  + "\n"
@@ -865,90 +948,125 @@ if __name__ == '__main__':
                 ctrl_all_count += 1
             if(('cif' in token) or ('celse' in token)):
                 ctrl_all_count +=1
-                
-        for nb_actions in range(max(min_no_actions,ctrl_all_count), (max_no_actions+1)):
+        print("nb_action_index", nb_action_index)
+        
+        for nb_actions in n_action_list[nb_action_index]:
             
-            all_perm = ([p for p in product(commands, repeat=ctrl_count)])
-            for selected_ctrl in all_perm:
-                numb_for_code_type = 0
-                #if(commands[2] in selected_ctrl): ##only if ctrl types
-                    
-                current_spec_codes = []
+        #all_perm = ([p for p in product(commands, repeat=ctrl_count)])
+        # for selected_ctrl in all_perm:
+            numb_for_code_type = 0
+            #if(commands[2] in selected_ctrl): ##only if ctrl types
                 
-                for i in range(0, (args.num_codes_per_spec)):
-                    numb_feat_vectors +=1
-                    parse_success = False
-                    outer_if = False
-                    quality_good = False
-                    qual_bad = True
-                    nb_attempts = 0
-                    best_score = -1.0
+            current_spec_codes = []
+            selected_ctrl = []
+            for i in range(0, (args.num_codes_per_spec)):
+                numb_feat_vectors +=1
+                parse_success = False
+                outer_if = False
+                quality_good = False
+                qual_bad = True
+                nb_attempts = 0
+                best_score = -1.0
 
-                    ##For generation
-                    log = ""
-                    log += "Numb_Actions: " + str(nb_actions)  + "\n"
-                    text = ""
-                    start = time.time()
-                    if(args.data_generator):
-                        while(not quality_good):
-                            random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
-                            outer_if= checkForOuterIf(random_code)
-                            if(outer_if):
-                                break
-                            qual_bad_1 = checkfor_tL_tR(random_code)
-                            qual_bad_2 = checkfor_putM_pickM(random_code)
-                            qual_bad = qual_bad_1 or qual_bad_2
-                            if(not qual_bad):
-                                random_code_idces = translate(random_code, tgt_tkn2idx)
-                                parse_success, _,random_code_ast_json = simulator.get_prog_ast(random_code_idces)
-                                if(parse_success and (not(random_code in current_spec_codes))):
-                                    current_spec_codes.append(random_code)   
-                                    quality_score = checkQuality(simulator, random_code_ast_json, args.max_iterations)
-                                    nb_attempts +=1
-                                #    log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
-                                #    log += "Code " + str(random_code)  + "\n"
-                                #    log += "quality_score " + str(quality_score)  + "\n"
-                                #    print("quality_score",quality_score)
-                                    if(quality_score > args.quality_threshold):
-                                        quality_good = True
-                                    else:
-                                        
-                                        if(quality_score> best_score):
-                                            best_score = quality_score
-                                            best_code = random_code
-                                            
-                                    if(nb_attempts == 50):
-                                        quality_good = True
-                                    #   random_code = best_code
-                    else:
-                        while(not parse_success):
-                            random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
-                            outer_if= checkForOuterIf(random_code)
-                            
+                ##For generation
+                log = ""
+                log += "Numb_Actions: " + str(nb_actions)  + "\n"
+                text = ""
+                start = time.time()
+                if(args.data_generator):
+                    while(not quality_good):
+                        random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
+                        outer_if= checkForOuterIf(random_code)
+                        if(outer_if):
+                            break
+                        qual_bad_1 = checkfor_tL_tR(random_code)
+                        qual_bad_2 = checkfor_putM_pickM(random_code)
+                        qual_bad = qual_bad_1 or qual_bad_2
+                        if(not qual_bad):
                             random_code_idces = translate(random_code, tgt_tkn2idx)
-                            parse_success, _, _ = simulator.get_prog_ast(random_code_idces)
-                            
-                    end = time.time()
-                    
-                    if(not(nb_attempts == 50) and (not outer_if)):
-                        log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
-                    
-                        final_codes.append(random_code)
-                        log += "Code " + str(random_code)  + "\n"
-                        with open(log_path, 'a+') as f:
-                            f.write(log)
-                            
-                        text += str(random_code)  + "\n"
-                        with open(text_path, 'a+') as f:
-                            f.write(text)
-                    
-                    ##For evaluation
-                    #random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
-                    #parse_success, _ = simulator.get_prog_ast(random_code)
-                    #if(parse_success):
-                        #final_codes.append(random_code)
-                        #text += str(random_code)  + "\n"
-                        #numb_for_code_type +=1
+                            parse_success, _,random_code_ast_json = simulator.get_prog_ast(random_code_idces)
+                            if(parse_success and (not(random_code in current_spec_codes))):
+                                current_spec_codes.append(random_code)   
+                                quality_score = checkQuality(simulator, random_code_ast_json, args.max_iterations)
+                                nb_attempts +=1
+                            #    log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
+                            #    log += "Code " + str(random_code)  + "\n"
+                            #    log += "quality_score " + str(quality_score)  + "\n"
+                            #    print("quality_score",quality_score)
+                                if(quality_score > args.quality_threshold):
+                                    quality_good = True
+                                else:
+                                    
+                                    if(quality_score> best_score):
+                                        best_score = quality_score
+                                        best_code = random_code
+                                        
+                                if(nb_attempts == 50):
+                                    quality_good = True
+                                #   random_code = best_code
+                else:
+                    while(not parse_success):
+                        random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
+                        print("random_code", random_code)
+                        outer_if= checkForOuterIf(random_code)
+                        
+                        if(outer_if):
+                            break
+                        
+                        #qual_bad_ = checkfor_tL_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tL_tL_tL(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tR_tR_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tL_pickM_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tR_pickM_tL(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tL_putM_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_tR_putM_tL(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_pickM_tL_putM(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_pickM_tR_putM(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_putM_tL_pickM(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_putM_tR_pickM(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_putM_pickM(random_code)
+                        
+                        #qual_bad_ = qual_bad_ or checkfor_pre_REPEAT_1(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_pre_REPEAT_2(random_code)
+                     ##   qual_bad_ = qual_bad_ or checkfor_pre_REPEAT_3(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_post_REPEAT_1(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_post_REPEAT_2(random_code)
+                     ##   qual_bad_ = qual_bad_ or checkfor_post_REPEAT_3(random_code)
+                        
+                        #qual_bad_ = qual_bad_ or checkfor_notfrontIsClear_move(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_notrightIsClear_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_notleftIsClear_tL(random_code)
+                        
+                        #qual_bad_ = qual_bad_ or checkfor_frontIsClear_tL_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_rightIsClear_tL(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_leftIsClear_tR(random_code)
+                        #qual_bad_ = qual_bad_ or checkfor_nomarkerPresent_pickMarker(random_code)
+                        
+                        #if(not qual_bad_):
+                        random_code_idces = translate(random_code, tgt_tkn2idx)
+                        parse_success, _, _ = simulator.get_prog_ast(random_code_idces)
+                        
+                end = time.time()
+                
+                if(not(nb_attempts == 50) and (not outer_if)):
+                    log += "Numb_Attempts: " + str(nb_attempts)  + "\n"
+                
+                    final_codes.append(random_code)
+                    log += "Code " + str(random_code)  + "\n"
+                    with open(log_path, 'a+') as f:
+                        f.write(log)
+                        
+                    text += str(random_code)  + "\n"
+                    with open(text_path, 'a+') as f:
+                        f.write(text)
+                
+                ##For evaluation
+                #random_code = generateCodes(code_type, list(selected_ctrl), nb_actions)
+                #parse_success, _ = simulator.get_prog_ast(random_code)
+                #if(parse_success):
+                    #final_codes.append(random_code)
+                    #text += str(random_code)  + "\n"
+                    #numb_for_code_type +=1
                         
                 if(numb_for_code_type>4):
                     unique_count_5+=1
@@ -959,7 +1077,8 @@ if __name__ == '__main__':
                 if(numb_for_code_type>89):
                     unique_count_90+=1
         
-        
+        nb_action_index+=1
+            
     numb_unique = len(set(map(tuple, final_codes)))   
     numb_feat = len(final_codes)
     total_generated = numb_feat_vectors
