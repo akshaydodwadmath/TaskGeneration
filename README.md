@@ -18,9 +18,9 @@ python setup.py install
 The code to run neural model can be found in Synthesis folder, while for the baseline model it is inside Baseline/random_generator. Also, the code for generating visual puzzles from programs is inside NeuralTaskSynthesizer folder.
 
 ## Neural Model- Training
-* `--kernel_size`, `--conv_stack`, `--fc_stack`, `--tgt_embedding_size`,
-  `--lstm_hidden_size`, `--nb_lstm_layers` are flags to specify the architecture
-  of the model to learn. See `Synthesis/model.py` to see how they are used.
+* `--kernel_size`, `--conv_stack`, `--fc_stack`, `--tgt_embedding_size`
+  are flags to specify the architecture of the model to learn. See
+  `Synthesis/model.py` to see how they are used.
 * `--use_grammar` makes the model use the handwritten syntax checker, found in
   `Synthesis/syntax/checker.pyx`. `--learn_syntax` adds a Syntax neural model that
   attempts to learn a syntax checker, jointly with the rest of the model. The
@@ -56,8 +56,6 @@ main.py   --kernel_size 3 \
           --conv_stack "64,64,64" \
           --fc_stack "512" \
           --tgt_embedding_size 256 \
-          --lstm_hidden_size 256 \
-          --nb_lstm_layers 2 \
           \
           --signal supervised \
           --nb_epochs 100 \
