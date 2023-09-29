@@ -1,10 +1,10 @@
 # Towards Synthesizing Qualitative and Diverse Programs for Block-Based Visual Programming 
 
-This repository contains the code used for the project [Towards Synthesizing Qualitative and Diverse
-Programs for Block-Based Visual Programming].
+This repository contains the code used for the project Towards Synthesizing Qualitative and Diverse
+Programs for Block-Based Visual Programming.
 
 ## Requirements
-We recommend installing this code into a virtual environment. In order to run
+I recommend installing this code into a virtual environment. In order to run
 the code, you first need to install pytorch, following the instructions from
 [the pytorch website](http://pytorch.org/). Once this is done, you can install
 this package and its dependencies by running:
@@ -15,17 +15,17 @@ python setup.py install
 ```
 
 ## Code Structure
-The code to run neural model can be found in Synthesis folder, while for the baseline model it is inside Baseline/random_generator. The code for generating tasks from code is inside NeuralTaskSynthesizer folder, and the code for preprocessing the training data is inside PreProcessing folder.
+The code to run neural model can be found in Synthesis folder, while for the baseline model it is inside Baseline/random_generator. Also, the code for generating visual puzzles from programs is inside NeuralTaskSynthesizer folder.
 
 ## Neural Model- Training
 * `--kernel_size`, `--conv_stack`, `--fc_stack`, `--tgt_embedding_size`,
   `--lstm_hidden_size`, `--nb_lstm_layers` are flags to specify the architecture
   of the model to learn. See `Synthesis/model.py` to see how they are used.
 * `--use_grammar` makes the model use the handwritten syntax checker, found in
-  `Synthesis/syntax/checker.pyx`. `--learn_syntax` adds a Syntax LSTM to the model
-  that attempts to learn a syntax checker, jointly with the rest of the model. The
+  `Synthesis/syntax/checker.pyx`. `--learn_syntax` adds a Syntax neural model that
+  attempts to learn a syntax checker, jointly with the rest of the model. The
   importance of this objective is controlled by the `--beta` parameter.
-* `--signal` allows to choose the loss, between `supervised`, and `rl``. Supervised
+* `--signal` allows to choose the loss, between `supervised`, and `rl`. Supervised
   attempts to reproduce the ground truth program, while `rl` try to maximize
   expected rewards. In order to be able to fit
   experiments in a single GPU, you may need to adjust `--nb_rollouts` (how many
@@ -53,49 +53,49 @@ The code to run neural model can be found in Synthesis folder, while for the bas
 # To run the neural model
 # Train a simple supervised model, using the handcoded syntax checker
 main.py   --kernel_size 3 \
-             --conv_stack "64,64,64" \
-             --fc_stack "512" \
-             --tgt_embedding_size 256 \
-             --lstm_hidden_size 256 \
-             --nb_lstm_layers 2 \
-             \
-             --signal supervised \
-             --nb_epochs 100 \
-             --optim_alg Adam \
-             --batch_size 128 \
-             --learning_rate 1e-4 \
-             \
-             --train_file data/train.json \
-             --val_file data/val.json \
-             --vocab data/new_vocab.vocab \
-             --result_folder exps/supervised_use_grammar \
-             \
-             --use_grammar \
-             \
-             --use_cuda
+          --conv_stack "64,64,64" \
+          --fc_stack "512" \
+          --tgt_embedding_size 256 \
+          --lstm_hidden_size 256 \
+          --nb_lstm_layers 2 \
+          \
+          --signal supervised \
+          --nb_epochs 100 \
+          --optim_alg Adam \
+          --batch_size 128 \
+          --learning_rate 1e-4 \
+          \
+          --train_file data/train.json \
+          --val_file data/val.json \
+          --vocab data/new_vocab.vocab \
+          --result_folder exps/supervised_use_grammar \
+          \
+          --use_grammar \
+          \
+          --use_cuda
 
 # Use a pretrained model, to fine-tune it using simple Reinforce
 # Change the --environment flag if you want to use a reward including performance.
 main.py  --signal rl \
-              --environment BlackBoxGeneralization \
-              --nb_rollouts 100 \
-              \
-              --init_weights exps/supervised_use_grammar/Weights/best.model \
-              --nb_epochs 5 \
-              --optim_alg Adam \
-              --learning_rate 1e-5 \
-              --batch_size 16 \
-              \
-              --train_file data/train.json \
-              --val_file data/val.json \
-              --vocab data/new_vocab.vocab \
-              --result_folder exps/reinforce_finetune \
-              \
-              --use_grammar \
-              \
-              --use_cuda
+         --environment BlackBoxGeneralization \
+         --nb_rollouts 100 \
+         \
+         --init_weights exps/supervised_use_grammar/Weights/best.model \
+         --nb_epochs 5 \
+         --optim_alg Adam \
+         --learning_rate 1e-5 \
+         --batch_size 16 \
+         \
+         --train_file data/train.json \
+         --val_file data/val.json \
+         --vocab data/new_vocab.vocab \
+         --result_folder exps/reinforce_finetune \
+         \
+         --use_grammar \
+         \
+         --use_cuda
 ```
-### Neural Model- Evaluation
+## Neural Model- Evaluation
 The evaluation command is fairly similar. Any flags non-specified has the same
 role as for the `main.py` command. The relevant file is `Synthesis/evaluate.py`.
 
